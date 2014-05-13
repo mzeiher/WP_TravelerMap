@@ -77,6 +77,26 @@
                 });
                 map.setView([parseFloat($('#tm_lat').val()),parseFloat($('#tm_lng').val())]);
         }
+        
+        function tm_selectNextPoint() {
+            if(currentSelection) {
+                if(currentSelection.next()) {
+                    currentSelection.next().trigger('click');
+                } else {
+                    //TODO: implement round
+                }
+            }
+        }
+        
+        function tm_selectPrevPoint() {
+            if(currentSelection) {
+                if(currentSelection.prev()) {
+                    currentSelection.prev().trigger('click');
+                } else {
+                    //TODO: implement round
+                }
+            }
+        }
 
         function tm_saveChanges() {
                 if(!currentSelection) return;

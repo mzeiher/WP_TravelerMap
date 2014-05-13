@@ -56,8 +56,27 @@
                     overlayMaps[data.properties.overlays[i]] = layer;
                 }
             }
-
             L.control.layers(baseMaps, overlayMaps).addTo(map);
+            
+            var marker = [];
+            var lineList = L.polyline([], {smoothFactor:0.1});
+            var firstPoint = null;
+            marker.push(lineList);
+            for(var i = 0; i < data.features.length; i++) {
+                var feature = data.features[i];
+                if(!firstPoint) {
+                    firstPoint = feature;
+                }
+                var pointMarker = L.marker([feature.properties.lat, feature.properties.lng]).bindPopup(feature.properties.title);
+                marker.push(pointMarker);
+                feature.properties.marker = pointMarker;
+                if(!feature.properties.excludeFromPath) {
+                    lineList.addLatLng([feature.properties.lat, feature.properties.lng]);
+                }
+                
+            }
+            L.layerGroup(marker).addTo(map);
+            map.setView([firstPoint.properties.lat, firstPoint.properties.lng], 5);
 
         }
         window.tm_loadFrontendMap = tm_loadMap;
