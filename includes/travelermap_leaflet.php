@@ -24,5 +24,6 @@
 
 wp_enqueue_style( 'leafet', TM_URL . "/media/leaflet.css" );
 wp_enqueue_script( 'leaflet', TM_URL . "/js/leaflet-src.js" , array(), '0.7.6', true );
+wp_enqueue_script( 'leaflet-providers', TM_URL . "/js/leaflet-providers.js" , array(), '1.0.5', true );
 
 ?>

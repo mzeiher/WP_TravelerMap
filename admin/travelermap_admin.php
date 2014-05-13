@@ -21,4 +21,8 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  *  THE SOFTWARE.
  */
+ wp_enqueue_script( 'jquery');
+ wp_enqueue_script( 'jquery-ui-core');
+ wp_enqueue_script( 'jquery-ui-sortable ');
+     
 ?>
