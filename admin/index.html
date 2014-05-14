@@ -1,8 +1,9 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
-		<script src="http://leafletjs.com/dist/leaflet.js"></script>
-		<script src="leaflet-providers.js"></script>
+		<link rel="stylesheet" href="../media/leaflet.css" />
+		<script src="../js/leaflet-src.js"></script>
+		<script src="../js/leaflet-providers.js"></script>
+
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
@@ -11,6 +12,7 @@
 				background-color: #ccc;
 			}
 		</style>
+		<script src="../frontend/js/travelermap_frontend.js"></script>
                 <script type="text/javascript" src="js/travelermap_admin.js">
                 </script>
 	</head>
@@ -100,32 +102,38 @@
 		</ul>
 		<div class="tm_map" style="height: 300px;" id="tm_map" data-mapid="0"></div>
 		<div class="tm_form">
+			<label for="tm_type">Type</label>
+			<select id="tm_type" disabled="true">
+				<option value="marker">Marker</option>
+				<option value="waypoint">Waypoint</option>
+				<option value="waystart">Waystart</option>
+				<option value="waystop">Waystop</option>
+			</select>
 			<label for="tm_title">Title</label>
-			<input type="text" id="tm_title" /><br />
+			<input type="text" id="tm_title" disabled="true"/><br />
 			<label for="tm_thumbnail">Thumbnail</label>
-			<input type="text" id="tm_thumbnail" /><br />
+			<input type="text" id="tm_thumbnail" disabled="true" /><br />
 			<label for="tm_description">Description</label>
-			<textarea id="tm_description" ></textarea><br />
+			<textarea id="tm_description" disabled="true" ></textarea><br />
 			<label for="tm_link">Link</label>
-			<input type="text" id="tm_link" /><br />
+			<input type="text" id="tm_link" disabled="true" /><br />
 			<label for="tm_excludefrompath">Exclude From Path</label>
-			<input type="checkbox" id="tm_excludefrompath" /><br />
+			<input type="checkbox" id="tm_excludefrompath" disabled="true"  /><br />
 			<label for="tm_lat">Lat</label>
-			<input type="text" id="tm_lat" /><br />
+			<input type="text" id="tm_lat" disabled="true"  /><br />
 			<label for="tm_lng">Lng</label>
-			<input type="text" id="tm_lng" /><br />
+			<input type="text" id="tm_lng" disabled="true"  /><br />
 			<label for="tm_arrival">Arrival</label>
-			<input type="text" id="tm_arrival" /><br />
+			<input type="text" id="tm_arrival" disabled="true"  /><br />
 			<label for="tm_departure">Departure</label>
-			<input type="text" id="tm_departure" /><br />
-			<button id="tm_linkToMedia">Link To Media</button><button id="tm_linkToPost">Link To Post</button><button id="tm_saveChanges">Save Changes</button>
+			<input type="text" id="tm_departure" disabled="true"  /><br />
+			<button id="tm_linkToMedia" disabled="true" >Link To Media</button><button id="tm_linkToPost" disabled="true" >Link To Post</button><button id="tm_saveChanges" disabled="true" >Save Changes</button>
 		</div>
                 <div class="tm_toolbar">
-			<button id="tm_addPoint">AddPoint</button><button id="tm_saveMap">Save Map</button>
+			<button id="tm_addPoint">AddPoint</button><button id="tm_saveMap">Save Map</button><button id="tm_previewMap">Preview Map</button>
 		</div>
 		<ul id="tm_points">
 		</ul>
-		
-                <textarea id="output"></textarea>
+        <textarea id="output"></textarea>
 	</body>
 </html>

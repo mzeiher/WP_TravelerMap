@@ -23,10 +23,35 @@
  */
 
 function tm_create_settings() {
+	add_option( "tm_version", "1.0.0" );
 }
 
 function tm_create_tables() {
-    
+	global $wpdb;
+
+	$map_table = $wpdb->prefix . "tm_map";
+	$layer_table = $wpdb->prefix . "tm_layer";
+
+	$map_sql = "CREATE TABLE $map_table (
+		id INT NOT NULL AUTO_INCREMENT,
+		name VARCHAR(255) NOT NULL,
+		map TEXT  NOT NULL,
+		PRIMARY KEY  (id)
+	);";
+
+	$layer_sql = "CREATE TABLE $layer_table (
+		id INT NOT NULL AUTO_INCREMENT,
+		name VARCHAR(255) NOT NULL,
+		urltemplate VARCHAR(1024) NOT NULL,
+		options TEXT NOT NULL,
+		PRIMARY KEY  (id)
+	);";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $map_sql );
+	dbDelta( $layer_sql );
+
+	add_option( "tm_db_version", "1.0.0" );
 }
 
 tm_create_settings();

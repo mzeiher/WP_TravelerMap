@@ -23,16 +23,24 @@
 (function($) {
     $(document).ready(function() {
         
-        var map = null;
+        function tm_loadMap(data ,element) {
+            return new tm_map(data, element);
+        }
+
+        function tm_map(data, element) {
+
+            var map = null;
         
-        function tm_loadMap(data) {
             if(typeof data === 'string') {
                 data = JSON.parse(data);
             }
-            if(map) {
-                map.remove();
+            
+            if(element) {
+                map = L.map($(element)[0]).setView([0,0], 3);;
+            } else {
+                map = L.map('tm_map_' + data.mapid).setView([0,0], 3);;    
             }
-            map = L.map('tm_map_' + data.properties.mapid).setView([0,0], 3);;
+            
 
             var firstLayer = null;
 
@@ -47,36 +55,71 @@
                 }
 
             }
-            map.addLayer(firstLayer);
+            if(firstLayer) {
+                map.addLayer(firstLayer);    
+            } else {
+                var firstLayer = L.tileLayer.provider("OpenStreetMap.Mapnik");
+                map.addLayer(firstLayer);
+                baseMaps["OpenStreetMap.Mapnik"] = firstLayer;
+            }
+            
 
             var overlayMaps = {};
             for(var i = 0 ; i < data.properties.overlays.length; i++) {
                 var layer = L.tileLayer.provider(data.properties.overlays[i]);
+                layer.addTo(map);
                 if(layer) {
                     overlayMaps[data.properties.overlays[i]] = layer;
                 }
             }
             L.control.layers(baseMaps, overlayMaps).addTo(map);
             
+            var mapping = [];
             var marker = [];
-            var lineList = L.polyline([], {smoothFactor:0.1});
+            var traveledlineList = L.polyline([], {smoothFactor:1, color: 'black', noClip:true, opacity:1, weight:3});
+            var toTravelLineList = L.polyline([], {smoothFactor:1, color: 'black', noClip:true, opacity:1, dashArray:'5, 10', weight:3});
             var firstPoint = null;
-            marker.push(lineList);
-            for(var i = 0; i < data.features.length; i++) {
-                var feature = data.features[i];
+            var traveled = true;
+            marker.push(traveledlineList);
+            marker.push(toTravelLineList);
+            for(var i = 0; i < data.data.length; i++) {
+                var feature = data.data[i];
+
                 if(!firstPoint) {
                     firstPoint = feature;
                 }
-                var pointMarker = L.marker([feature.properties.lat, feature.properties.lng]).bindPopup(feature.properties.title);
+
+                var pointMarker = L.marker([feature.lat, feature.lng]).bindPopup(feature.title);
+                mapping.push({marker: pointMarker, feature: feature});
                 marker.push(pointMarker);
-                feature.properties.marker = pointMarker;
-                if(!feature.properties.excludeFromPath) {
-                    lineList.addLatLng([feature.properties.lat, feature.properties.lng]);
+                if(feature.arrival != null && feature.arrival >= new Date().getTime() && traveled) {
+                    traveled = false;
+                    var points = traveledlineList.getLatLngs();
+                    if(points.length > 0) {
+                        toTravelLineList.addLatLng(points[points.length-1]);    
+                    }
+                }
+
+                if(!feature.excludeFromPath) {
+                    if(traveled) {
+                        traveledlineList.addLatLng([feature.lat, feature.lng]);
+                    } else {
+                        toTravelLineList.addLatLng([feature.lat, feature.lng]);
+                    }
+                    
                 }
                 
             }
             L.layerGroup(marker).addTo(map);
-            map.setView([firstPoint.properties.lat, firstPoint.properties.lng], 5);
+            if(firstPoint) {
+                setTimeout(function() {
+                    map.setView([firstPoint.lat, firstPoint.lng], 5);    
+                }, 500);
+            }
+
+            this.destroy = function() {
+                map.remove();
+            }
 
         }
         window.tm_loadFrontendMap = tm_loadMap;

@@ -50,7 +50,7 @@ function tm_deactivate() {
 }
 
 if ( is_admin() ) {
-        register_activation_hook( __FILE__, 'tm_activate' );
+    register_activation_hook( __FILE__, 'tm_activate' );
 	register_deactivation_hook( __FILE__, 'tm_deactivate' );
         
 	require 'admin/travelermap_admin.php';
