@@ -115,17 +115,18 @@
                 $('#tm_saveChanges').prop('disabled', false);
             } else if(data.type === 'waypoint') {
                 $('#tm_type').prop('disabled', false);
+                $('#tm_title').prop('disabled', false);
                 $('#tm_arrival').prop('disabled', false);
                 $('#tm_departure').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
 
                 $('#tm_saveChanges').prop('disabled', false);
-            } else if(data.type === 'waystart') {
+            } else if(data.type === 'startsection') {
                 $('#tm_type').prop('disabled', false);
 
                 $('#tm_saveChanges').prop('disabled', false);
-            } else if(data.type === 'waystop') {
+            } else if(data.type === 'endsection') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
@@ -178,8 +179,8 @@
 
                 $(currentSelection).removeClass('marker');
                 $(currentSelection).removeClass('waypoint');
-                $(currentSelection).removeClass('waystart');
-                $(currentSelection).removeClass('waystop');
+                $(currentSelection).removeClass('startsection');
+                $(currentSelection).removeClass('endsection');
                 
                 $(currentSelection).addClass(data.type);
 
@@ -290,6 +291,9 @@
         }
 
         function tm_loadMap(mapData) {
+            if(mapData && typeof mapData === 'string') {
+                mapData = JSON.parse(mapData);
+            }
             if(!mapData) { mapData = {};}
             $("#tm_points").empty();
             $("#tm_points").sortable("refresh");
@@ -341,6 +345,9 @@
                 tm_previewMap();
         });
         $('#tm_type').on('change', function() {
+        });
+        $('#tm_loadMap').on('click', function() {
+            window.tm_loadAdminMap($("#output").val());
         });
     });
 })(jQuery);

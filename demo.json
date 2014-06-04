@@ -1,60 +1,86 @@
 {
-  "version": "1.0",
-  "mapid": 0,
-  "mapname" : "",
-  "properties": {
-    "layer": [ 
-    {
-    	"name" : "OpenStreetMap.Mapnik",
-    	"urltemplate" : null,
-    	"options" : null
-    }
-    ],
-    "overlays": [
-	{
-    	"name" : "OpenStreetMap.Overlay",
-    	"urltemplate" : null,
-    	"options" : null
-	}
-    ]
-  },
-  "data": [
-    {
-		"type" : "marker",
-    	"properties": {
-	        "title": "point",
-	        "thumbnail": "",
-	        "description": "",
-	        "link": null,
-	        "excludeFromPath": false,
-	        "lat": 0,
-	        "lng": 0,
-	        "arrival": null,
-	        "departure": null
-      	}
+    "version": "1.0.0",
+    "mapid": 0,
+    "properties": {
+        "layer": ["OpenStreetMap.BlackAndWhite"],
+        "overlays": []
     },
-    {
-		"type" : "waypoint",
-    	"properties": {
-	        "lat": 0,
-	        "lng": 0,
-	        "arrival": null,
-	        "departure": null
-      	}
-    },
-    {
-		"type" : "waystart",
-    	"properties": {
-      	}
-    },
-    {
-		"type" : "waystop",
-    	"properties": {
-	        "title": "point",
-	        "thumbnail": "",
-	        "description": "",
-	        "link": null,
-      	}
-    }
-  ]
+    "data": [{
+            "type": "marker",
+            "title": "point",
+            "thumbnail": "",
+            "description": "",
+            "link": "",
+            "excludeFromPath": false,
+            "lat": -5.266007882805498,
+            "lng": -57.30468749999999,
+            "arrival": null,
+            "departure": null
+        }, {
+            "type": "marker",
+            "title": "point",
+            "thumbnail": "",
+            "description": "",
+            "link": "",
+            "excludeFromPath": false,
+            "lat": -11.005904459659451,
+            "lng": -20.7421875,
+            "arrival": null,
+            "departure": null
+        }, {
+            "type": "startsection",
+            "title": "starsection",
+            "thumbnail": "",
+            "description": "",
+            "link": "",
+            "excludeFromPath": false,
+            "lat": 0,
+            "lng": 0,
+            "arrival": null,
+            "departure": null
+        }, {
+            "type": "waypoint",
+            "title": "point",
+            "thumbnail": "",
+            "description": "",
+            "link": "",
+            "excludeFromPath": false,
+            "lat": 19.31114335506464,
+            "lng": 3.8671874999999996,
+            "arrival": null,
+            "departure": null
+        }, {
+            "type": "waypoint",
+            "title": "point",
+            "thumbnail": "",
+            "description": "",
+            "link": "",
+            "excludeFromPath": false,
+            "lat": -8.05922962720018,
+            "lng": 30.234375,
+            "arrival": 1404424800000,
+            "departure": null
+        }, {
+            "type": "endsection",
+            "title": "endsection",
+            "thumbnail": "",
+            "description": "",
+            "link": "",
+            "excludeFromPath": false,
+            "lat": 0,
+            "lng": 0,
+            "arrival": null,
+            "departure": null
+        }, {
+            "type": "marker",
+            "title": "point",
+            "thumbnail": "",
+            "description": "",
+            "link": "",
+            "excludeFromPath": false,
+            "lat": 1.9332268264771233,
+            "lng": 114.9609375,
+            "arrival": null,
+            "departure": null
+        }]
 }
