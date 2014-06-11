@@ -22,6 +22,7 @@
  *  THE SOFTWARE.
  */
 
+die;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 if ( ! defined( 'TM_VERSION' ) )	
