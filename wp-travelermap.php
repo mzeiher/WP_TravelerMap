@@ -22,39 +22,40 @@
  *  THE SOFTWARE.
  */
 
-function tm_create_settings() {
-	add_option( "tm_version", "1.0.0" );
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+if ( ! defined( 'TM_VERSION' ) )	
+	define( 'TM', '0.0.1' );
+	
+if ( ! defined( 'TM_URL' ) )
+	define( 'TM_URL', plugin_dir_url( __FILE__ ) );
+
+if ( !defined( 'TM_BASENAME' ) )
+	define( 'TM_BASENAME', plugin_basename( __FILE__ ) );
+	
+echo "TESSSSSSSSSSSSSSSSSST";
+global $wpdb;
+
+$wpdb->nwm_routes = $wpdb->prefix . 'tm_routes';
+$wpdb->nwm_custom = $wpdb->prefix . 'tm_layers';
+
+require 'includes/travelermap-leaflet.php';
+
+function tm_activate() {
+	require 'admin/travelermap-install.php';
 }
 
-function tm_create_tables() {
-	global $wpdb;
-
-	$map_table = $wpdb->prefix . "tm_map";
-	$layer_table = $wpdb->prefix . "tm_layer";
-
-	$map_sql = "CREATE TABLE $map_table (
-		id INT NOT NULL AUTO_INCREMENT,
-		name VARCHAR(255) NOT NULL,
-		map TEXT  NOT NULL,
-		PRIMARY KEY  (id)
-	);";
-
-	$layer_sql = "CREATE TABLE $layer_table (
-		id INT NOT NULL AUTO_INCREMENT,
-		name VARCHAR(255) NOT NULL,
-		urltemplate VARCHAR(1024) NOT NULL,
-		options TEXT NOT NULL,
-		PRIMARY KEY  (id)
-	);";
-
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	dbDelta( $map_sql );
-	dbDelta( $layer_sql );
-
-	add_option( "tm_db_version", "1.0.0" );
+function tm_deactivate() {
+	
 }
 
-tm_create_settings();
-tm_create_tables();
+if ( is_admin() ) {
+    register_activation_hook( __FILE__, 'tm_activate' );
+    register_deactivation_hook( __FILE__, 'tm_deactivate' );
+        
+    require 'admin/travelermap-admin.php';
+} else {
+    require 'frontend/travelermap-frontend.php';
+}
 
 ?>

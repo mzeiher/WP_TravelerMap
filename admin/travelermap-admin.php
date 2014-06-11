@@ -30,10 +30,9 @@ function travelermap_init() {
    wp_enqueue_script( 'jquery-ui-core');
    wp_enqueue_script( 'jquery-ui-sortable ');
 
-   require_once (dirname (__FILE__) . '/travelermap_ajax.php');
-   require_once (dirname (__FILE__) . '/travelermap_editmaps.php');
-   require_once (dirname (__FILE__) . '/travelermap_editmap.php');
-   require_once (dirname (__FILE__) . '/nwm-map-settings.php');
+   require_once (dirname (__FILE__) . '/travelermap-ajax.php');
+   require_once (dirname (__FILE__) . '/travelermap-editmaps.php');
+   require_once (dirname (__FILE__) . '/travelermap-editmap.php');
 }
 
 function travelermap_create_admin_menu() {
