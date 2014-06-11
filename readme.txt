@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== WP Travelermap ===
 Contributors: Mathis Zeiher
 Donate link: http://bitschubser.org
 Tags: travel, map, waypoints

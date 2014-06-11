@@ -22,12 +22,20 @@
  *  THE SOFTWARE.
  */
 
-add_action( 'wp_ajax_travelermap_addmap', 'tm_ajax_addmap' );
+add_action( 'wp_ajax_travlermap_ajax_updatemap', 'travlermap_ajax_updatemap' );
 
-function tm_ajax_addmap() {
-	global $wpdb;
-        echo "";
-	die();
+function travlermap_ajax_updatemap() {
+    global $wpdb;
+    
+    $map_table = $wpdb->prefix . "travelermap_maps";
+    $wpdb->query(
+        $wpdb->prepare(
+            "UPDATE $map_table SET name=%s, map=%s WHERE id=%d",
+            $_POST['name'], $_POST['map'], $_POST['id']
+        )
+    );
+    echo "0";
+    die();
 }
 
 ?>

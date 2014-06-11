@@ -264,6 +264,7 @@
             obj['version'] = "1.0.0";
             obj['mapid'] = $('#tm_map').data('mapid');
             obj['name'] = $('#tm_map_name').val();
+            obj['id'] = $('#tm_map_id').val();
 
             var mainProperties = { layer : [], overlays: [] };
             $('#tm_layerlist > li').each(function() {
@@ -288,6 +289,22 @@
             obj['data'] = data;
             $('#output').val(JSON.stringify(obj));
             return obj;
+        }
+        
+        function tm_saveMap() {
+            var map = tm_generateMap();
+            
+            var data = {
+		"action": "travlermap_ajax_updatemap",
+		"map": JSON.stringify(map),
+                "name": map.name,
+                "id" : map.id
+            };
+
+            // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+            $.post(ajaxurl, data, function(response) {
+                    alert('Got this from the server: ' + response);
+            });
         }
 
         function tm_previewMap() {
@@ -356,7 +373,7 @@
                 tm_addOverlay();
         });
         $('#tm_saveMap').on('click', function() {
-                tm_generateMap();
+                tm_saveMap();
         });
         $('#tm_previewMap').on('click', function() {
                 tm_previewMap();

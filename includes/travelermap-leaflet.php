@@ -22,8 +22,20 @@
  *  THE SOFTWARE.
  */
 
-wp_enqueue_style( 'leafet', TM_URL . "/media/leaflet.css" );
-wp_enqueue_script( 'leaflet', TM_URL . "/js/leaflet-src.js" , array(), '0.7.6', false);
-wp_enqueue_script( 'leaflet-providers', TM_URL . "/js/leaflet-providers.js" , array(), '1.0.5', false);
+add_action( 'wp_enqueue_scripts','travelermap_enqueue_leaflet_scripts' );
+add_action( 'wp_enqueue_styles','travelermap_enqueue_leaflet_styles' );
+if ( is_admin() ) {
+    add_action( 'admin_enqueue_scripts','travelermap_enqueue_leaflet_scripts' );
+    add_action( 'admin_enqueue_scripts','travelermap_enqueue_leaflet_styles' );
+}
+
+function travelermap_enqueue_leaflet_scripts() {
+    wp_enqueue_script( 'leaflet', TM_URL . "/js/leaflet-src.js" , array(), '0.7.2', false);
+    wp_enqueue_script( 'leaflet-providers', TM_URL . "/js/leaflet-providers.js" , array(), '1.0.5', false);   
+}
+
+function travelermap_enqueue_leaflet_styles() {
+    wp_enqueue_style( 'leafet', TM_URL . "/media/leaflet.css" );
+}
 
 ?>
