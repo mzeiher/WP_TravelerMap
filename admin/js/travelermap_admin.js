@@ -26,7 +26,7 @@
         var currentSelection = null;
 
         // create a map in the "map" div, set the view to a given place and zoom
-        var map = L.map('tm_map').setView([0,0], 3);
+        var map = L.map('tm_preview_map').setView([0,0], 3);
 
         // add an OpenStreetMap tile layer
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -40,11 +40,14 @@
                 $('#tm_lng').val(latlng.lng);
         });
 
-        $('#tm_points').sortable();
-        $('#tm_layer').sortable();
-        $('#tm_overlays').sortable();
+        $('#tm_pointlist').sortable();
+        $('#tm_layerlist').sortable();
+        $('#tm_overlaylist').sortable();
         $('#tm_arrival').datepicker();
         $('#tm_departure').datepicker();
+        $('#tm_type').on('change', function() {
+            tm_enableControls({type: $('#tm_type').val()});
+        });
 
         function tm_editPoint(elem) {
                 if(currentSelection) {
@@ -72,7 +75,7 @@
                 } else {
                         $('#tm_lat').val(0);
                 }
-                if(data.type == 'waypoint' || data.type == 'marker') {
+                if(data.type == 'waypoint' || data.type == 'marker' || data.type== 'media' || data.type == 'post') {
                     marker.setLatLng({
                             lat: parseFloat($('#tm_lat').val()),
                             lng: parseFloat($('#tm_lng').val())
@@ -98,7 +101,7 @@
             $('#tm_linkToPost').prop('disabled', true);
             $('#tm_saveChanges').prop('disabled', true);
 
-            if(data.type === 'marker') {
+            if(data.type === 'marker' || data.type === 'post' || data.type === 'media') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
@@ -161,10 +164,12 @@
 
         function tm_saveChanges() {
                 if(!currentSelection) return;
-                data = {
+                var data = {
                         "type" : $('#tm_type').val(),
                         "title" : $('#tm_title').val(),
                         "thumbnail" : $('#tm_thumbnail').val(),
+                        "media_id" : -1,
+                        "post_id" : -1,
                         "description" : $('#tm_description').val(),
                         "link" : $('#tm_link').val(),
                         "excludeFromPath" : $('#tm_excludefrompath').prop('checked') ? true : false,
@@ -174,11 +179,13 @@
                         "departure" : $('#tm_arrival').val() != '' ? Date.parse($('#tm_departure').val()): null
                 }
                 $(currentSelection).data('point', data);
-                $(currentSelection).find('span:first-child').html(data.title);
+                $(currentSelection).find('.tm_title').html(data.title);
                 $(currentSelection).find('input').prop('checked',data.excludeFromPath);
 
                 $(currentSelection).removeClass('marker');
                 $(currentSelection).removeClass('waypoint');
+                $(currentSelection).removeClass('media');
+                $(currentSelection).removeClass('post');
                 $(currentSelection).removeClass('startsection');
                 $(currentSelection).removeClass('endsection');
                 
@@ -192,9 +199,11 @@
                 if(!data) {
                         data = {
                                 "type" : "marker",
-                                "title" : "point",
+                                "title" : "",
                                 "thumbnail" : "",
                                 "description" : "",
+                                "media_id" : -1,
+                                "post_id" : -1,
                                 "link" : null,
                                 "excludeFromPath" : false,
                                 "lat" : 0,
@@ -203,7 +212,7 @@
                                 "departure" : null
                         }
                 }
-                var li = $('<li class="marker"><span>' + data.title +'</span><span>Exclude From Path<input disabled="true" type="checkbox" '+ (data.excludeFromPath ? 'checked="true"' : "") +'/></span><a href="#">delete</a></li>');
+                var li = $('<li class="marker"><i class="fa fa-fw"></i><span class="tm_title">' + data.title +'</span><span>Exclude From Path<input disabled="true" type="checkbox" '+ (data.excludeFromPath ? 'checked="true"' : "") +'/></span><a href="#">delete</a></li>');
                 li.on('click', function() {
                         tm_editPoint(this);
                 });
@@ -217,8 +226,8 @@
                     $('#points').sortable("refresh");
                 });
                 li.data('point', data);
-                $('#tm_points').append(li);
-                $('#tm_points').sortable("refresh");
+                $('#tm_pointlist').append(li);
+                $('#tm_pointlist').sortable("refresh");
                 li.trigger('click');
         }
 
@@ -226,48 +235,53 @@
                 if(!name) {
                     name = $('#tm_layer_select').val();
                 }
-                var li = $('<li>'+name+'<a href="#">delete</a></li>');
+                var li = $('<li><i class="fa fa-fw"></i>'+name+'<a href="#">delete</a></li>');
                 li.find('a').on('click', function() {
                         $(this).parent().remove();
-                        $('#tm_layer').sortable("refresh");
+                        $('#tm_layerlist').sortable("refresh");
                 });
                 li.data('value', name);
-                $('#tm_layer').append(li);
-                $('#tm_layer').sortable("refresh");
+                $('#tm_layerlist').append(li);
+                $('#tm_layerlist').sortable("refresh");
         }
 
         function tm_addOverlay(name) {
                 if(!name) {
                     name = $('#tm_overlays_select').val();
                 }
-                var li = $('<li>'+name+'<a href="#">delete</a></li>');
+                var li = $('<li><i class="fa fa-fw"></i>'+name+'<a href="#">delete</a></li>');
                 li.find('a').on('click', function() {
                         $(this).parent().remove();
-                        $('#tm_overlays').sortable("refresh");
+                        $('#tm_overlaylist').sortable("refresh");
                 });
                 li.data('value', name);
-                $('#tm_overlays').append(li);
-                $('#tm_overlays').sortable("refresh");
+                $('#tm_overlaylist').append(li);
+                $('#tm_overlaylist').sortable("refresh");
         }
 
         function tm_generateMap() {
             var obj = {};
             obj['version'] = "1.0.0";
             obj['mapid'] = $('#tm_map').data('mapid');
-            obj['mapname'] = $('#tm_map').data('mapname');
+            obj['name'] = $('#tm_map_name').val();
 
             var mainProperties = { layer : [], overlays: [] };
-            $('#tm_layer > li').each(function() {
+            $('#tm_layerlist > li').each(function() {
                 mainProperties.layer.push($(this).data('value'));
             });
-            $('#tm_overlays > li').each(function() {
+            $('#tm_overlaylist > li').each(function() {
                 mainProperties.overlays.push($(this).data('value'));
             });
             obj['properties'] = mainProperties;
 
             var data = [];
-            $('#tm_points > li').each(function() {
+            $('#tm_pointlist > li').each(function() {
                 var point = $(this).data('point');
+                for(var i in point) { /* delete temp attachments */
+                    if(i.toString().charAt(0) === '_') {
+                        delete point[i];
+                    }
+                }
                 data.push(point);
             });
 
@@ -295,12 +309,15 @@
                 mapData = JSON.parse(mapData);
             }
             if(!mapData) { mapData = {};}
-            $("#tm_points").empty();
-            $("#tm_points").sortable("refresh");
-            $("#tm_layer").empty();
-            $("#tm_layer").sortable("refresh");
-            $("#tm_overlays").empty();
-            $("#tm_overlays").sortable("refresh");
+            $("#tm_pointlist").empty();
+            $("#tm_pointlist").sortable("refresh");
+            $("#tm_layerlist").empty();
+            $("#tm_layerlist").sortable("refresh");
+            $("#tm_overlaylist").empty();
+            $("#tm_overlaylist").sortable("refresh");
+            if(mapData.name) {
+                $("#tm_map_name").val(mapData.name);
+            }
             if(mapData.properties) {
                 var props = mapData.properties;
                 if(props.layer) {

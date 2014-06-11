@@ -21,8 +21,23 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  *  THE SOFTWARE.
  */
- wp_enqueue_script( 'jquery');
- wp_enqueue_script( 'jquery-ui-core');
- wp_enqueue_script( 'jquery-ui-sortable ');
-     
+
+add_action( 'admin_init', 'travelermap_init' );
+add_action( 'admin_menu', 'travelermap_create_admin_menu');
+ 
+function travelermap_init() {
+   wp_enqueue_script( 'jquery');
+   wp_enqueue_script( 'jquery-ui-core');
+   wp_enqueue_script( 'jquery-ui-sortable ');
+
+   require_once (dirname (__FILE__) . '/travelermap_ajax.php');
+   require_once (dirname (__FILE__) . '/travelermap_editmaps.php');
+   require_once (dirname (__FILE__) . '/travelermap_editmap.php');
+   require_once (dirname (__FILE__) . '/nwm-map-settings.php');
+}
+
+function travelermap_create_admin_menu() {
+    add_menu_page( 'Travelermap', 'Travelermap', 'manage_options', 'travelermap_editmaps', 'travelermap_editmaps' );
+}
+ 
 ?>
