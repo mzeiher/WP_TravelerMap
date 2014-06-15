@@ -22,9 +22,12 @@
  *  THE SOFTWARE.
  */
 
-add_action( 'wp_ajax_travlermap_ajax_updatemap', 'travlermap_ajax_updatemap' );
+add_action( 'wp_ajax_travelermap_ajax_updatemap', 'travelermap_ajax_updatemap' );
+add_action( 'wp_ajax_travelermap_ajax_getpostnames', 'travelermap_ajax_getpostnames' );
+add_action( 'wp_ajax_travelermap_ajax_getpostinfos', 'travelermap_ajax_getpostinfos' );
 
-function travlermap_ajax_updatemap() {
+function travelermap_ajax_updatemap() {
+    check_ajax_referer( 'travelermap_ajax_updatemap');
     global $wpdb;
     
     $map_table = $wpdb->prefix . "travelermap_maps";
@@ -36,6 +39,70 @@ function travlermap_ajax_updatemap() {
     );
     echo "0";
     die();
+}
+
+function travelermap_ajax_getpostnames() {
+    check_ajax_referer( 'travelermap_ajax_getpostnames');
+    global $wpdb;
+    
+    $table = $wpdb->prefix . "posts";
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT id, post_title FROM $table WHERE post_status=%s AND post_type=%s",
+                'publish', 'post'
+        )
+    );
+    $response = array();
+    foreach ( $results as $map ) {
+        array_push($response, array('value' => $map->id, 'label' => $map->post_title));
+    }
+    wp_send_json( $response );	
+    die();
+}
+
+function travelermap_ajax_getpostinfos() {
+    check_ajax_referer( 'travelermap_ajax_getpostinfos');
+    
+    $result = get_post($_GET['post_id']);
+    
+    if($result == false) {
+        echo "error";
+        wp_send_json_error();
+    }
+    $postId = $result->ID;
+    $thumbnailId = get_post_thumbnail_id( $result->ID);
+    $permalink = get_permalink( $result->ID);
+    $thumbnail = wp_get_attachment_image_src( $thumbnailId );
+    $fullsize = wp_get_attachment_image_src( $thumbnailId, 'full');
+    $description = travelermap_create_excerpt($result->post_content);
+    $title = $result->post_title;
+    $date = $result->post_date;
+    
+    $response = array(
+        "postId" => $postId,
+        "link" => $permalink,
+        "thumbnail" => $thumbnail[0] === null ? "" : $thumbnail[0],
+        "mediaId" => $thumbnailId === false ? -1 : $thumbnailId,
+        "fullsize" => $fullsize[0] === null ? "": $fullsize[0],
+        "description" => $description,
+        "title" => $title,
+        "date" => $date
+    );
+    
+    wp_send_json( $response );	
+}
+
+function travelermap_create_excerpt($text) {
+    $length = 20;
+    $text  = strip_tags( strip_shortcodes( $text ) );
+    $words = explode( ' ', $text, $length + 1 );
+
+    if( count ( $words ) > $length ) {
+            array_pop( $words );
+            array_push( $words, '…' );
+            $text = implode( ' ', $words ) ;
+    }
+    return $text;	
 }
 
 ?>

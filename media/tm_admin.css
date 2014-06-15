@@ -57,6 +57,10 @@ ul#tm_overlaylist li > i:before {
 	content: "\f1c5";
 }
 
+ul#tm_pointlist .active {
+    background-color: #ccc;
+}
+
 ul#tm_pointlist > li.marker > i:before {
 	content: "\f041";
 }

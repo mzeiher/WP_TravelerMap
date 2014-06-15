@@ -29,7 +29,9 @@ add_action( 'admin_enqueue_scripts','travelermap_enqueue_admin_scripts' );
 function travelermap_enqueue_admin_scripts() {
     wp_enqueue_script( 'jquery');
     wp_enqueue_script( 'jquery-ui-core');
-    wp_enqueue_script( 'jquery-ui-sortable ');
+    wp_enqueue_script( 'jquery-ui-sortable');
+    wp_enqueue_script( 'jquery-ui-autocomplete');
+    wp_enqueue_script( 'jquery-ui-tooltip'); 
     wp_enqueue_script( 'travelermap-admin', TM_URL . "/admin/js/travelermap_admin.js" , array(), '1.0.0', false);
     wp_enqueue_script( 'travelermap-frontend', TM_URL . "/frontend/js/travelermap_frontend.js" , array(), '1.0.0', false);
     wp_enqueue_style( 'tm-admin', TM_URL . "/media/tm_admin.css" );

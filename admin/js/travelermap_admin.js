@@ -24,30 +24,34 @@
     $(document).ready(function() {
 
         var currentSelection = null;
+        var marker = null;
+        var map = null;
+        
+        function tm_init() {
+            // create a map in the "map" div, set the view to a given place and zoom
+            map = L.map('tm_preview_map').setView([0,0], 3);
 
-        // create a map in the "map" div, set the view to a given place and zoom
-        var map = L.map('tm_preview_map').setView([0,0], 3);
+            // add an OpenStreetMap tile layer
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
 
-        // add an OpenStreetMap tile layer
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+            marker = L.marker([0,0], {'draggable':true}).addTo(map);
+            marker.on('dragend', function(evt) {
+                    var latlng = marker.getLatLng();
+                    $('#tm_lat').val(latlng.lat);
+                    $('#tm_lng').val(latlng.lng);
+            });
 
-        var marker = L.marker([0,0], {'draggable':true}).addTo(map);
-        marker.on('dragend', function(evt) {
-                var latlng = marker.getLatLng();
-                $('#tm_lat').val(latlng.lat);
-                $('#tm_lng').val(latlng.lng);
-        });
-
-        $('#tm_pointlist').sortable();
-        $('#tm_layerlist').sortable();
-        $('#tm_overlaylist').sortable();
-        $('#tm_arrival').datepicker();
-        $('#tm_departure').datepicker();
-        $('#tm_type').on('change', function() {
-            tm_enableControls({type: $('#tm_type').val()});
-        });
+            $('#tm_pointlist').sortable();
+            $('#tm_layerlist').sortable();
+            $('#tm_overlaylist').sortable();
+            $('#tm_arrival').datepicker();
+            $('#tm_departure').datepicker();
+            $('#tm_type').on('change', function() {
+                tm_enableControls({type: $('#tm_type').val()});
+            });
+        }
 
         function tm_editPoint(elem) {
                 if(currentSelection) {
@@ -59,6 +63,9 @@
                 $('#tm_type').val(data.type);
                 $('#tm_title').val(data.title);
                 $('#tm_thumbnail').val(data.thumbnail);
+                $('#tm_mediaid').val(data.mediaId);
+                $('#tm_postid').val(data.postId);
+                $('#tm_fullsize').val(data.fullsize);
                 $('#tm_description').val(data.description);
                 $('#tm_link').val(data.link);
                 $('#tm_excludefrompath').val(data.excludeFromPath);
@@ -89,6 +96,7 @@
             $('#tm_type').prop('disabled', true);
             $('#tm_title').prop('disabled', true);
             $('#tm_thumbnail').prop('disabled', true);
+            $('#tm_fullsize').prop('disabled', true);
             $('#tm_description').prop('disabled', true);
             $('#tm_link').prop('disabled', true);
             $('#tm_excludefrompath').prop('disabled', true);
@@ -105,6 +113,7 @@
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
+                $('#tm_fullsize').prop('disabled', false);
                 $('#tm_description').prop('disabled', false);
                 $('#tm_link').prop('disabled', false);
                 $('#tm_excludefrompath').prop('disabled', false);
@@ -133,6 +142,7 @@
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
+                $('#tm_fullsize').prop('disabled', false);
                 $('#tm_description').prop('disabled', false);
                 $('#tm_link').prop('disabled', false);
 
@@ -168,8 +178,9 @@
                         "type" : $('#tm_type').val(),
                         "title" : $('#tm_title').val(),
                         "thumbnail" : $('#tm_thumbnail').val(),
-                        "media_id" : -1,
-                        "post_id" : -1,
+                        "fullsize" : $('#tm_fullsize').val(),
+                        "mediaId" : parseInt($('#tm_mediaid').val()),
+                        "postId" : parseInt($('#tm_postid').val()),
                         "description" : $('#tm_description').val(),
                         "link" : $('#tm_link').val(),
                         "excludeFromPath" : $('#tm_excludefrompath').prop('checked') ? true : false,
@@ -201,6 +212,7 @@
                                 "type" : "marker",
                                 "title" : "",
                                 "thumbnail" : "",
+                                "fullsize" : "",
                                 "description" : "",
                                 "media_id" : -1,
                                 "post_id" : -1,
@@ -291,14 +303,63 @@
             return obj;
         }
         
+        function tm_linkToPost() {
+            var data = {
+		"action": "travelermap_ajax_getpostnames",
+                "_wpnonce" : $('#travelermap_ajax_getpostnames').val()
+            };
+
+            // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+            $.get(ajaxurl, data, function(response) {
+                    if(response == '-1') {
+                        alert("Error while linking to post");
+                        return;
+                    }
+                    var select = $('<select></select>');
+                    for(var i = 0; i < response.length; i++) {
+                        select.append($('<option value="'+response[i].value+'">'+response[i].label+'</option>'));
+                    }
+                    var dialog = $('<div></div>');
+                    dialog.append($('<label>Select Post</label>'));
+                    dialog.append(select);
+                    
+                    dialog.dialog({ buttons: [ 
+                            { text: "Ok", click: function() { 
+                                $( this ).dialog( "destroy" ); 
+                                $.get(ajaxurl, {action:'travelermap_ajax_getpostinfos',post_id: select.val(), _wpnonce:$('#travelermap_ajax_getpostinfos').val()}, function(response) {
+                                    if(response == "-1") {
+                                        alert("Error while linking to post");
+                                        return;
+                                    }
+                                    $('#tm_type').val('post');
+                                    $('#tm_title').val(response.title);
+                                    $('#tm_thumbnail').val(response.thumbnail);
+                                    $('#tm_mediaid').val(response.mediaId);
+                                    $('#tm_postid').val(response.postId);
+                                    $('#tm_fullsize').val(response.fullsize);
+                                    $('#tm_description').val(response.description);
+                                    $('#tm_link').val(response.link);
+                                });
+                            } },
+                            { text: "Cancel", click: function() { $( this ).dialog( "destroy" ); } } 
+                    ] });
+                    dialog.on('close', function() {
+                        dialog.dialog('destroy');
+                    });
+                    //select.autocomplete({source : response, appendTo:dialog.parent()});
+                    select.combobox();
+            });
+        }
+        
         function tm_saveMap() {
             var map = tm_generateMap();
             
             var data = {
-		"action": "travlermap_ajax_updatemap",
+		"action": "travelermap_ajax_updatemap",
 		"map": JSON.stringify(map),
                 "name": map.name,
-                "id" : map.id
+                "id" : map.id,
+                "_wpnonce" : $('#travelermap_ajax_updatemap').val()
             };
 
             // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
@@ -359,6 +420,7 @@
             }
         }
         window.tm_loadAdminMap = tm_loadMap;
+        window.tm_init = tm_init;
 
         $('#tm_addPoint').on('click', function() {
                 tm_addPoint();
@@ -378,6 +440,10 @@
         $('#tm_previewMap').on('click', function() {
                 tm_previewMap();
         });
+        $('#tm_linkToPost').on('click', function() {
+                tm_linkToPost();
+        });
+        
         $('#tm_type').on('change', function() {
         });
         $('#tm_loadMap').on('click', function() {
@@ -385,3 +451,117 @@
         });
     });
 })(jQuery);
+
+ (function( $ ) {
+$.widget( "custom.combobox", {
+_create: function() {
+this.wrapper = $( "<span>" )
+.addClass( "custom-combobox" )
+.insertAfter( this.element );
+this.element.hide();
+this._createAutocomplete();
+this._createShowAllButton();
+},
+_createAutocomplete: function() {
+var selected = this.element.children( ":selected" ),
+value = selected.val() ? selected.text() : "";
+this.input = $( "<input>" )
+.appendTo( this.wrapper )
+.val( value )
+.attr( "title", "" )
+.addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+.autocomplete({
+delay: 0,
+minLength: 0,
+source: $.proxy( this, "_source" )
+})
+.tooltip({
+tooltipClass: "ui-state-highlight"
+});
+this._on( this.input, {
+autocompleteselect: function( event, ui ) {
+ui.item.option.selected = true;
+this._trigger( "select", event, {
+item: ui.item.option
+});
+},
+autocompletechange: "_removeIfInvalid"
+});
+},
+_createShowAllButton: function() {
+var input = this.input,
+wasOpen = false;
+$( "<a>" )
+.attr( "tabIndex", -1 )
+.attr( "title", "Show All Items" )
+.tooltip()
+.appendTo( this.wrapper )
+.button({
+icons: {
+primary: "ui-icon-triangle-1-s"
+},
+text: false
+})
+.removeClass( "ui-corner-all" )
+.addClass( "custom-combobox-toggle ui-corner-right" )
+.mousedown(function() {
+wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+})
+.click(function() {
+input.focus();
+// Close if already visible
+if ( wasOpen ) {
+return;
+}
+// Pass empty string as value to search for, displaying all results
+input.autocomplete( "search", "" );
+});
+},
+_source: function( request, response ) {
+var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+response( this.element.children( "option" ).map(function() {
+var text = $( this ).text();
+if ( this.value && ( !request.term || matcher.test(text) ) )
+return {
+label: text,
+value: text,
+option: this
+};
+}) );
+},
+_removeIfInvalid: function( event, ui ) {
+// Selected an item, nothing to do
+if ( ui.item ) {
+return;
+}
+// Search for a match (case-insensitive)
+var value = this.input.val(),
+valueLowerCase = value.toLowerCase(),
+valid = false;
+this.element.children( "option" ).each(function() {
+if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+this.selected = valid = true;
+return false;
+}
+});
+// Found a match, nothing to do
+if ( valid ) {
+return;
+}
+// Remove invalid value
+this.input
+.val( "" )
+.attr( "title", value + " didn't match any item" )
+.tooltip( "open" );
+this.element.val( "" );
+this._delay(function() {
+this.input.tooltip( "close" ).attr( "title", "" );
+}, 2500 );
+this.input.data( "ui-autocomplete" ).term = "";
+},
+_destroy: function() {
+this.wrapper.remove();
+this.element.show();
+}
+});
+})( jQuery );

@@ -43,6 +43,7 @@ if(isset($_GET['map_id'])) {
 <script type="text/javascript">
     (function($) {
     $(document).ready(function() {
+    window.tm_init();
     window.tm_loadAdminMap('<?php echo $map->map ?>');    
     });
 })(jQuery);
@@ -51,6 +52,9 @@ if(isset($_GET['map_id'])) {
 }   
 ?>
 <div class="tm_mapoptions">
+                <input id="travelermap_ajax_getpostnames" type="hidden" value="<?php echo wp_create_nonce('travelermap_ajax_getpostnames') ?>"/>
+                <input id="travelermap_ajax_updatemap" type="hidden" value="<?php echo wp_create_nonce('travelermap_ajax_updatemap') ?>"/>
+                <input id="travelermap_ajax_getpostinfos" type="hidden" value="<?php echo wp_create_nonce('travelermap_ajax_getpostinfos') ?>"/>
 		<label for="tm_map_name">Name</label>
 		<input type="text" id="tm_map_name" />
                 <input id="tm_map_id" type="hidden" value="<?php echo $map->id ?>" />
@@ -145,6 +149,8 @@ if(isset($_GET['map_id'])) {
 	</div>
 	<div class="tm_pointdetails">
 		<div class="tm_form">
+                        <input type="hidden" id="tm_postid" value="-1" disabled="true"/>
+                        <input type="hidden" id="tm_mediaid" value="-1" disabled="true"/>
 			<label for="tm_type">Type</label>
 			<select id="tm_type" disabled="true">
 				<option value="marker">Marker</option>
@@ -158,6 +164,8 @@ if(isset($_GET['map_id'])) {
 			<input type="text" id="tm_title" disabled="true"/><br />
 			<label for="tm_thumbnail">Thumbnail</label>
 			<input type="text" id="tm_thumbnail" disabled="true" /><br />
+                        <label for="tm_fullsize">Fullsize</label>
+			<input type="text" id="tm_fullsize" disabled="true" /><br />
 			<label for="tm_description">Description</label>
 			<textarea id="tm_description" disabled="true" ></textarea><br />
 			<label for="tm_link">Link</label>
