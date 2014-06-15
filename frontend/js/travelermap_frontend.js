@@ -59,7 +59,7 @@
                 
                 for(var i = 0; i < data.length; i++) {
 
-                    var routeLayer = createRouteLayer(data[i].data);
+                    var routeLayer = createRouteLayer(data[i].data, data[i].lineColor);
                     var markerLayer = createMarker(data[i].data);
 
                     var mapLayer = L.layerGroup([routeLayer, markerLayer]);
@@ -114,11 +114,14 @@
                 return overlays;
             }
             
-            function createRouteLayer(data /* array */) {
+            function createRouteLayer(data /* array */, lineColor) {
                 var group = L.layerGroup([]);
                 if(!data && data.length === 0) return group;
+                if(!lineColor) {
+                    lineColor = "#03f";
+                }
                 var isInFuture = false;
-                var currentLine = L.polyline([]);
+                var currentLine = L.polyline([], {color:lineColor});
                 var lastPoint = null;
                 for(var i = 0; i < data.length; i++) {
                     var feature = data[i];
@@ -144,7 +147,7 @@
                         currentLine['tm_data'] = feature;
                         group.addLayer(currentLine);
                         feature['_lf_object'] = currentLine;
-                        currentLine = L.polyline([]);
+                        currentLine = L.polyline([],{color:lineColor});
                         currentLine.addLatLng([lastPoint.lat, lastPoint.lng]); //add as starting point
                     }
                     lastPoint = feature;
@@ -183,6 +186,7 @@
                         } 
                         var icon = L.AwesomeMarkers.icon({
                             icon: iconName,
+                            markerColor: feature.iconColor,
                             prefix: 'fa'
                         });
                         var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(feature.title);

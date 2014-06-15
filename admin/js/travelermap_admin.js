@@ -63,6 +63,8 @@
                 var data = currentSelection.data('point');
                 $('#tm_type').val(data.type);
                 $('#tm_title').val(data.title);
+                $('#tm_icon').val(data.icon);
+                $('#tm_icon_color').val(data.iconColor);
                 $('#tm_thumbnail').val(data.thumbnail);
                 $('#tm_mediaid').val(data.mediaId);
                 $('#tm_postid').val(data.postId);
@@ -97,6 +99,7 @@
             $('#tm_type').prop('disabled', true);
             $('#tm_title').prop('disabled', true);
             $('#tm_icon').prop('disabled', true);
+            $('#tm_icon_color').prop('disabled', true);
             $('#tm_thumbnail').prop('disabled', true);
             $('#tm_fullsize').prop('disabled', true);
             $('#tm_description').prop('disabled', true);
@@ -114,6 +117,7 @@
             if(data.type === 'marker' || data.type === 'post' || data.type === 'media') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_icon').prop('disabled', false);
+                $('#tm_icon_color').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
                 $('#tm_fullsize').prop('disabled', false);
@@ -181,6 +185,7 @@
                         "type" : $('#tm_type').val(),
                         "title" : $('#tm_title').val(),
                         "icon" : $('#tm_icon').val(),
+                        "iconColor" : $('#tm_icon_color').val(),
                         "thumbnail" : $('#tm_thumbnail').val(),
                         "fullsize" : $('#tm_fullsize').val(),
                         "mediaId" : parseInt($('#tm_mediaid').val()),
@@ -218,8 +223,9 @@
                                 "thumbnail" : "",
                                 "fullsize" : "",
                                 "description" : "",
-                                "media_id" : -1,
-                                "post_id" : -1,
+                                "iconColor" : "blue",
+                                "mediaId" : -1,
+                                "postId" : -1,
                                 "link" : null,
                                 "icon" : "",
                                 "excludeFromPath" : false,
@@ -227,7 +233,7 @@
                                 "lng" : 0,
                                 "arrival" : null,
                                 "departure" : null
-                        }
+                        };
                 }
                 var li = $('<li class="'+data.type+'"><i class="fa fa-fw"></i><span class="tm_title">' + data.title +'</span><span>Exclude From Path<input disabled="true" type="checkbox" '+ (data.excludeFromPath ? 'checked="true"' : "") +'/></span><a href="#">delete</a></li>');
                 li.on('click', function() {
@@ -282,6 +288,7 @@
             obj['mapid'] = $('#tm_map').data('mapid');
             obj['name'] = $('#tm_map_name').val();
             obj['id'] = $('#tm_map_id').val();
+            obj['lineColor'] = $("#tm_line_color").val();
 
             var mainProperties = { layer : [], overlays: [] };
             $('#tm_layerlist > li').each(function() {
@@ -432,6 +439,11 @@
             $("#tm_overlaylist").sortable("refresh");
             if(mapData.name) {
                 $("#tm_map_name").val(mapData.name);
+            }
+            if(mapData.lineColor) {
+                $("#tm_line_color").val(mapData.lineColor);
+            } else {
+                $("#tm_line_color").val('#03f');
             }
             if(mapData.properties) {
                 var props = mapData.properties;
