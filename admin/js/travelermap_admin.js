@@ -26,6 +26,7 @@
         var currentSelection = null;
         var marker = null;
         var map = null;
+        var fileFrame;
         
         function tm_init() {
             // create a map in the "map" div, set the view to a given place and zoom
@@ -303,6 +304,42 @@
             return obj;
         }
         
+        function tm_linkToMedia() {
+             // If the media frame already exists, reopen it.
+            if ( fileFrame ) {
+                fileFrame.open();
+                return;
+            }
+
+            // Create the media frame.
+            fileFrame = wp.media.frames.file_frame = wp.media({
+                title: "Choose File",
+                button: {
+                    text: "Select"
+                },
+                multiple: false // Set to true to allow multiple files to be selected
+            });
+
+            // When an image is selected, run a callback.
+            fileFrame.on( 'select', function() {
+                // We set multiple to false so only get one image from the uploader
+                attachment = fileFrame.state().get('selection').first().toJSON();
+                console.log(attachment)
+                $('#tm_type').val('media');
+                $('#tm_title').val(attachment.title);
+                $('#tm_thumbnail').val(attachment.sizes.thumbnail.url);
+                $('#tm_mediaid').val(attachment.id);
+                $('#tm_postid').val(-1);
+                $('#tm_fullsize').val(attachment.sizes.full.url);
+                $('#tm_description').val(attachment.description);
+                $('#tm_link').val(attachment.link);
+                // Do something with attachment.id and/or attachment.url here
+            });
+
+            // Finally, open the modal
+            fileFrame.open();
+        }
+        
         function tm_linkToPost() {
             var data = {
 		"action": "travelermap_ajax_getpostnames",
@@ -442,6 +479,9 @@
         });
         $('#tm_linkToPost').on('click', function() {
                 tm_linkToPost();
+        });
+        $('#tm_linkToMedia').on('click', function() {
+                tm_linkToMedia();
         });
         
         $('#tm_type').on('change', function() {

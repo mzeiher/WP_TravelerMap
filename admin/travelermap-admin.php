@@ -27,6 +27,7 @@ add_action( 'admin_menu', 'travelermap_create_admin_menu');
 add_action( 'admin_enqueue_scripts','travelermap_enqueue_admin_scripts' );
 
 function travelermap_enqueue_admin_scripts() {
+    wp_enqueue_media();
     wp_enqueue_script( 'jquery');
     wp_enqueue_script( 'jquery-ui-core');
     wp_enqueue_script( 'jquery-ui-sortable');
