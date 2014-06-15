@@ -36,6 +36,7 @@ function travelermap_enqueue_admin_scripts() {
     wp_enqueue_script( 'travelermap-admin', TM_URL . "/admin/js/travelermap_admin.js" , array(), '1.0.0', false);
     wp_enqueue_script( 'travelermap-frontend', TM_URL . "/frontend/js/travelermap_frontend.js" , array(), '1.0.0', false);
     wp_enqueue_style( 'tm-admin', TM_URL . "/media/tm_admin.css" );
+    wp_enqueue_style( 'tm-frontend', TM_URL . "/media/tm_frontend.css" );
     wp_enqueue_style( 'font-awesome', "http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" );
 }
 

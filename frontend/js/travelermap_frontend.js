@@ -178,6 +178,7 @@
                         markerLayer.addLayer(wp);
                     } else if(feature.type === 'marker' || feature.type === 'media' || feature.type === 'post') {
                         var marker = L.marker([feature.lat, feature.lng]).bindPopup(feature.title);
+                        //var marker = L.marker([feature.lat, feature.lng]).bindPopup('<img src="'+feature.thumbnail+'"/>');
                         //feature['_lf_object'] = marker;
                         marker['tm_data'] = feature;
                         feature['_lf_object'] = marker;

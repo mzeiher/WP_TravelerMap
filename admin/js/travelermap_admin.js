@@ -305,26 +305,23 @@
         }
         
         function tm_linkToMedia() {
-             // If the media frame already exists, reopen it.
+            
             if ( fileFrame ) {
                 fileFrame.open();
                 return;
             }
 
-            // Create the media frame.
             fileFrame = wp.media.frames.file_frame = wp.media({
                 title: "Choose File",
                 button: {
                     text: "Select"
                 },
-                multiple: false // Set to true to allow multiple files to be selected
+                multiple: false
             });
 
-            // When an image is selected, run a callback.
             fileFrame.on( 'select', function() {
-                // We set multiple to false so only get one image from the uploader
                 attachment = fileFrame.state().get('selection').first().toJSON();
-                console.log(attachment)
+
                 $('#tm_type').val('media');
                 $('#tm_title').val(attachment.title);
                 $('#tm_thumbnail').val(attachment.sizes.thumbnail.url);
@@ -333,10 +330,9 @@
                 $('#tm_fullsize').val(attachment.sizes.full.url);
                 $('#tm_description').val(attachment.description);
                 $('#tm_link').val(attachment.link);
-                // Do something with attachment.id and/or attachment.url here
+                
             });
 
-            // Finally, open the modal
             fileFrame.open();
         }
         
@@ -406,13 +402,13 @@
         }
 
         function tm_previewMap() {
-            var map = tm_generateMap();
-            var div = $('<div><div style="height:400px;width:400px;" class="tm_previewmap"></div><div>');
+            var mapData = tm_generateMap();
+            var div = $('<div><div style="height:400px;width:600px;" class="tm_previewmap"></div><div>');
             
             div.dialog({close : function(evt) {
                 
-            },minWidth: 450});
-            var map = window.tm_loadFrontendMap(map,div.find("> div")[0]);
+            },minWidth: 650});
+            var map = window.tm_loadFrontendMap(mapData,div.find("> div")[0]);
             div.on('close', function() {
                 map.destroy();
                 div.dialog('destroy');
