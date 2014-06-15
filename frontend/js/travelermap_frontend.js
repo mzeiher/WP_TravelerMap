@@ -177,7 +177,15 @@
                         feature['_lf_object'] = wp;
                         markerLayer.addLayer(wp);
                     } else if(feature.type === 'marker' || feature.type === 'media' || feature.type === 'post') {
-                        var marker = L.marker([feature.lat, feature.lng]).bindPopup(feature.title);
+                        var iconName = feature.icon;
+                        if(!iconName) {
+                            iconName="circle";
+                        } 
+                        var icon = L.AwesomeMarkers.icon({
+                            icon: iconName,
+                            prefix: 'fa'
+                        });
+                        var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(feature.title);
                         //var marker = L.marker([feature.lat, feature.lng]).bindPopup('<img src="'+feature.thumbnail+'"/>');
                         //feature['_lf_object'] = marker;
                         marker['tm_data'] = feature;

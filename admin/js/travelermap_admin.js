@@ -96,6 +96,7 @@
         function tm_enableControls(data) {
             $('#tm_type').prop('disabled', true);
             $('#tm_title').prop('disabled', true);
+            $('#tm_icon').prop('disabled', true);
             $('#tm_thumbnail').prop('disabled', true);
             $('#tm_fullsize').prop('disabled', true);
             $('#tm_description').prop('disabled', true);
@@ -112,6 +113,7 @@
 
             if(data.type === 'marker' || data.type === 'post' || data.type === 'media') {
                 $('#tm_type').prop('disabled', false);
+                $('#tm_icon').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
                 $('#tm_fullsize').prop('disabled', false);
@@ -178,6 +180,7 @@
                 var data = {
                         "type" : $('#tm_type').val(),
                         "title" : $('#tm_title').val(),
+                        "icon" : $('#tm_icon').val(),
                         "thumbnail" : $('#tm_thumbnail').val(),
                         "fullsize" : $('#tm_fullsize').val(),
                         "mediaId" : parseInt($('#tm_mediaid').val()),
@@ -218,6 +221,7 @@
                                 "media_id" : -1,
                                 "post_id" : -1,
                                 "link" : null,
+                                "icon" : "",
                                 "excludeFromPath" : false,
                                 "lat" : 0,
                                 "lng" : 0,
@@ -225,7 +229,7 @@
                                 "departure" : null
                         }
                 }
-                var li = $('<li class="marker"><i class="fa fa-fw"></i><span class="tm_title">' + data.title +'</span><span>Exclude From Path<input disabled="true" type="checkbox" '+ (data.excludeFromPath ? 'checked="true"' : "") +'/></span><a href="#">delete</a></li>');
+                var li = $('<li class="'+data.type+'"><i class="fa fa-fw"></i><span class="tm_title">' + data.title +'</span><span>Exclude From Path<input disabled="true" type="checkbox" '+ (data.excludeFromPath ? 'checked="true"' : "") +'/></span><a href="#">delete</a></li>');
                 li.on('click', function() {
                         tm_editPoint(this);
                 });
