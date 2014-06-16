@@ -37,7 +37,8 @@ function travelermap_show_map($atts, $content = null) {
     extract( shortcode_atts( array (
         "height"  => '400',
         "id"      => '',
-        "connectmaps" => 'false'
+        "connectmaps" => 'false',
+        'spinner' => 'true'
     ), $atts ) );
     
     $ids = explode(",", $id);
@@ -68,7 +69,7 @@ function travelermap_show_map($atts, $content = null) {
     $output .= ",";
     $output .= "$('#tm_map_$map_id')";
     $output .= ",";
-    $output .= "{connectMaps:$connectmaps, height:$height}";
+    $output .= "{connectMaps:$connectmaps, height:$height, spinner:$spinner}";
     $output .= ');';
     $output .= '});';
     $output .= '})(jQuery);';

@@ -35,7 +35,8 @@
             var lastMapPoint = null;
             var mapOptions = {
                 connectMaps : false,
-                height: 400
+                height: 400,
+                spinner: true
             };
             
             var currentMap = -1;
@@ -99,10 +100,11 @@
                 }
 
                 L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-                createMarkerInfoMapping(data);
-                console.log('');
-                createInfoPanel();
+                
+                if(mapOptions.spinner) {
+                    createMarkerInfoMapping(data);
+                    createInfoPanel();
+                }
             }
             
             function createBaseMapLayer(data) {
