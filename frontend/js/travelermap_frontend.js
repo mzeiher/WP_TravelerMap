@@ -71,7 +71,11 @@
                 }
                 
                 map = L.map(mapWrapper[0]).setView([0,0], 3);;
-                
+                map.on('popupopen', function(e) {
+                    var px = map.project(e.popup._latlng);
+                    px.y -= e.popup._container.clientHeight/2;
+                    map.panTo(map.unproject(px),{animate: true});
+                });
                 var baseMaps = {};
                 for(var i = 0; i < data.length; i++) {
                     $.extend(baseMaps, createBaseMapLayer(data[i]));
