@@ -30,7 +30,7 @@ function travelermap_enqueue_admin_scripts() {
     wp_enqueue_media();
     wp_enqueue_script('jquery');
     wp_enqueue_script('jquery-ui-01.10.4', TM_URL . "js/jquery-ui-1.10.4.min.js" , array('jquery'), '1.10.4', false);
-    wp_enqueue_script('jquery-fancybox', TM_URL . "js/jquery.fancybox.pack.js" , array('jquery'), '2.1.5', false);
+    wp_enqueue_script('jquery-slimbox2', TM_URL . "js/slimbox2.js" , array('jquery'), '2.0.5', false);
     wp_enqueue_script('json2');
     wp_enqueue_script('travelermap-admin', TM_URL . "admin/js/travelermap_admin.js" , array(), '1.0.0', false);
     wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap_frontend.js" , array(), '1.0.0', false);
@@ -38,7 +38,7 @@ function travelermap_enqueue_admin_scripts() {
     wp_enqueue_style('tm-frontend', TM_URL . "media/tm_frontend.css" );
     wp_enqueue_style('font-awesome', TM_URL . "media/font-awesome.min.css" );
     wp_enqueue_style('jquery-style', TM_URL . "media/jquery-ui-1.10.4.min.css" );
-    wp_enqueue_style('jquery-fancybox-style', TM_URL . "media/jquery.fancybox.css");
+    wp_enqueue_style('jquery-slimbox2-style', TM_URL . "media/slimbox/slimbox2.css");
 }
 
 function travelermap_init() {

@@ -1,5 +1,5 @@
 === WP Travelermap ===
-Contributors: Mathis Zeiher
+Contributors: der_maddis
 Donate link: http://bitschubser.org
 Tags: travel, map, waypoints
 Requires at least: 3.9.0
