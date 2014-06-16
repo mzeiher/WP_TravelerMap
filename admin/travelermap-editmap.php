@@ -210,7 +210,6 @@ if(isset($_GET['map_id'])) {
 		<ul id="tm_pointlist">
 		</ul>
 	</div>
-	<textarea id="output"></textarea><button id="tm_loadMap">LoadMap</button>
         
 <?php
 }

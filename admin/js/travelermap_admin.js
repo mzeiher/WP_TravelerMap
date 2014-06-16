@@ -319,7 +319,6 @@
             });
 
             obj['data'] = data;
-            $('#output').val(JSON.stringify(obj));
             return obj;
         }
 
@@ -347,6 +346,7 @@
                 $('#tm_thumbnail').val(attachment.sizes.thumbnail.url);
                 $('#tm_mediaid').val(attachment.id);
                 $('#tm_postid').val(-1);
+                $('#tm_date').val(attachment.date.getTime());
                 $('#tm_fullsize').val(attachment.sizes.full.url);
                 $('#tm_description').val(attachment.description);
                 $('#tm_link').val(attachment.link);
@@ -514,9 +514,6 @@
         });
 
         $('#tm_type').on('change', function() {
-        });
-        $('#tm_loadMap').on('click', function() {
-            window.tm_loadAdminMap($("#output").val());
         });
     });
 })(jQuery);
