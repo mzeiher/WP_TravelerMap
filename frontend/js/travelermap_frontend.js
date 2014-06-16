@@ -34,7 +34,8 @@
             var mapNameMapping = {};
             var lastMapPoint = null;
             var mapOptions = {
-                connectMaps : false
+                connectMaps : false,
+                height: 400
             };
             
             var currentMap = -1;
@@ -65,7 +66,7 @@
                 element.append(wrapper);
                 
                 if(mapOptions.height) {
-                    mapWrapper.css('height', options.height + "px");
+                    mapWrapper.css('height', mapOptions.height + "px");
                 }
                 
                 map = L.map(mapWrapper[0]).setView([0,0], 3);;
@@ -238,8 +239,8 @@
                         });
                         var popupElement = feature.title;
                         if(feature.type === 'media') {
-                            var pop = $('<a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /><h2>'+feature.title+'</h2></a>');
-                            //pop.fancybox();
+                            var pop = $('<div><a class="tm_popup fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a><div>'+feature.title+'</divp></div>');
+                            pop.find('a').fancybox();
                             popupElement = pop[0];
                         }
                         var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(popupElement);
@@ -254,10 +255,10 @@
             }
             
             function createMarkerInfo(feature) {
-                var wrapper = $('<li class="tm_marker_info" style="display:none;"></li>');
+                var wrapper = $('<li class="tm_marker_info_entry" style="display:none;"></li>');
                 if(feature.thumbnail) {
                     var img = $('<div class="tm_marker_info_image"><a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a></div>');
-                    //img.find('a').fancybox();
+                    img.find('a').fancybox();
                     wrapper.append(img);
                 }
                 var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a><span>'+ (feature.date ? new Date(feature.date).toLocaleDateString() : '') +'</span></h2><p>'+feature.description+'</p></div>');
@@ -295,14 +296,14 @@
                 infoWrapper.append(_mapWrapper);
                 infoWrapper.append(_infoWrapper);
                 
-                var _prevMapBut = $('<a href="">PR</a>');
+                var _prevMapBut = $('<a href=""><i class="fa fa-angle-left"></i></a>');
                 _prevMapBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     _previousMapClick();
                 });
                 
-                var _nextMapBut = $('<a href="">NE</a>');
+                var _nextMapBut = $('<a href=""><i class="fa fa-angle-right"></i></a>');
                 _nextMapBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
@@ -320,13 +321,13 @@
                 _mapWrapper.append(_mapList);
                 _mapWrapper.append(_nextMapBut);
                 
-                var _prevInfoBut = $('<a href="">PR</a>');
+                var _prevInfoBut = $('<a href=""><i class="fa fa-angle-left"></i></a>');
                 _prevInfoBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     _previousInfoClick();
                 });
-                var _nextInfoBut = $('<a href="">NE</a>');
+                var _nextInfoBut = $('<a href=""><i class="fa fa-angle-right"></i></a>');
                 _nextInfoBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
@@ -338,11 +339,16 @@
                 _infoWrapper.append(_infoList);
                 _infoWrapper.append(_nextInfoBut);
                 
+                var nbrmaps = 0;
                 for(var map in markerInfoMapping) {
                     var minfomap = markerInfoMapping[map];
                     for(var i = 0; i < minfomap.length; i++) {
                         _infoList.append(minfomap[i].info);
                     }
+                    nbrmaps++;
+                }
+                if(nbrmaps === 1) {
+                    _mapWrapper.css('display', 'none');
                 }
                 for(var map in markerInfoMapping) {
                     _showMap(map);
@@ -366,13 +372,14 @@
                     if(!first) {
                         first = map;
                     }
-                    if(markerInfoMapping[map] === currentMap) {
-                        hasCurrent = true;
-                    }
                     if(hasCurrent) {
                         next = map;
                         break;
                     }
+                    if(markerInfoMapping[map] === currentMap) {
+                        hasCurrent = true;
+                    }
+                    
                 }
                 if(!next) {
                     _showMap(first);
@@ -409,6 +416,7 @@
                         mapNameMapping[mapname].css('display', 'none');
                     }
                     mapNameMapping[name].css('display', '');
+                    currentInfo = -1;
                     _showInfo(0);
                 }
             }

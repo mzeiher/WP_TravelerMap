@@ -27,7 +27,7 @@ if ( is_admin() ) {
     add_action( 'admin_enqueue_scripts','travelermap_enqueue_leaflet_styles' );
 } else {
     add_action( 'wp_enqueue_scripts','travelermap_enqueue_leaflet_scripts' );
-    add_action( 'wp_enqueue_styles','travelermap_enqueue_leaflet_styles' );    
+    add_action( 'wp_enqueue_scripts','travelermap_enqueue_leaflet_styles' );    
 }
 
 function travelermap_enqueue_leaflet_scripts() {
@@ -37,8 +37,8 @@ function travelermap_enqueue_leaflet_scripts() {
 }
 
 function travelermap_enqueue_leaflet_styles() {
-    wp_enqueue_style( 'leafet', TM_URL . "/media/leaflet.css" );
-    wp_enqueue_style( 'leafet-markers', TM_URL . "/media/leaflet.awesome-markers.css" );
+    wp_enqueue_style( 'leafet', TM_URL . "media/leaflet.css" );
+    wp_enqueue_style( 'leafet-markers', TM_URL . "media/leaflet.awesome-markers.css" );
 }
 
 ?>

@@ -1,3 +1,71 @@
-.tm_map {
-    height: 400px;
+.tm_marker_map_wrapper {
+    width: 100%;
+    display: table;
+    background-color: #eee;
+}
+
+.tm_marker_map_wrapper > a {
+    display: table-cell;
+    width: 50px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.tm_marker_map_wrapper > ul {
+    display: table-cell;
+    vertical-align: middle;
+    list-style: none !important;
+}
+
+.tm_marker_info_wrapper {
+    width: 100%;
+    height: 160px;
+    display: table;
+    border-bottom: 2px solid #eee;
+}
+
+.tm_marker_info_wrapper > a {
+    display: table-cell;
+    width: 50px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold !important;
+}
+
+.tm_marker_info_wrapper > ul {
+    display: table-cell;
+    vertical-align: top;
+    list-style: none !important;
+}
+
+.tm_marker_info_wrapper > ul > li {
+    width: 100%;
+}
+
+.tm_marker_info_image {
+    float: left;
+    padding: 5px;
+}
+
+.tm_marker_info {
+    float:left;
+    padding: 5px;
+}
+
+.tm_marker_info > h2 {
+    margin: 0 !important;
+    padding: 5px 0px;
+}
+
+.tm_marker_info > h2 > span {
+    font-size: 100% !important;
+    display: block;
+}
+
+.tm_popup h2 {
+    font-size: 15px;
+    margin: 0;
+    font-weight: normal;
+    text-decoration: none;
 }

@@ -21,4 +21,72 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  *  THE SOFTWARE.
  */
+
+add_action( 'wp_enqueue_scripts','travelermap_enqueue_frontend_scripts' );
+add_action( 'wp_enqueue_scripts','travelermap_enqueue_frontend_styles' );    
+
+add_shortcode( 'tm_map', 'travelermap_show_map' );
+
+function travelermap_show_map($atts, $content = null) {
+    
+    global $wpdb;
+    
+    static $map_id = 0;
+    $map_id++;
+    
+    extract( shortcode_atts( array (
+        "height"  => '400',
+        "id"      => '',
+        "connectmaps" => 'false'
+    ), $atts ) );
+    
+    $ids = explode(",", $id);
+    $map_table = $wpdb->prefix . "travelermap_maps";
+    
+    $separator = "";
+    $script = "[";
+    foreach ( $ids as $mapid ) {
+        $result = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM $map_table WHERE ID = %d",
+                $mapid
+            )
+        );
+        if(!$result) {continue;}
+        $script .= $separator;
+        
+        $script .= $result->map;
+        $separator = ",";
+    }
+    $script .= "]";
+    $output = "";
+    $output .= '<div id="tm_map_'. $map_id .'"></div>';
+    $output .= '<script type="text/javascript">';
+    $output .= '(function($) { $(document).ready(function() {';
+    $output .= 'window.tm_loadFrontendMap(';
+    $output .= str_replace('\"', '"', $script);
+    $output .= ",";
+    $output .= "$('#tm_map_$map_id')";
+    $output .= ",";
+    $output .= "{connectMaps:$connectmaps, height:$height}";
+    $output .= ');';
+    $output .= '});';
+    $output .= '})(jQuery);';
+    $output .= '</script>';
+    
+    return $output;
+}
+
+function travelermap_enqueue_frontend_scripts() {
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('jquery-fancybox', TM_URL . "js/jquery.fancybox.pack.js" , array('jquery'), '2.1.5', false);
+    wp_enqueue_script('json2');
+    wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap_frontend.js" , array(), '1.0.0', false);
+}
+
+function travelermap_enqueue_frontend_styles() {
+    wp_enqueue_style('tm-frontend', TM_URL . "media/tm_frontend.css" );
+    wp_enqueue_style('font-awesome', TM_URL . "media/font-awesome.min.css" );
+    wp_enqueue_style('jquery-fancybox-style', TM_URL . "media/jquery.fancybox.css");
+}
 ?>
