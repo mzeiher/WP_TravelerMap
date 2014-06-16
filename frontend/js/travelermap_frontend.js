@@ -23,11 +23,11 @@
 (function($) {
     $(document).ready(function() {
         
-        function tm_loadMap(data ,element) {
-            return new tm_map(data, element);
+        function tm_loadMap(data ,element, options) {
+            return new tm_map(data, element, options);
         }
 
-        function tm_map(data, element) {
+        function tm_map(data, element, options) {
 
             var map = null;
             var markerInfoMapping = [];
@@ -121,6 +121,8 @@
                     lineColor = "#03f";
                 }
                 var isInFuture = false;
+                var switchToFutureLine = false;
+                var isInSection = false;
                 var currentLine = L.polyline([], {color:lineColor});
                 var lastPoint = null;
                 for(var i = 0; i < data.length; i++) {
@@ -130,16 +132,30 @@
                         if(feature.arrival && feature.arrival >= new Date().getTime()) {
                             isInFuture = true;
                         }
+                        if(isInFuture && !isInSection && !switchToFutureLine) {
+                            switchToFutureLine = true;
+                            var nextPoint = findNextWaypointMarker(data,i);
+                            if(nextPoint !== null) {
+                                currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
+                            }
+                            group.addLayer(currentLine);
+                            currentLine = L.polyline([], {color:lineColor});
+                            if(nextPoint !== null) {
+                                currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
+                            }
+                        }
+                        lastPoint = feature;
                     } else if(feature.type === 'startsection') {
                         var nextPoint = findNextWaypointMarker(data,i);
                         if(nextPoint !== null) {
                             currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
                         }
                         group.addLayer(currentLine);
-                        currentLine = L.polyline([], {color:'black'});
+                        currentLine = L.polyline([], {color:'black', weight: 5});
                         if(nextPoint !== null) {
                             currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
                         }
+                        isInSection = true;
                     } else if(feature.type === 'endsection') {
                         //var nextPoint = findNextWaypointMarker(data,i);
                         currentLine.addLatLng([lastPoint.lat, lastPoint.lng]);
@@ -149,8 +165,9 @@
                         feature['_lf_object'] = currentLine;
                         currentLine = L.polyline([],{color:lineColor});
                         currentLine.addLatLng([lastPoint.lat, lastPoint.lng]); //add as starting point
+                        isInSection = false;
                     }
-                    lastPoint = feature;
+                    
                     if(isInFuture) {
                         currentLine.setStyle({dashArray: "5, 10"});
                     }
@@ -161,7 +178,7 @@
             
             function findNextWaypointMarker(data, start) {
                 for(var i = start; i < data.length; i++) {
-                    if((data[i].type === "waypoint" || data[i].type==='marker' || feature.type === 'media' || feature.type === 'post') && !data[i].type.excludeFromPath) {
+                    if((data[i].type === "waypoint" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].type.excludeFromPath) {
                         return data[i];
                     }
                 }

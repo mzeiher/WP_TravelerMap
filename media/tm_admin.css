@@ -78,7 +78,7 @@ ul#tm_pointlist > li.endsection > i:before {
 }
 
 ul#tm_pointlist > li.media > i:before {
-	content: "\f03e";
+	content: "\f030";
 }
 
 ul#tm_pointlist > li.post > i:before {
