@@ -49,6 +49,7 @@
             $('#tm_overlaylist').sortable();
             $('#tm_arrival').datepicker();
             $('#tm_departure').datepicker();
+            $('#tm_date').datepicker();
             //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
                 tm_enableControls({type: $('#tm_type').val()});
@@ -67,6 +68,7 @@
             $('#tm_icon').val(data.icon);
             $('#tm_icon_color').val(data.iconColor);
             $('#tm_thumbnail').val(data.thumbnail);
+            $('#tm_date').val(data.date);
             $('#tm_mediaid').val(data.mediaId);
             $('#tm_postid').val(data.postId);
             $('#tm_fullsize').val(data.fullsize);
@@ -99,6 +101,7 @@
         function tm_enableControls(data) {
             $('#tm_type').prop('disabled', true);
             $('#tm_title').prop('disabled', true);
+            $('#tm_date').prop('disabled', true);
             $('#tm_icon').prop('disabled', true);
             $('#tm_icon_color').prop('disabled', true);
             $('#tm_thumbnail').prop('disabled', true);
@@ -120,6 +123,7 @@
                 $('#tm_icon').prop('disabled', false);
                 $('#tm_icon_color').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
+                $('#tm_date').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
                 $('#tm_fullsize').prop('disabled', false);
                 $('#tm_description').prop('disabled', false);
@@ -186,6 +190,7 @@
             var data = {
                 "type": $('#tm_type').val(),
                 "title": $('#tm_title').val(),
+                "date": $('#tm_date').val() != '' ? Date.parse($('#tm_date').val()) : null,
                 "icon": $('#tm_icon').val(),
                 "iconColor": $('#tm_icon_color').val(),
                 "thumbnail": $('#tm_thumbnail').val(),
@@ -222,6 +227,7 @@
                 data = {
                     "type": "marker",
                     "title": "",
+                    "date" : null,
                     "thumbnail": "",
                     "fullsize": "",
                     "description": "",
@@ -334,7 +340,7 @@
 
             fileFrame.on('select', function() {
                 attachment = fileFrame.state().get('selection').first().toJSON();
-
+                console.log(attachment);
                 $('#tm_type').val('media');
                 $('#tm_title').val(attachment.title);
                 $('#tm_icon').val('camera');
@@ -382,6 +388,7 @@
                                         $('#tm_type').val('post');
                                     }
                                     $('#tm_title').val(response.title);
+                                    $('#tm_date').val(response.date);
                                     $('#tm_thumbnail').val(response.thumbnail);
                                     $('#tm_mediaid').val(response.mediaId);
                                     $('#tm_postid').val(response.postId);

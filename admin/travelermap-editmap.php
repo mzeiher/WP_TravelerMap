@@ -179,12 +179,14 @@ if(isset($_GET['map_id'])) {
 			</select><br />
 			<label for="tm_title">Title</label>
 			<input type="text" id="tm_title" disabled="true"/><br />
+                        <label for="tm_date">Date</label>
+			<input type="text" id="tm_date" disabled="true"  /><br />
+			<label for="tm_description">Description</label>
+			<textarea id="tm_description" disabled="true" ></textarea><br />
 			<label for="tm_thumbnail">Thumbnail</label>
 			<input type="text" id="tm_thumbnail" disabled="true" /><br />
                         <label for="tm_fullsize">Fullsize</label>
 			<input type="text" id="tm_fullsize" disabled="true" /><br />
-			<label for="tm_description">Description</label>
-			<textarea id="tm_description" disabled="true" ></textarea><br />
 			<label for="tm_link">Link</label>
 			<input type="text" id="tm_link" disabled="true" /><br />
 			<label for="tm_excludefrompath">Exclude From Path</label>
