@@ -31,10 +31,18 @@
             
             var map = null;
             var markerInfoMapping = {};
+            var mapNameMapping = {};
             var lastMapPoint = null;
             var mapOptions = {
                 connectMaps : false
             };
+            
+            var currentMap = -1;
+            var currentInfo = -1;
+            
+            var wrapper = $('<div class="tm_map_wrapper"></div>');
+            var mapWrapper = $('<div class="tm_map"></div>');
+            var infoWrapper = $('<div class="tm_map_info"></div>');
             
             $.extend(mapOptions, options);
 
@@ -50,10 +58,6 @@
                     element = $('#tm_map_' + data.mapid);
                 }
                 if(!element) return;
-                
-                var wrapper = $('<div class="tm_map_wrapper"></div>');
-                var mapWrapper = $('<div class="tm_map"></div>');
-                var infoWrapper = $('<div class="tm_map_info"></div>');
                 
                 wrapper.append(mapWrapper);
                 wrapper.append(infoWrapper);
@@ -97,6 +101,7 @@
 
                 createMarkerInfoMapping(data);
                 console.log('');
+                createInfoPanel();
             }
             
             function createBaseMapLayer(data) {
@@ -234,7 +239,7 @@
                         var popupElement = feature.title;
                         if(feature.type === 'media') {
                             var pop = $('<a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /><h2>'+feature.title+'</h2></a>');
-                            pop.fancybox();
+                            //pop.fancybox();
                             popupElement = pop[0];
                         }
                         var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(popupElement);
@@ -249,13 +254,15 @@
             }
             
             function createMarkerInfo(feature) {
-                var wrapper = $('<div class="tm_marker_info_wrapper" style="display:none;"></div>');
+                var wrapper = $('<li class="tm_marker_info" style="display:none;"></li>');
                 if(feature.thumbnail) {
-                    var img = $('<div class="tm_marker_info_image"><img src="'+feature.thumbnail+'" /></div>');
+                    var img = $('<div class="tm_marker_info_image"><a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a></div>');
+                    //img.find('a').fancybox();
                     wrapper.append(img);
                 }
-                var info = $('<div class="tm_marker_info"><h1>'+ feature.title+'</h1><p>'+feature.description+'</p></div>');
+                var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a><span>'+ (feature.date ? new Date(feature.date).toLocaleDateString() : '') +'</span></h2><p>'+feature.description+'</p></div>');
                 wrapper.append(info);
+                //infoWrapper.append(wrapper);
                 return wrapper;
             }
 
@@ -269,11 +276,175 @@
                     for(var j = 0; j < data[i].data.length; j++) {
                         var feature = data[i].data[j];
                         if(feature.type === 'startsection') continue;
-                        var markerInfo = null; //createMarkerInfo(feature);
+                        var markerInfo = createMarkerInfo(feature);
                         markerInfoMapping[data[i].name].push({marker: feature._lf_object, info: markerInfo});
+                        if(feature._lf_object) {
+                            feature._lf_object.on('click', function(evt) {
+                                _findMarker(evt.target); 
+                            });
+                        }
                     }
                 }
                 
+            }
+            
+            function createInfoPanel() {
+                var _mapWrapper = $('<div class="tm_marker_map_wrapper"></div>');
+                var _infoWrapper = $('<div class="tm_marker_info_wrapper"></div>');
+                
+                infoWrapper.append(_mapWrapper);
+                infoWrapper.append(_infoWrapper);
+                
+                var _prevMapBut = $('<a href="">PR</a>');
+                _prevMapBut.on('click', function(evt) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    _previousMapClick();
+                });
+                
+                var _nextMapBut = $('<a href="">NE</a>');
+                _nextMapBut.on('click', function(evt) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    _nextMapClick();
+                });
+                
+                var _mapList = $('<ul class="tm_marker_info_map_list"></ul>');
+                for(var map in markerInfoMapping) {
+                    var liEntry = $('<li class="tm_marker_info_map_entry" style="display:none;">'+map+'</li>');
+                    mapNameMapping[map]=liEntry;
+                    _mapList.append(liEntry);
+                }
+                
+                _mapWrapper.append(_prevMapBut);
+                _mapWrapper.append(_mapList);
+                _mapWrapper.append(_nextMapBut);
+                
+                var _prevInfoBut = $('<a href="">PR</a>');
+                _prevInfoBut.on('click', function(evt) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    _previousInfoClick();
+                });
+                var _nextInfoBut = $('<a href="">NE</a>');
+                _nextInfoBut.on('click', function(evt) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    _nextInfoClick();
+                });
+                
+                var _infoList = $('<ul class="tm_marker_info_list"></ul>');
+                _infoWrapper.append(_prevInfoBut);
+                _infoWrapper.append(_infoList);
+                _infoWrapper.append(_nextInfoBut);
+                
+                for(var map in markerInfoMapping) {
+                    var minfomap = markerInfoMapping[map];
+                    for(var i = 0; i < minfomap.length; i++) {
+                        _infoList.append(minfomap[i].info);
+                    }
+                }
+                for(var map in markerInfoMapping) {
+                    _showMap(map);
+                    return;
+                }
+            }
+            
+            function _nextInfoClick() {
+                _showInfo(currentInfo + 1);
+            }
+            
+            function _previousInfoClick() {
+                _showInfo(currentInfo - 1);
+            }
+            
+            function _nextMapClick() {
+                var first = null;
+                var next = null;
+                var hasCurrent = false;
+                for(var map in markerInfoMapping) {
+                    if(!first) {
+                        first = map;
+                    }
+                    if(markerInfoMapping[map] === currentMap) {
+                        hasCurrent = true;
+                    }
+                    if(hasCurrent) {
+                        next = map;
+                        break;
+                    }
+                }
+                if(!next) {
+                    _showMap(first);
+                } else {
+                    _showMap(next);
+                }
+            }
+            
+            function _previousMapClick() {
+                var last = null;
+                var previous = null;
+                for(var map in markerInfoMapping) {
+                    last = map;
+                    if(markerInfoMapping[map] === currentMap) {
+                        break;
+                    }
+                    previous = map;
+                }
+                if(!previous) {
+                    _showMap(last);
+                } else {
+                    _showMap(previous);
+                }
+            }
+            
+            function _showMap(name) {
+                if(markerInfoMapping[name] !== currentMap) {
+                    if(currentMap && currentMap[currentInfo]) {
+                        currentMap[currentInfo].info.css('display', 'none');
+                        currentMap[currentInfo].marker.closePopup();
+                    }
+                    currentMap = markerInfoMapping[name];
+                    for(var mapname in markerInfoMapping) {
+                        mapNameMapping[mapname].css('display', 'none');
+                    }
+                    mapNameMapping[name].css('display', '');
+                    _showInfo(0);
+                }
+            }
+            
+            function _findMarker(marker) {
+
+                for(var mapname in markerInfoMapping) {
+                    for(var i = 0; i < markerInfoMapping[mapname].length; i++) {
+                        if(markerInfoMapping[mapname][i].marker === marker) {
+                            _showMap(mapname);
+                            _showInfo(i);
+                            return;
+                        }
+                    }
+                }
+                console.log(marker);
+            }
+            
+            function _showInfo(id) {
+                if(!currentMap) return;
+                if(currentInfo !== id) {
+                    if(currentMap.length === 0) return;
+                    if(id >= currentMap.length) {
+                        id = 0;
+                    } else if(id < 0) {
+                        id = currentMap.length -1;
+                    }
+                    if(id < 0) return;
+                    if(currentMap && currentMap[currentInfo]) {
+                        currentMap[currentInfo].info.css('display', 'none');
+                        currentMap[currentInfo].marker.closePopup();
+                    }
+                    currentInfo = id;
+                    currentMap[currentInfo].info.css('display', '');
+                    currentMap[currentInfo].marker.openPopup();
+                }
             }
             
             this.destroy = function() {
