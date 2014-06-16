@@ -41,6 +41,8 @@
 
 .tm_marker_info_wrapper > ul > li {
     width: 100%;
+    overflow: hidden;
+    margin: 0;
 }
 
 .tm_marker_info_image {
