@@ -58,10 +58,15 @@
 .tm_marker_info > h2 {
     margin: 0 !important;
     padding: 5px 0px;
+    font-size: 18px;
+}
+
+.tm_marker_info > h2 > a {
+    text-decoration: none;
 }
 
 .tm_marker_info > h2 > span {
-    font-size: 100% !important;
+    font-size: 15px;
     display: block;
 }
 

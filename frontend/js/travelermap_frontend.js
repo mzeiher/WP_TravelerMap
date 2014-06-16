@@ -367,6 +367,10 @@
             }
             
             function _nextMapClick() {
+                _showMap(_getNextMap());
+            }
+            
+            function _getNextMap() {
                 var first = null;
                 var next = null;
                 var hasCurrent = false;
@@ -384,13 +388,17 @@
                     
                 }
                 if(!next) {
-                    _showMap(first);
+                    return first;
                 } else {
-                    _showMap(next);
+                    return next;
                 }
             }
             
             function _previousMapClick() {
+                _showMap(_getPreviousMap());
+            }
+            
+            function _getPreviousMap() {
                 var last = null;
                 var previous = null;
                 for(var map in markerInfoMapping) {
@@ -401,9 +409,9 @@
                     previous = map;
                 }
                 if(!previous) {
-                    _showMap(last);
+                    return last;
                 } else {
-                    _showMap(previous);
+                    return previous;
                 }
             }
             
@@ -442,9 +450,19 @@
                 if(currentInfo !== id) {
                     if(currentMap.length === 0) return;
                     if(id >= currentMap.length) {
-                        id = 0;
+                        if(mapOptions.connectMaps) {
+                            _showMap(_getNextMap());
+                            return;
+                        } else {
+                            id = 0;
+                        }
                     } else if(id < 0) {
-                        id = currentMap.length -1;
+                        if(mapOptions.connectMaps) {
+                            _showMap(_getPreviousMap());
+                            return;
+                        } else {
+                            id = currentMap.length -1;
+                        }
                     }
                     if(id < 0) return;
                     if(currentMap && currentMap[currentInfo]) {
