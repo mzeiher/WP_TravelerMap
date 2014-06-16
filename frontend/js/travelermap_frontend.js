@@ -401,12 +401,14 @@
             function _getPreviousMap() {
                 var last = null;
                 var previous = null;
+                var counter = 0;
                 for(var map in markerInfoMapping) {
                     last = map;
-                    if(markerInfoMapping[map] === currentMap) {
+                    if(markerInfoMapping[map] === currentMap && counter !== 0) {
                         break;
                     }
                     previous = map;
+                    counter++;
                 }
                 if(!previous) {
                     return last;
@@ -459,7 +461,7 @@
                     } else if(id < 0) {
                         if(mapOptions.connectMaps) {
                             _showMap(_getPreviousMap());
-                            return;
+                            id = currentMap.length -1;
                         } else {
                             id = currentMap.length -1;
                         }
