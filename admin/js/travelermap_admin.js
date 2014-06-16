@@ -49,6 +49,7 @@
             $('#tm_overlaylist').sortable();
             $('#tm_arrival').datepicker();
             $('#tm_departure').datepicker();
+            //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
                 tm_enableControls({type: $('#tm_type').val()});
             });
@@ -71,7 +72,7 @@
             $('#tm_fullsize').val(data.fullsize);
             $('#tm_description').val(data.description);
             $('#tm_link').val(data.link);
-            $('#tm_excludefrompath').val(data.excludeFromPath);
+            $('#tm_excludefrompath').prop('checked',data.excludeFromPath);
             $('#tm_arrival').val(data.arrival);
             $('#tm_departure').val(data.departure);
 
@@ -377,7 +378,9 @@
                                         alert("Error while linking to post");
                                         return;
                                     }
-                                    $('#tm_type').val('post');
+                                    if($('#tm_type').val() !== 'endsection') {
+                                        $('#tm_type').val('post');
+                                    }
                                     $('#tm_title').val(response.title);
                                     $('#tm_thumbnail').val(response.thumbnail);
                                     $('#tm_mediaid').val(response.mediaId);
@@ -418,15 +421,16 @@
 
         function tm_previewMap() {
             var mapData = tm_generateMap();
-            var div = $('<div><div style="height:400px;width:600px;" class="tm_previewmap"></div><div>');
-
-            div.dialog({close: function(evt) {
+            var dialog = $('<div><div>');
+            var mapWrapper = $('<div style="height:400px;"></div>');
+            dialog.append(mapWrapper);
+            dialog.dialog({close: function(evt) {
 
                 }, minWidth: 650});
-            var map = window.tm_loadFrontendMap(mapData, div.find("> div")[0]);
-            div.on('close', function() {
+            var map = window.tm_loadFrontendMap(mapData, mapWrapper);
+            dialog.on('close', function() {
                 map.destroy();
-                div.dialog('destroy');
+                dialog.dialog('destroy');
             });
         }
 

@@ -61,12 +61,46 @@ ul#tm_pointlist .active {
     background-color: #ccc;
 }
 
+ul#tm_pointlist > li {
+    display: table;
+    width: 100%;
+}
+
+ul#tm_pointlist > li > * {
+    display: table-cell;
+}
+
+ul#tm_pointlist > li > *:nth-child(1) {
+    width: 40px;
+}
+ul#tm_pointlist > li > *:nth-child(2) {
+    
+}
+ul#tm_pointlist > li > *:nth-child(3) {
+    width: 200px;
+}
+ul#tm_pointlist > li > *:nth-child(4) {
+    width: 50px;
+}
+
 ul#tm_pointlist > li.marker > i:before {
 	content: "\f041";
 }
 
 ul#tm_pointlist > li.waypoint > i:before {
 	content: "\f10c";
+}
+
+ul#tm_pointlist > li.startsection {
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+
+ul#tm_pointlist > li.endsection {
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+    border-left: 1px solid #000;
 }
 
 ul#tm_pointlist > li.startsection > i:before {

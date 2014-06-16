@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: WP Travelermap
+Plugin Name: wp-travelermap
 Plugin URI: http://bitschubser.org
-Description: Create a travel map
-Version: 1.0.0
+Description: Creates a travel map
+Version: 0.9.0
 Author: Mathis Zeiher
 Author URI: http://bitschubser.org/
 
