@@ -206,7 +206,13 @@
                             markerColor: feature.iconColor,
                             prefix: 'fa'
                         });
-                        var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(feature.title);
+                        var popupElement = feature.title;
+                        if(feature.type === 'media') {
+                            var pop = $('<a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a>');
+                            pop.fancybox();
+                            popupElement = pop[0];
+                        }
+                        var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(popupElement);
                         //var marker = L.marker([feature.lat, feature.lng]).bindPopup('<img src="'+feature.thumbnail+'"/>');
                         //feature['_lf_object'] = marker;
                         marker['tm_data'] = feature;
