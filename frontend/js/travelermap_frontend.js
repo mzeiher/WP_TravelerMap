@@ -188,7 +188,7 @@
                             currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
                         }
                         group.addLayer(currentLine);
-                        currentLine = L.geodesicPolyline([], {color:'black', weight: 5});
+                        currentLine = L.geodesicPolyline([], {color:lineColor, weight: 5, opacity:1});
                         if(nextPoint !== null) {
                             currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
                         }
@@ -228,6 +228,7 @@
                 for(var i = 0; i < data.length; i++) {
                     var feature = data[i];
                     if(feature.type === 'waypoint') {
+                        continue;
                         var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5}).bindPopup(feature.title);
                         //feature['_lf_object'] = wp;
                         wp['tm_data'] = feature;
@@ -282,7 +283,7 @@
                     markerInfoMapping[data[i].name] = [];
                     for(var j = 0; j < data[i].data.length; j++) {
                         var feature = data[i].data[j];
-                        if(feature.type === 'startsection') continue;
+                        if(feature.type === 'startsection' || feature.type === 'waypoint') continue;
                         var markerInfo = createMarkerInfo(feature);
                         markerInfoMapping[data[i].name].push({marker: feature._lf_object, info: markerInfo});
                         if(feature._lf_object) {
