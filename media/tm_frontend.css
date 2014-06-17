@@ -100,3 +100,11 @@
     font-weight: normal;
     text-decoration: none;
 }
+
+#cboxOverlay {
+    z-index: 100000 !important;
+}
+
+#colorbox {
+    z-index: 100001 !important;
+}

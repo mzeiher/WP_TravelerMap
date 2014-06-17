@@ -246,7 +246,7 @@
                         var popupElement = feature.title;
                         if(feature.type === 'media') {
                             var pop = $('<div><a class="tm_popup fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a><div>'+feature.title+'</divp></div>');
-                            pop.find('a').colorbox();
+                            pop.find('a').colorbox({maxWidth:'95%', maxHeight:'95%'});
                             popupElement = pop[0];
                         }
                         var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(popupElement);
@@ -264,7 +264,7 @@
                 var wrapper = $('<li class="tm_marker_info_entry" style="display:none;"></li>');
                 if(feature.thumbnail) {
                     var img = $('<div class="tm_marker_info_image"><a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a></div>');
-                    img.find('a').colorbox();
+                    img.find('a').colorbox({maxWidth:'95%', maxHeight:'95%'});
                     wrapper.append(img);
                 }
                 var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a><span>'+ (feature.date ? new Date(feature.date).toLocaleDateString() : '') +'</span></h2><p>'+feature.description+'</p></div>');
