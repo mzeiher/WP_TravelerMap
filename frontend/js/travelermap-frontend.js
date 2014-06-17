@@ -29,24 +29,24 @@
 
         function tm_map(data, element, options) {
             
-            var map = null;
-            var markerInfoMapping = {};
-            var mapNameMapping = {};
-            var lastMapPoint = null;
-            var mapOptions = {
+            var _map = null;
+            var _markerInfoMapping = {};
+            var _mapNameMapping = {};
+            var _lastMapPoint = null;
+            var _mapOptions = {
                 connectMaps : false,
                 height: 400,
                 spinner: true
             };
             
-            var currentMap = -1;
-            var currentInfo = -1;
+            var _currentMap = null;
+            var _currentInfo = -1;
             
-            var wrapper = $('<div class="tm_map_wrapper"></div>');
-            var mapWrapper = $('<div class="tm_map"></div>');
-            var infoWrapper = $('<div class="tm_map_info"></div>');
+            var _wrapper = $('<div class="tm_map_wrapper"></div>');
+            var _mapWrapper = $('<div class="tm_map"></div>');
+            var _infoWrapper = $('<div class="tm_map_info"></div>');
             
-            $.extend(mapOptions, options);
+            $.extend(_mapOptions, options);
 
             if(typeof data === 'string') {
                 data = JSON.parse(data);
@@ -55,43 +55,44 @@
                 data = [data];
             }
 
-            function createMap(data, element) {
+            function _createMap(data, element) {
                 if(!element) {
                     element = $('#tm_map_' + data.mapid);
                 }
                 if(!element) return;
                 
-                wrapper.append(mapWrapper);
-                wrapper.append(infoWrapper);
+                _wrapper.append(_mapWrapper);
+                _wrapper.append(_infoWrapper);
                 
-                element.append(wrapper);
+                element.append(_wrapper);
                 
-                if(mapOptions.height) {
-                    mapWrapper.css('height', mapOptions.height + "px");
+                if(_mapOptions.height) {
+                    _mapWrapper.css('height', _mapOptions.height + "px");
                 }
                 
-                map = L.map(mapWrapper[0]).setView([0,0], 3);;
-                map.on('popupopen', function(e) {
-                    var px = map.project(e.popup._latlng);
+                _map = L.map(_mapWrapper[0]).setView([0,0], 3);;
+                _map.on('popupopen', function(e) {
+                    var px = _map.project(e.popup._latlng);
                     px.y -= e.popup._container.clientHeight/2;
-                    map.panTo(map.unproject(px),{animate: true});
+                    _map.panTo(_map.unproject(px),{animate: true});
                 });
                 var baseMaps = {};
                 for(var i = 0; i < data.length; i++) {
-                    $.extend(baseMaps, createBaseMapLayer(data[i]));
+                    $.extend(baseMaps, _createBaseMapLayer(data[i]));
                 }
                 var overlayMaps = {};
                 for(var i = 0; i < data.length; i++) {
-                    $.extend(overlayMaps, createOverlayLayer(data[i]));
+                    $.extend(overlayMaps, _createOverlayLayer(data[i]));
                 }
                 for(baseMap in baseMaps) {
-                    map.addLayer(baseMaps[baseMap]);
+                    _map.addLayer(baseMaps[baseMap]);
+                    break;
                 }
                 
                 for(var i = 0; i < data.length; i++) {
 
-                    var routeLayer = createRouteLayer(data[i].data, data[i].lineColor);
-                    var markerLayer = createMarker(data[i].data, data[i].lineColor);
+                    var routeLayer = _createRouteLayer(data[i].data, data[i].lineColor);
+                    var markerLayer = _createMarker(data[i].data, data[i].lineColor);
 
                     var mapLayer = L.layerGroup([routeLayer, markerLayer]);
                     if(!data[i].name) {
@@ -100,18 +101,18 @@
                     overlayMaps[data[i].name] = mapLayer;
                 }
                 for(overlayMap in overlayMaps) {
-                    map.addLayer(overlayMaps[overlayMap]);
+                    _map.addLayer(overlayMaps[overlayMap]);
                 }
 
-                L.control.layers(baseMaps, overlayMaps).addTo(map);
+                L.control.layers(baseMaps, overlayMaps).addTo(_map);
                 
-                if(mapOptions.spinner) {
-                    createMarkerInfoMapping(data);
-                    createInfoPanel();
+                if(_mapOptions.spinner) {
+                    _createMarkerInfoMapping(data);
+                    _createInfoPanel();
                 }
             }
             
-            function createBaseMapLayer(data) {
+            function _createBaseMapLayer(data) {
                 var basemaps = {};
                 var hasBasemap = false;
                 if(data.properties && data.properties.layer) {
@@ -132,7 +133,7 @@
                 return basemaps;
             }
             
-            function createOverlayLayer(data) {
+            function _createOverlayLayer(data) {
                 var overlays = {};
                 if(data.properties && data.properties.overlays) {
                     for(var i = 0; i < data.properties.overlays.length; i++) {
@@ -147,7 +148,7 @@
                 return overlays;
             }
             
-            function createRouteLayer(data /* array */, lineColor) {
+            function _createRouteLayer(data /* array */, lineColor) {
                 var group = L.layerGroup([]);
                 if(!data && data.length === 0) return group;
                 if(!lineColor) {
@@ -157,15 +158,15 @@
                 var switchToFutureLine = false;
                 var isInSection = false;
                 var currentLine = L.geodesicPolyline([], {color:lineColor});
-                if(mapOptions.connectMaps && lastMapPoint) {
-                    currentLine.addLatLng([lastMapPoint.lat, lastMapPoint.lng]);
+                if(_mapOptions.connectMaps && _lastMapPoint) {
+                    currentLine.addLatLng([_lastMapPoint.lat, _lastMapPoint.lng]);
                 }
                 var lastPoint = null;
                 for(var i = 0; i < data.length; i++) {
                     var feature = data[i];
                     if((feature.type === 'waypoint' || feature.type === 'marker'|| feature.type === 'media' || feature.type === 'post') && !feature.excludeFromPath) {
                         currentLine.addLatLng([feature.lat, feature.lng]);
-                        var nextPoint = findNextWaypointMarker(data,i+1);
+                        var nextPoint = _findNextWaypointMarker(data,i+1);
                         if(nextPoint) {
                             if(nextPoint.arrival && nextPoint.arrival >= new Date().getTime()) {
                                 isInFuture = true;
@@ -178,7 +179,7 @@
                             currentLine.addLatLng([feature.lat, feature.lng]); //add as starting point
                         }
                         lastPoint = feature;
-                        lastMapPoint = feature;
+                        _lastMapPoint = feature;
                     } else if(feature.type === 'startsection') {
                         currentLine.addLatLng([feature.lat, feature.lng]);
                         group.addLayer(currentLine);
@@ -207,7 +208,7 @@
                         currentLine = L.geodesicPolyline([],{color:lineColor});
                         currentLine.addLatLng([feature.lat, feature.lng]); //add as starting point
                         isInSection = false;
-                        var nextPoint = findNextWaypointMarker(data,i+1);
+                        var nextPoint = _findNextWaypointMarker(data,i+1);
                         if(nextPoint) {
                             if(nextPoint.arrival && nextPoint.arrival >= new Date().getTime()) {
                                 isInFuture = true;
@@ -223,7 +224,7 @@
                 return group;
             }
             
-            function findNextWaypointMarker(data, start) {
+            function _findNextWaypointMarker(data, start) {
                 for(var i = start; i < data.length; i++) {
                     if((data[i].type === "waypoint" || data[i].type === "startsection" || data[i].type === "endsection" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].excludeFromPath) {
                         return data[i];
@@ -232,7 +233,7 @@
                 return null;
             }
             
-            function createMarker(data, lineColor) {
+            function _createMarker(data, lineColor) {
                 var markerLayer = L.layerGroup([]);
                 if(!data && data.length === 0) return markerLayer;
                 if(!lineColor) {
@@ -242,11 +243,6 @@
                     var feature = data[i];
                     if(feature.type === 'waypoint') {
                         continue;
-                        var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5}).bindPopup(feature.title);
-                        //feature['_lf_object'] = wp;
-                        wp['tm_data'] = feature;
-                        feature['_lf_object'] = wp;
-                        markerLayer.addLayer(wp);
                     } else if(feature.type === 'startsection' || feature.type === 'endsection') {
                         var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor}).bindPopup(feature.title);
                         markerLayer.addLayer(wp);
@@ -267,8 +263,6 @@
                             popupElement = pop[0];
                         }
                         var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(popupElement);
-                        //var marker = L.marker([feature.lat, feature.lng]).bindPopup('<img src="'+feature.thumbnail+'"/>');
-                        //feature['_lf_object'] = marker;
                         marker['tm_data'] = feature;
                         feature['_lf_object'] = marker;
                         markerLayer.addLayer(marker);
@@ -277,7 +271,7 @@
                 return markerLayer;
             }
             
-            function createMarkerInfo(feature) {
+            function _createMarkerInfo(feature) {
                 var wrapper = $('<li class="tm_marker_info_entry" style="display:none;"></li>');
                 if(feature.thumbnail) {
                     var img = $('<div class="tm_marker_info_image"><a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a></div>');
@@ -297,22 +291,21 @@
                 dateInfo += '</span>';
                 var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a>'+dateInfo+'</h2><p>'+feature.description+'</p></div>');
                 wrapper.append(info);
-                //infoWrapper.append(wrapper);
                 return wrapper;
             }
 
-            function createMarkerInfoMapping(data) {
+            function _createMarkerInfoMapping(data) {
                 if(!$.isArray(data)) {
                     data = [data];
                 } 
                 for(var i = 0; i < data.length; i++) {
                     if(!data[i].data && data[i].data.length === 0) continue;
-                    markerInfoMapping[data[i].name] = [];
+                    _markerInfoMapping[data[i].name] = [];
                     for(var j = 0; j < data[i].data.length; j++) {
                         var feature = data[i].data[j];
                         if(feature.type === 'startsection' || feature.type === 'waypoint') continue;
-                        var markerInfo = createMarkerInfo(feature);
-                        markerInfoMapping[data[i].name].push({marker: feature._lf_object, info: markerInfo});
+                        var markerInfo = _createMarkerInfo(feature);
+                        _markerInfoMapping[data[i].name].push({marker: feature._lf_object, info: markerInfo});
                         if(feature._lf_object) {
                             feature._lf_object.on('click', function(evt) {
                                 _findMarker(evt.target); 
@@ -323,79 +316,79 @@
                 
             }
             
-            function createInfoPanel() {
-                var _mapWrapper = $('<div class="tm_marker_map_wrapper"></div>');
-                var _infoWrapper = $('<div class="tm_marker_info_wrapper"></div>');
+            function _createInfoPanel() {
+                var mapWrapper = $('<div class="tm_marker_map_wrapper"></div>');
+                var infoWrapper = $('<div class="tm_marker_info_wrapper"></div>');
                 
-                infoWrapper.append(_mapWrapper);
-                infoWrapper.append(_infoWrapper);
+                _infoWrapper.append(mapWrapper);
+                _infoWrapper.append(infoWrapper);
                 
-                var _prevMapBut = $('<a href=""><i class="fa fa-angle-left"></i></a>');
-                _prevMapBut.on('click', function(evt) {
+                var prevMapBut = $('<a href=""><i class="fa fa-angle-left"></i></a>');
+                prevMapBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     _previousMapClick();
                 });
                 
-                var _nextMapBut = $('<a href=""><i class="fa fa-angle-right"></i></a>');
-                _nextMapBut.on('click', function(evt) {
+                var nextMapBut = $('<a href=""><i class="fa fa-angle-right"></i></a>');
+                nextMapBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     _nextMapClick();
                 });
                 
-                var _mapList = $('<ul class="tm_marker_info_map_list"></ul>');
-                for(var map in markerInfoMapping) {
+                var mapList = $('<ul class="tm_marker_info_map_list"></ul>');
+                for(var map in _markerInfoMapping) {
                     var liEntry = $('<li class="tm_marker_info_map_entry" style="display:none;">'+map+'</li>');
-                    mapNameMapping[map]=liEntry;
-                    _mapList.append(liEntry);
+                    _mapNameMapping[map]=liEntry;
+                    mapList.append(liEntry);
                 }
                 
-                _mapWrapper.append(_prevMapBut);
-                _mapWrapper.append(_mapList);
-                _mapWrapper.append(_nextMapBut);
+                mapWrapper.append(prevMapBut);
+                mapWrapper.append(mapList);
+                mapWrapper.append(nextMapBut);
                 
-                var _prevInfoBut = $('<a href=""><i class="fa fa-angle-left"></i></a>');
-                _prevInfoBut.on('click', function(evt) {
+                var prevInfoBut = $('<a href=""><i class="fa fa-angle-left"></i></a>');
+                prevInfoBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     _previousInfoClick();
                 });
-                var _nextInfoBut = $('<a href=""><i class="fa fa-angle-right"></i></a>');
-                _nextInfoBut.on('click', function(evt) {
+                var nextInfoBut = $('<a href=""><i class="fa fa-angle-right"></i></a>');
+                nextInfoBut.on('click', function(evt) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     _nextInfoClick();
                 });
                 
-                var _infoList = $('<ul class="tm_marker_info_list"></ul>');
-                _infoWrapper.append(_prevInfoBut);
-                _infoWrapper.append(_infoList);
-                _infoWrapper.append(_nextInfoBut);
+                var infoList = $('<ul class="tm_marker_info_list"></ul>');
+                infoWrapper.append(prevInfoBut);
+                infoWrapper.append(infoList);
+                infoWrapper.append(nextInfoBut);
                 
                 var nbrmaps = 0;
-                for(var map in markerInfoMapping) {
-                    var minfomap = markerInfoMapping[map];
+                for(var map in _markerInfoMapping) {
+                    var minfomap = _markerInfoMapping[map];
                     for(var i = 0; i < minfomap.length; i++) {
-                        _infoList.append(minfomap[i].info);
+                        infoList.append(minfomap[i].info);
                     }
                     nbrmaps++;
                 }
                 if(nbrmaps === 1) {
-                    _mapWrapper.css('display', 'none');
+                    mapWrapper.css('display', 'none');
                 }
-                for(var map in markerInfoMapping) {
+                for(var map in _markerInfoMapping) {
                     _showMap(map);
                     return;
                 }
             }
             
             function _nextInfoClick() {
-                _showInfo(currentInfo + 1);
+                _showInfo(_currentInfo + 1);
             }
             
             function _previousInfoClick() {
-                _showInfo(currentInfo - 1);
+                _showInfo(_currentInfo - 1);
             }
             
             function _nextMapClick() {
@@ -406,7 +399,7 @@
                 var first = null;
                 var next = null;
                 var hasCurrent = false;
-                for(var map in markerInfoMapping) {
+                for(var map in _markerInfoMapping) {
                     if(!first) {
                         first = map;
                     }
@@ -414,7 +407,7 @@
                         next = map;
                         break;
                     }
-                    if(markerInfoMapping[map] === currentMap) {
+                    if(_markerInfoMapping[map] === _currentMap) {
                         hasCurrent = true;
                     }
                     
@@ -434,9 +427,9 @@
                 var last = null;
                 var previous = null;
                 var counter = 0;
-                for(var map in markerInfoMapping) {
+                for(var map in _markerInfoMapping) {
                     last = map;
-                    if(markerInfoMapping[map] === currentMap && counter !== 0) {
+                    if(_markerInfoMapping[map] === _currentMap && counter !== 0) {
                         break;
                     }
                     previous = map;
@@ -450,70 +443,68 @@
             }
             
             function _showMap(name) {
-                if(markerInfoMapping[name] !== currentMap) {
-                    if(currentMap && currentMap[currentInfo]) {
-                        currentMap[currentInfo].info.css('display', 'none');
-                        currentMap[currentInfo].marker.closePopup();
+                if(_markerInfoMapping[name] !== _currentMap) {
+                    if(_currentMap && _currentMap[_currentInfo]) {
+                        _currentMap[_currentInfo].info.css('display', 'none');
+                        _currentMap[_currentInfo].marker.closePopup();
                     }
-                    currentMap = markerInfoMapping[name];
-                    for(var mapname in markerInfoMapping) {
-                        mapNameMapping[mapname].css('display', 'none');
+                    _currentMap = _markerInfoMapping[name];
+                    for(var mapname in _markerInfoMapping) {
+                        _mapNameMapping[mapname].css('display', 'none');
                     }
-                    mapNameMapping[name].css('display', '');
-                    currentInfo = -1;
+                    _mapNameMapping[name].css('display', '');
+                    _currentInfo = -1;
                     _showInfo(0);
                 }
             }
             
             function _findMarker(marker) {
-
-                for(var mapname in markerInfoMapping) {
-                    for(var i = 0; i < markerInfoMapping[mapname].length; i++) {
-                        if(markerInfoMapping[mapname][i].marker === marker) {
+                for(var mapname in _markerInfoMapping) {
+                    for(var i = 0; i < _markerInfoMapping[mapname].length; i++) {
+                        if(_markerInfoMapping[mapname][i].marker === marker) {
                             _showMap(mapname);
                             _showInfo(i);
                             return;
                         }
                     }
                 }
-                console.log(marker);
             }
             
             function _showInfo(id) {
-                if(!currentMap) return;
-                if(currentInfo !== id) {
-                    if(currentMap.length === 0) return;
-                    if(id >= currentMap.length) {
-                        if(mapOptions.connectMaps) {
+                if(!_currentMap) return;
+                if(_currentInfo !== id) {
+                    if(_currentMap.length === 0) return;
+                    if(id >= _currentMap.length) {
+                        if(_mapOptions.connectMaps) {
                             _showMap(_getNextMap());
                             return;
                         } else {
                             id = 0;
                         }
                     } else if(id < 0) {
-                        if(mapOptions.connectMaps) {
+                        if(_mapOptions.connectMaps) {
                             _showMap(_getPreviousMap());
-                            id = currentMap.length -1;
+                            id = _currentMap.length -1;
                         } else {
-                            id = currentMap.length -1;
+                            id = _currentMap.length -1;
                         }
                     }
                     if(id < 0) return;
-                    if(currentMap && currentMap[currentInfo]) {
-                        currentMap[currentInfo].info.css('display', 'none');
-                        currentMap[currentInfo].marker.closePopup();
+                    if(_currentMap && _currentMap[_currentInfo]) {
+                        _currentMap[_currentInfo].info.css('display', 'none');
+                        _currentMap[_currentInfo].marker.closePopup();
                     }
-                    currentInfo = id;
-                    currentMap[currentInfo].info.css('display', '');
-                    currentMap[currentInfo].marker.openPopup();
+                    _currentInfo = id;
+                    _currentMap[_currentInfo].info.css('display', '');
+                    _currentMap[_currentInfo].marker.openPopup();
                 }
             }
             
             this.destroy = function() {
-                map.remove();
+                _map.remove();
             };
 
-            createMap(data,element);
+            _createMap(data,element);
         }
         window.tm_loadFrontendMap = tm_loadMap;
 
