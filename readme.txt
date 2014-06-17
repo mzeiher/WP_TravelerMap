@@ -4,7 +4,7 @@ Donate link: http://bitschubser.org
 Tags: travel, map, waypoints
 Requires at least: 3.9.0
 Tested up to: 3.9.0
-Stable tag: 0.9
+Stable tag: 0.9.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -18,7 +18,8 @@ The points or route section can be linked with posts or media attachments.
 The Plugin is build with the help of leaflet.js and some 3rd party libraries. The
 licenses of the libraries are in the appendix "3rd Party Licenses" within this readme.
 
-If you have ideas for the plugin or if you found some bugs just let me know.
+If you have ideas for the plugin or if you found some bugs just let me know. I submitted this plugin
+in a rather early but stable phase to react to improvements and feature requests from the community
 
 == Installation ==
 
@@ -39,7 +40,7 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 
 == Changelog ==
 
-= 0.9 =
+= 0.9.0 =
 * Initial Release of the BETA
 
 == Upgrade Notice ==

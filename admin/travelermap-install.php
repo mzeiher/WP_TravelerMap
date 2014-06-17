@@ -30,7 +30,6 @@ function travelermap_create_tables() {
 	global $wpdb;
 
 	$map_table = $wpdb->prefix . "travelermap_maps";
-	$layer_table = $wpdb->prefix . "travelermap_layer";
 
 	$map_sql = "CREATE TABLE $map_table (
 		id INT NOT NULL AUTO_INCREMENT,
@@ -39,19 +38,10 @@ function travelermap_create_tables() {
 		PRIMARY KEY  (id)
 	);";
 
-	$layer_sql = "CREATE TABLE $layer_table (
-		id INT NOT NULL AUTO_INCREMENT,
-		name VARCHAR(255) NOT NULL,
-		urltemplate VARCHAR(1024) NOT NULL,
-		options TEXT NOT NULL,
-		PRIMARY KEY  (id)
-	);";
-
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $map_sql );
-	dbDelta( $layer_sql );
 
-	add_option( "tm_db_version", "1.0.0" );
+	add_option( "travelermap_db_version", "0.9.0" );
 }
 
 travelermap_create_settings();

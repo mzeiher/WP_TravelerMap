@@ -23,9 +23,17 @@
  */
 
 
-function tm_uninstall() {
-
+function travelermap_uninstall() {
+    global $wpdb;
+    
+    $map_table = $wpdb->prefix . "travelermap_maps";
+    
+    $wpdb->query(
+        "DROP TABLE $map_table"
+    );
+    
+    delete_option( "travelermap_db_version", "0.9.0" );
 }
 
-tm_uninstall();
+travelermap_uninstall();
 ?>
