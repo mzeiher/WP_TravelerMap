@@ -32,8 +32,8 @@ function travelermap_uninstall() {
         "DROP TABLE $map_table"
     );
     
-    delete_option( "travelermap_db_version", "0.9.0" );
-    delete_option( "travelermap_version", "0.9.0" );
+    delete_option( "travelermap_db_version");
+    delete_option( "travelermap_version");
 }
 
 travelermap_uninstall();

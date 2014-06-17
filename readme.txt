@@ -4,7 +4,7 @@ Donate link: http://bitschubser.org
 Tags: travel, map, waypoints
 Requires at least: 3.9.0
 Tested up to: 3.9.0
-Stable tag: 0.9.0
+Stable tag: 1.0.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -51,7 +51,7 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 
 == Changelog ==
 
-= 0.9.0 =
+= 1.0.0 =
 * Initial Release of the BETA
 
 == Upgrade Notice ==
