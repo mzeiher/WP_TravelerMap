@@ -93,5 +93,10 @@ Leaflet.geodesic
 (c) 2013 Fragger (Kevin Brasier) Licensed BSD2
 http://github.com/Fragger
 
- Font Awesome 4.1.0 by @davegandy - http://fontawesome.io - @fontawesome
- License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+Font Awesome 4.1.0 by @davegandy - http://fontawesome.io - @fontawesome
+License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+
+Spectrum Colorpicker v1.3.4
+https://github.com/bgrins/spectrum
+Author: Brian Grinstead
+License: MIT

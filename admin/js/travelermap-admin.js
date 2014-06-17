@@ -50,6 +50,8 @@
             $('#tm_arrival').datepicker({dateFormat:'yy-mm-dd'});
             $('#tm_departure').datepicker({dateFormat:'yy-mm-dd'});
             $('#tm_date').datepicker({dateFormat:'yy-mm-dd'});
+            $('#tm_line_color').spectrum();
+            
             //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
                 tm_enableControls({type: $('#tm_type').val()});

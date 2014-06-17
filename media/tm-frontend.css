@@ -23,6 +23,8 @@
     display: table-cell;
     vertical-align: middle;
     list-style: none !important;
+    margin:0;
+    padding: 5px 0 !important;
 }
 
 .tm_marker_info_wrapper {
@@ -53,6 +55,8 @@
     display: table-cell;
     vertical-align: top;
     list-style: none !important;
+    margin:0;
+    padding: 5px 0 !important;
 }
 
 .tm_marker_info_wrapper > ul > li {
