@@ -31,10 +31,10 @@ if ( is_admin() ) {
 }
 
 function travelermap_enqueue_leaflet_scripts() {
-    wp_enqueue_script( 'leaflet', TM_URL . "/js/leaflet-src.js" , array(), '0.7.2', false);
-    wp_enqueue_script( 'leaflet-providers', TM_URL . "/js/leaflet-providers.js" , array(), '1.0.5', false);   
-    wp_enqueue_script( 'leaflet-markers', TM_URL . "/js/leaflet.awesome-markers.js" , array(), '2.0.2', false);   
-    wp_enqueue_script( 'leaflet-geodesic', TM_URL . "/js/leaflet.geodesic.js" , array(), '1.0.0', false);   
+    wp_enqueue_script( 'leaflet', TM_URL . "js/leaflet-src.js" , array(), '0.7.2', false);
+    wp_enqueue_script( 'leaflet-providers', TM_URL . "js/leaflet-providers.js" , array(), '1.0.5', false);   
+    wp_enqueue_script( 'leaflet-markers', TM_URL . "js/leaflet.awesome-markers.js" , array(), '2.0.2', false);   
+    wp_enqueue_script( 'leaflet-geodesic', TM_URL . "js/leaflet.geodesic.js" , array(), '1.0.0', false);   
 }
 
 function travelermap_enqueue_leaflet_styles() {

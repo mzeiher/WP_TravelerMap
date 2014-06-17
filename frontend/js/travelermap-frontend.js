@@ -284,7 +284,18 @@
                     img.find('a').colorbox({maxWidth:'95%', maxHeight:'95%'});
                     wrapper.append(img);
                 }
-                var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a><span>'+ (feature.date ? new Date(feature.date).toLocaleDateString() : '') +'</span></h2><p>'+feature.description+'</p></div>');
+                var dateInfo = '<span>';
+                if(feature.date) {
+                    dateInfo += 'Date: ' + new Date(feature.date).toLocaleDateString() + ' ';
+                }
+                if(feature.arrival) {
+                    dateInfo += 'Arrival: ' + new Date(feature.arrival).toLocaleDateString() + ' ';
+                }
+                if(feature.depature) {
+                    dateInfo += 'Departure: ' + new Date(feature.departure).toLocaleDateString() + ' ';
+                }
+                dateInfo += '</span>';
+                var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a>'+dateInfo+'</h2><p>'+feature.description+'</p></div>');
                 wrapper.append(info);
                 //infoWrapper.append(wrapper);
                 return wrapper;

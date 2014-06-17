@@ -47,9 +47,9 @@
             $('#tm_pointlist').sortable();
             $('#tm_layerlist').sortable();
             $('#tm_overlaylist').sortable();
-            $('#tm_arrival').datepicker();
-            $('#tm_departure').datepicker();
-            $('#tm_date').datepicker();
+            $('#tm_arrival').datepicker({dateFormat:'yy-mm-dd'});
+            $('#tm_departure').datepicker({dateFormat:'yy-mm-dd'});
+            $('#tm_date').datepicker({dateFormat:'yy-mm-dd'});
             //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
                 tm_enableControls({type: $('#tm_type').val()});
@@ -68,15 +68,30 @@
             $('#tm_icon').val(data.icon);
             $('#tm_icon_color').val(data.iconColor);
             $('#tm_thumbnail').val(data.thumbnail);
-            $('#tm_date').val(data.date);
+            if(data.date) {
+                var date = new Date(data.date);
+                $('#tm_date').val(date.toISOString().substr(0,10));
+            } else {
+                $('#tm_date').val('');
+            }
             $('#tm_mediaid').val(data.mediaId);
             $('#tm_postid').val(data.postId);
             $('#tm_fullsize').val(data.fullsize);
             $('#tm_description').val(data.description);
             $('#tm_link').val(data.link);
             $('#tm_excludefrompath').prop('checked',data.excludeFromPath);
-            $('#tm_arrival').val(data.arrival);
-            $('#tm_departure').val(data.departure);
+            if(data.arrival) {
+                var date = new Date(data.arrival);
+                $('#tm_arrival').val(date.toISOString().substr(0,10));
+            } else {
+                $('#tm_arrival').val('');
+            }
+            if(data.departure) {
+                var date = new Date(data.departure);
+                $('#tm_departure').val(date.toISOString().substr(0,10));
+            } else {
+                $('#tm_departure').val('');
+            }
 
             if ($.isNumeric(data.lng)) {
                 $('#tm_lng').val(data.lng);
@@ -167,33 +182,13 @@
             }
         }
 
-        function tm_selectNextPoint() {
-            if (currentSelection) {
-                if (currentSelection.next()) {
-                    currentSelection.next().trigger('click');
-                } else {
-                    //TODO: implement round
-                }
-            }
-        }
-
-        function tm_selectPrevPoint() {
-            if (currentSelection) {
-                if (currentSelection.prev()) {
-                    currentSelection.prev().trigger('click');
-                } else {
-                    //TODO: implement round
-                }
-            }
-        }
-
         function tm_saveChanges() {
             if (!currentSelection)
                 return;
             var data = {
                 "type": $('#tm_type').val(),
                 "title": $('#tm_title').val(),
-                "date": $('#tm_date').val() != '' ? Date.parse($('#tm_date').val()) : null,
+                "date": $('#tm_date').val() !== '' ? Date.parse($('#tm_date').val()) : null,
                 "icon": $('#tm_icon').val(),
                 "iconColor": $('#tm_icon_color').val(),
                 "thumbnail": $('#tm_thumbnail').val(),
@@ -203,10 +198,10 @@
                 "description": $('#tm_description').val(),
                 "link": $('#tm_link').val(),
                 "excludeFromPath": $('#tm_excludefrompath').prop('checked') ? true : false,
-                "lat": $('#tm_lat').val() != '' ? parseFloat($('#tm_lat').val()) : 0.0,
-                "lng": $('#tm_lng').val() != '' ? parseFloat($('#tm_lng').val()) : 0.0,
-                "arrival": $('#tm_arrival').val() != '' ? Date.parse($('#tm_arrival').val()) : null,
-                "departure": $('#tm_departure').val() != '' ? Date.parse($('#tm_departure').val()) : null
+                "lat": $('#tm_lat').val() !== '' ? parseFloat($('#tm_lat').val()) : 0.0,
+                "lng": $('#tm_lng').val() !== '' ? parseFloat($('#tm_lng').val()) : 0.0,
+                "arrival": $('#tm_arrival').val() !== '' ? Date.parse($('#tm_arrival').val()) : null,
+                "departure": $('#tm_departure').val() !== '' ? Date.parse($('#tm_departure').val()) : null
             }
             if(data.type === 'startsection' || data.type === 'endsection' || data.type === 'waypoint') {
                 data.excludeFromPath = false;
@@ -258,7 +253,7 @@
                 evt.preventDefault();
                 evt.stopPropagation();
                 $(this).parent().remove();
-                if (currentSelection == $(this)) {
+                if (currentSelection === $(this)) {
                     currentSelection = null;
                 }
                 $('#points').sortable("refresh");
@@ -353,8 +348,9 @@
                 $('#tm_thumbnail').val(attachment.sizes.thumbnail.url);
                 $('#tm_mediaid').val(attachment.id);
                 $('#tm_postid').val(-1);
-                if(attachment.date) {
-                    $('#tm_date').val(attachment.date.getTime());
+                var date = Date.parse(attachment.date);
+                if(!isNaN(date)) {
+                    $('#tm_date').val(new Date(date).toISOString().substr(0,10));
                 }
                 $('#tm_fullsize').val(attachment.sizes.full.url);
                 $('#tm_description').val(attachment.description);
@@ -397,7 +393,10 @@
                                         $('#tm_type').val('post');
                                     }
                                     $('#tm_title').val(response.title);
-                                    $('#tm_date').val(response.date);
+                                    var date = Date.parse(response.date);
+                                    if(!isNaN(date)) {
+                                        $('#tm_date').val(new Date(date).toISOString().substr(0,10));
+                                    }
                                     $('#tm_thumbnail').val(response.thumbnail);
                                     $('#tm_mediaid').val(response.mediaId);
                                     $('#tm_postid').val(response.postId);

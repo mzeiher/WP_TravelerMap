@@ -1,60 +1,60 @@
 .tm_layer {
-	display: table;
-	width: 100%;
-	padding: 10px;
-	box-sizing: border-box;
-	border: 1px solid #000;
-	width: 100%
+    display: table;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    width: 100%
 }
 
 .tm_maplayer {
-	display: table-cell;
-	width: 50%;
+    display: table-cell;
+    width: 50%;
 }
 
 .tm_overlays {
-	display: table-cell;
-	width: 50%;
+    display: table-cell;
+    width: 50%;
 }
 
 .tm_pointdetails {
-	display: table;
-	padding: 10px;
-	box-sizing: border-box;
-	border: 1px solid #000;
-	width: 100%
+    display: table;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    width: 100%
 }
 
 .tm_pointdetails > .tm_form {
-	display: table-cell;
-	min-width: 350px;
-	width: 350px;
+    display: table-cell;
+    min-width: 350px;
+    width: 350px;
 }
 
 .tm_pointdetails > .tm_preview_map {
-	display: table-cell;
-	width: 100%;
+    display: table-cell;
+    width: 100%;
 }
 
 .tm_points {
-	padding: 10px;
-	box-sizing: border-box;
-	border: 1px solid #000;
-	width: 100%
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    width: 100%
 }
 
 ul#tm_layerlist, ul#tm_overlaylist, ul#tm_pointlist {
-	list-style: none;
-	margin:0;
-	padding: 5px;
+    list-style: none;
+    margin:0;
+    padding: 5px;
 }
 
 ul#tm_layerlist li > i:before {
-	content: "\f1c5";
+    content: "\f1c5";
 }
 
 ul#tm_overlaylist li > i:before {
-	content: "\f1c5";
+    content: "\f1c5";
 }
 
 ul#tm_pointlist .active {
@@ -74,7 +74,7 @@ ul#tm_pointlist > li > *:nth-child(1) {
     width: 40px;
 }
 ul#tm_pointlist > li > *:nth-child(2) {
-    
+
 }
 ul#tm_pointlist > li > *:nth-child(3) {
     width: 200px;
@@ -84,11 +84,11 @@ ul#tm_pointlist > li > *:nth-child(4) {
 }
 
 ul#tm_pointlist > li.marker > i:before {
-	content: "\f041";
+    content: "\f041";
 }
 
 ul#tm_pointlist > li.waypoint > i:before {
-	content: "\f10c";
+    content: "\f10c";
 }
 
 ul#tm_pointlist > li.startsection {
@@ -104,22 +104,41 @@ ul#tm_pointlist > li.endsection {
 }
 
 ul#tm_pointlist > li.startsection > i:before {
-	content: "\f105";
+    content: "\f105";
 }
 
 ul#tm_pointlist > li.endsection > i:before {
-	content: "\f104";
+    content: "\f104";
 }
 
 ul#tm_pointlist > li.media > i:before {
-	content: "\f030";
+    content: "\f030";
 }
 
 ul#tm_pointlist > li.post > i:before {
-	content: "\f040";
+    content: "\f040";
 }
 
 .tm_form > label {
-	width: 130px;
-	display: inline-block;
+    width: 130px;
+    display: inline-block;
+}
+
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+}
+.custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+    /* support: IE7 */
+    *height: 1.7em;
+    *top: 0.1em;
+}
+.custom-combobox-input {
+    margin: 0;
+    padding: 0.3em;
 }
