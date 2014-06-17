@@ -91,7 +91,7 @@
                 for(var i = 0; i < data.length; i++) {
 
                     var routeLayer = createRouteLayer(data[i].data, data[i].lineColor);
-                    var markerLayer = createMarker(data[i].data);
+                    var markerLayer = createMarker(data[i].data, data[i].lineColor);
 
                     var mapLayer = L.layerGroup([routeLayer, markerLayer]);
                     if(!data[i].name) {
@@ -183,16 +183,21 @@
                         lastPoint = feature;
                         lastMapPoint = feature;
                     } else if(feature.type === 'startsection') {
-                        //var nextPoint = findNextWaypointMarker(data,i);
-                        //if(nextPoint !== null) {
-                        //    currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
-                        //}
                         currentLine.addLatLng([feature.lat, feature.lng]);
                         group.addLayer(currentLine);
-                        currentLine = L.geodesicPolyline([], {color:lineColor, weight: 5, opacity:1});
-                        //if(nextPoint !== null) {
-                        //    currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
-                        //}
+                        currentLine = L.geodesicPolyline([], {color:lineColor});
+                        currentLine.on('mouseover', function(evt) {
+                            evt.target.setStyle({opacity: 1});
+                        });
+                        currentLine.on('mouseout', function(evt) {
+                            evt.target.setStyle({opacity: 0.5});
+                        });
+                        currentLine.on('popupopen', function(evt) {
+                            evt.target.setStyle({opacity: 1});
+                        });
+                        currentLine.on('popupclose', function(evt) {
+                            evt.target.setStyle({opacity: 0.5});
+                        });
                         currentLine.addLatLng([feature.lat, feature.lng]);
                         isInSection = true;
                     } else if(feature.type === 'endsection') {
@@ -217,16 +222,19 @@
             
             function findNextWaypointMarker(data, start) {
                 for(var i = start; i < data.length; i++) {
-                    if((data[i].type === "waypoint" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].type.excludeFromPath) {
+                    if((data[i].type === "waypoint" || data[i].type === "startsection" || data[i].type === "endsection" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].type.excludeFromPath) {
                         return data[i];
                     }
                 }
                 return null;
             }
             
-            function createMarker(data) {
+            function createMarker(data, lineColor) {
                 var markerLayer = L.layerGroup([]);
                 if(!data && data.length === 0) return markerLayer;
+                if(!lineColor) {
+                    lineColor = "#03f";
+                }
                 for(var i = 0; i < data.length; i++) {
                     var feature = data[i];
                     if(feature.type === 'waypoint') {
@@ -235,6 +243,9 @@
                         //feature['_lf_object'] = wp;
                         wp['tm_data'] = feature;
                         feature['_lf_object'] = wp;
+                        markerLayer.addLayer(wp);
+                    } else if(feature.type === 'startsection' || feature.type === 'endsection') {
+                        var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor}).bindPopup(feature.title);
                         markerLayer.addLayer(wp);
                     } else if(feature.type === 'marker' || feature.type === 'media' || feature.type === 'post') {
                         var iconName = feature.icon;
