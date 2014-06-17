@@ -23,23 +23,23 @@
 (function($) {
     $(document).ready(function() {
 
-        var currentSelection = null;
-        var marker = null;
-        var map = null;
-        var fileFrame;
+        var _currentSelection = null;
+        var _marker = null;
+        var _map = null;
+        var _fileFrame;
 
-        function tm_init() {
+        function _tm_init() {
             // create a map in the "map" div, set the view to a given place and zoom
-            map = L.map('tm_preview_map').setView([0, 0], 3);
+            _map = L.map('tm_map').setView([0, 0], 3);
 
             // add an OpenStreetMap tile layer
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+            }).addTo(_map);
 
-            marker = L.marker([0, 0], {'draggable': true}).addTo(map);
-            marker.on('dragend', function(evt) {
-                var latlng = marker.getLatLng();
+            _marker = L.marker([0, 0], {'draggable': true}).addTo(_map);
+            _marker.on('dragend', function(evt) {
+                var latlng = _marker.getLatLng();
                 $('#tm_lat').val(latlng.lat);
                 $('#tm_lng').val(latlng.lng);
             });
@@ -54,17 +54,17 @@
             
             //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
-                tm_enableControls({type: $('#tm_type').val()});
+                _tm_enableControls({type: $('#tm_type').val()});
             });
         }
 
-        function tm_editPoint(elem) {
-            if (currentSelection) {
-                $(currentSelection).removeClass("active");
+        function _tm_editPoint(elem) {
+            if (_currentSelection) {
+                $(_currentSelection).removeClass("active");
             }
-            currentSelection = $(elem);
-            currentSelection.addClass("active");
-            var data = currentSelection.data('point');
+            _currentSelection = $(elem);
+            _currentSelection.addClass("active");
+            var data = _currentSelection.data('point');
             $('#tm_type').val(data.type);
             $('#tm_title').val(data.title);
             $('#tm_icon').val(data.icon);
@@ -105,17 +105,17 @@
             } else {
                 $('#tm_lat').val(0);
             }
-            if (data.type == 'waypoint' || data.type == 'marker' || data.type == 'media' || data.type == 'post' || data.type == 'startsection' || data.type == 'endsection') {
-                marker.setLatLng({
+            if (data.type === 'waypoint' || data.type === 'marker' || data.type === 'media' || data.type === 'post' || data.type === 'startsection' || data.type === 'endsection') {
+                _marker.setLatLng({
                     lat: parseFloat($('#tm_lat').val()),
                     lng: parseFloat($('#tm_lng').val())
                 });
-                map.setView([parseFloat($('#tm_lat').val()), parseFloat($('#tm_lng').val())]);
+                _map.setView([parseFloat($('#tm_lat').val()), parseFloat($('#tm_lng').val())]);
             }
-            tm_enableControls(data);
+            _tm_enableControls(data);
         }
 
-        function tm_enableControls(data) {
+        function _tm_enableControls(data) {
             $('#tm_type').prop('disabled', true);
             $('#tm_title').prop('disabled', true);
             $('#tm_date').prop('disabled', true);
@@ -131,9 +131,9 @@
             $('#tm_lng').prop('disabled', true);
             $('#tm_lat').prop('disabled', true);
 
-            $('#tm_linkToMedia').prop('disabled', true);
-            $('#tm_linkToPost').prop('disabled', true);
-            $('#tm_saveChanges').prop('disabled', true);
+            $('#tm_link_to_media').prop('disabled', true);
+            $('#tm_link_to_post').prop('disabled', true);
+            $('#tm_save_changes').prop('disabled', true);
 
             if (data.type === 'marker' || data.type === 'post' || data.type === 'media') {
                 $('#tm_type').prop('disabled', false);
@@ -151,9 +151,9 @@
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
 
-                $('#tm_linkToMedia').prop('disabled', false);
-                $('#tm_linkToPost').prop('disabled', false);
-                $('#tm_saveChanges').prop('disabled', false);
+                $('#tm_link_to_media').prop('disabled', false);
+                $('#tm_link_to_post').prop('disabled', false);
+                $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'waypoint') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
@@ -162,13 +162,13 @@
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
 
-                $('#tm_saveChanges').prop('disabled', false);
+                $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'startsection') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
                 
-                $('#tm_saveChanges').prop('disabled', false);
+                $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'endsection') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
@@ -178,14 +178,14 @@
                 $('#tm_link').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
-                $('#tm_linkToMedia').prop('disabled', false);
-                $('#tm_linkToPost').prop('disabled', false);
-                $('#tm_saveChanges').prop('disabled', false);
+                $('#tm_link_to_media').prop('disabled', false);
+                $('#tm_link_to_post').prop('disabled', false);
+                $('#tm_save_changes').prop('disabled', false);
             }
         }
 
-        function tm_saveChanges() {
-            if (!currentSelection)
+        function _tm_saveChanges() {
+            if (!_currentSelection)
                 return;
             var data = {
                 "type": $('#tm_type').val(),
@@ -209,24 +209,24 @@
                 data.excludeFromPath = false;
                 $('#tm_excludefrompath').prop('checked', data.excludeFromPath);
             }
-            $(currentSelection).data('point', data);
-            $(currentSelection).find('.tm_title').html(((data.title) ? data.title : '&nbsp;'));
-            $(currentSelection).find('input').prop('checked', data.excludeFromPath);
+            $(_currentSelection).data('point', data);
+            $(_currentSelection).find('.tm_title').html(((data.title) ? data.title : '&nbsp;'));
+            $(_currentSelection).find('input').prop('checked', data.excludeFromPath);
 
-            $(currentSelection).removeClass('marker');
-            $(currentSelection).removeClass('waypoint');
-            $(currentSelection).removeClass('media');
-            $(currentSelection).removeClass('post');
-            $(currentSelection).removeClass('startsection');
-            $(currentSelection).removeClass('endsection');
+            $(_currentSelection).removeClass('marker');
+            $(_currentSelection).removeClass('waypoint');
+            $(_currentSelection).removeClass('media');
+            $(_currentSelection).removeClass('post');
+            $(_currentSelection).removeClass('startsection');
+            $(_currentSelection).removeClass('endsection');
 
-            $(currentSelection).addClass(data.type);
+            $(_currentSelection).addClass(data.type);
 
-            tm_enableControls(data);
+            _tm_enableControls(data);
 
         }
 
-        function tm_addPoint(data) {
+        function _tm_addPoint(data) {
             if (!data) {
                 data = {
                     "type": "marker",
@@ -249,14 +249,14 @@
             }
             var li = $('<li class="' + data.type + '"><i class="fa fa-fw"></i><span class="tm_title">' + ((data.title) ? data.title : '&nbsp;') + '</span><span>Exclude From Path<input disabled="true" type="checkbox" ' + (data.excludeFromPath ? 'checked="true"' : "") + '/></span><a href="#">delete</a></li>');
             li.on('click', function() {
-                tm_editPoint(this);
+                _tm_editPoint(this);
             });
             li.find('a').on('click', function(evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
                 $(this).parent().remove();
-                if (currentSelection === $(this)) {
-                    currentSelection = null;
+                if (_currentSelection === $(this)) {
+                    _currentSelection = null;
                 }
                 $('#points').sortable("refresh");
             });
@@ -266,7 +266,7 @@
             li.trigger('click');
         }
 
-        function tm_addLayer(name) {
+        function _tm_addLayer(name) {
             if (!name) {
                 name = $('#tm_layer_select').val();
             }
@@ -280,7 +280,7 @@
             $('#tm_layerlist').sortable("refresh");
         }
 
-        function tm_addOverlay(name) {
+        function _tm_addOverlay(name) {
             if (!name) {
                 name = $('#tm_overlays_select').val();
             }
@@ -294,7 +294,7 @@
             $('#tm_overlaylist').sortable("refresh");
         }
 
-        function tm_generateMap() {
+        function _tm_generateMap() {
             var obj = {};
             obj['version'] = "1.0.0";
             obj['mapid'] = $('#tm_map').data('mapid');
@@ -326,14 +326,14 @@
             return obj;
         }
 
-        function tm_linkToMedia() {
+        function _tm_linkToMedia() {
 
-            if (fileFrame) {
-                fileFrame.open();
+            if (_fileFrame) {
+                _fileFrame.open();
                 return;
             }
 
-            fileFrame = wp.media.frames.file_frame = wp.media({
+            _fileFrame = wp.media.frames.file_frame = wp.media({
                 title: "Choose File",
                 button: {
                     text: "Select"
@@ -341,8 +341,8 @@
                 multiple: false
             });
 
-            fileFrame.on('select', function() {
-                attachment = fileFrame.state().get('selection').first().toJSON();
+            _fileFrame.on('select', function() {
+                attachment = _fileFrame.state().get('selection').first().toJSON();
                 console.log(attachment);
                 $('#tm_type').val('media');
                 $('#tm_title').val(attachment.title);
@@ -360,10 +360,10 @@
 
             });
 
-            fileFrame.open();
+            _fileFrame.open();
         }
 
-        function tm_linkToPost() {
+        function _tm_linkToPost() {
             var data = {
                 "action": "travelermap_ajax_getpostnames",
                 "_wpnonce": $('#travelermap_ajax_getpostnames').val()
@@ -419,7 +419,7 @@
             });
         }
 
-        function tm_validate(map) {
+        function _tm_validate(map) {
             if(map.data && map.data.length > 0) {
                 var inSection = false;
                 for(var i = 0; i < map.data.length; i++) {
@@ -438,9 +438,9 @@
             return true;
         }
         
-        function tm_saveMap() {
-            var map = tm_generateMap();
-            if(!tm_validate(map)) {
+        function _tm_saveMap() {
+            var map = _tm_generateMap();
+            if(!_tm_validate(map)) {
                 alert("Errors in Map, please check the marker order and sections");
                 return;
             }
@@ -462,8 +462,8 @@
             });
         }
 
-        function tm_previewMap() {
-            var mapData = tm_generateMap();
+        function _tm_previewMap() {
+            var mapData = _tm_generateMap();
             var dialog = $('<div><div>');
             var mapWrapper = $('<div style=""></div>');
             dialog.append(mapWrapper);
@@ -477,7 +477,7 @@
             });
         }
 
-        function tm_loadMap(mapData) {
+        function _tm_loadMap(mapData) {
             if (mapData && typeof mapData === 'string') {
                 mapData = JSON.parse(mapData);
             }
@@ -502,51 +502,51 @@
                 var props = mapData.properties;
                 if (props.layer) {
                     for (var i = 0; i < props.layer.length; i++) {
-                        tm_addLayer(props.layer[i]);
+                        _tm_addLayer(props.layer[i]);
                     }
                 } else {
-                    tm_addLayer("OpenStreetMap.Mapnik");
+                    _tm_addLayer("OpenStreetMap.Mapnik");
                 }
                 if (props.overlays) {
                     for (var i = 0; i < props.overlays.length; i++) {
-                        tm_addOverlay(props.overlays[i]);
+                        _tm_addOverlay(props.overlays[i]);
                     }
                 }
             } else {
-                tm_addLayer("OpenStreetMap.Mapnik");
+                _tm_addLayer("OpenStreetMap.Mapnik");
             }
             if (mapData.data) {
                 for (var i = 0; i < mapData.data.length; i++) {
-                    tm_addPoint(mapData.data[i]);
+                    _tm_addPoint(mapData.data[i]);
                 }
             }
         }
-        window.tm_loadAdminMap = tm_loadMap;
-        window.tm_init = tm_init;
+        window.tm_loadAdminMap = _tm_loadMap;
+        window.tm_init = _tm_init;
 
-        $('#tm_addPoint').on('click', function() {
-            tm_addPoint();
+        $('#tm_add_point').on('click', function() {
+            _tm_addPoint();
         });
-        $('#tm_saveChanges').on('click', function() {
-            tm_saveChanges();
+        $('#tm_save_changes').on('click', function() {
+            _tm_saveChanges();
         });
-        $('#tm_addLayer').on('click', function() {
-            tm_addLayer();
+        $('#tm_add_layer').on('click', function() {
+            _tm_addLayer();
         });
-        $('#tm_addOverlay').on('click', function() {
-            tm_addOverlay();
+        $('#tm_add_overlay').on('click', function() {
+            _tm_addOverlay();
         });
-        $('#tm_saveMap').on('click', function() {
-            tm_saveMap();
+        $('#tm_save_map').on('click', function() {
+            _tm_saveMap();
         });
-        $('#tm_previewMap').on('click', function() {
-            tm_previewMap();
+        $('#tm_preview_map').on('click', function() {
+            _tm_previewMap();
         });
-        $('#tm_linkToPost').on('click', function() {
-            tm_linkToPost();
+        $('#tm_link_to_post').on('click', function() {
+            _tm_linkToPost();
         });
-        $('#tm_linkToMedia').on('click', function() {
-            tm_linkToMedia();
+        $('#tm_link_to_media').on('click', function() {
+            _tm_linkToMedia();
         });
 
         $('#tm_type').on('change', function() {

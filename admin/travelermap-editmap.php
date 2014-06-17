@@ -115,7 +115,7 @@ if(isset($_GET['map_id'])) {
 						<option value="Acetate.all">Acetate.all</option>
 						<option value="Acetate.hillshading">Acetate.hillshading</option>
 					</select>
-					<button id="tm_addLayer">AddLayer</button>
+					<button id="tm_add_layer">Add Layer</button>
 				</div>
 				<ul id="tm_layerlist">
 				</ul>
@@ -142,7 +142,7 @@ if(isset($_GET['map_id'])) {
 						<option value="Acetate.roads">Acetate.roads</option>
 						<option value="Acetate.labels">Acetate.labels</option>
 					</select>
-					<button id="tm_addOverlay">AddOverlay</button>
+					<button id="tm_add_overlay">Add Overlay</button>
 				</div>
 				<ul id="tm_overlaylist">
 				</ul>
@@ -199,13 +199,13 @@ if(isset($_GET['map_id'])) {
 			<input type="text" id="tm_arrival" disabled="true"  /><br />
 			<label for="tm_departure">Departure</label>
 			<input type="text" id="tm_departure" disabled="true"  /><br />
-			<button id="tm_linkToMedia" disabled="true" >Link To Media</button><button id="tm_linkToPost" disabled="true" >Link To Post</button><button id="tm_saveChanges" disabled="true" >Save Changes</button>
+			<button id="tm_link_to_media" disabled="true" >Link To Media</button><button id="tm_link_to_post" disabled="true" >Link To Post</button><button id="tm_save_changes" disabled="true" >Save Changes</button>
 		</div>
-		<div class="tm_preview_map" style="height: 300px;" id="tm_preview_map" data-mapid="0"></div>
+		<div class="tm_preview_map" style="height: 300px;" id="tm_map" data-mapid="0"></div>
 	</div>
 	<div class="tm_points">
 		<div class="tm_toolbar">
-			<button id="tm_addPoint">AddPoint</button><button id="tm_saveMap">Save Map</button><button id="tm_previewMap">Preview Map</button>
+			<button id="tm_add_point">Add Point</button><button id="tm_save_map">Save Map</button><button id="tm_preview_map">Preview Map</button>
 		</div>
 		<ul id="tm_pointlist">
 		</ul>
