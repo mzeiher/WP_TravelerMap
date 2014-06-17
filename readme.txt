@@ -15,6 +15,17 @@ A simple Plugin to create travel routes and manage maps
 This Pluigin allow the creation of travel maps with routes and point of interests.
 The points or route section can be linked with posts or media attachments.
 
+To place the maps within posts use the shortcode [tm_map id=""] where id is either the map id or
+a comma separated list of map ids to display.
+Additional parameters for the shortcode are: connectmaps="true|false" to connect the maps in the order
+specified in the comma separated id list and spinner="true|false" to disable the spinner to navigate
+through markers.
+
+example:
+[tm_map id="1"]
+[tm_map id="1,2" connectmaps="false"]
+[tm_map id="1,6,3 spinner="false" connectmaps="true"]
+
 The Plugin is build with the help of leaflet.js and some 3rd party libraries. The
 licenses of the libraries are in the appendix "3rd Party Licenses" within this readme.
 
