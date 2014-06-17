@@ -50,7 +50,7 @@
             $('#tm_arrival').datepicker({dateFormat:'yy-mm-dd'});
             $('#tm_departure').datepicker({dateFormat:'yy-mm-dd'});
             $('#tm_date').datepicker({dateFormat:'yy-mm-dd'});
-            $('#tm_line_color').spectrum();
+            //$("#tm_line_color").spectrum({change: function(color) {$("#tm_line_color").val(color.toHexString());}});
             
             //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
@@ -204,13 +204,13 @@
                 "lng": $('#tm_lng').val() !== '' ? parseFloat($('#tm_lng').val()) : 0.0,
                 "arrival": $('#tm_arrival').val() !== '' ? Date.parse($('#tm_arrival').val()) : null,
                 "departure": $('#tm_departure').val() !== '' ? Date.parse($('#tm_departure').val()) : null
-            }
+            };
             if(data.type === 'startsection' || data.type === 'endsection' || data.type === 'waypoint') {
                 data.excludeFromPath = false;
                 $('#tm_excludefrompath').prop('checked', data.excludeFromPath);
             }
             $(currentSelection).data('point', data);
-            $(currentSelection).find('.tm_title').html(data.title);
+            $(currentSelection).find('.tm_title').html(((data.title) ? data.title : '&nbsp;'));
             $(currentSelection).find('input').prop('checked', data.excludeFromPath);
 
             $(currentSelection).removeClass('marker');
@@ -247,7 +247,7 @@
                     "departure": null
                 };
             }
-            var li = $('<li class="' + data.type + '"><i class="fa fa-fw"></i><span class="tm_title">' + data.title + '</span><span>Exclude From Path<input disabled="true" type="checkbox" ' + (data.excludeFromPath ? 'checked="true"' : "") + '/></span><a href="#">delete</a></li>');
+            var li = $('<li class="' + data.type + '"><i class="fa fa-fw"></i><span class="tm_title">' + ((data.title) ? data.title : '&nbsp;') + '</span><span>Exclude From Path<input disabled="true" type="checkbox" ' + (data.excludeFromPath ? 'checked="true"' : "") + '/></span><a href="#">delete</a></li>');
             li.on('click', function() {
                 tm_editPoint(this);
             });
@@ -470,7 +470,7 @@
             if (mapData.lineColor) {
                 $("#tm_line_color").val(mapData.lineColor);
             } else {
-                $("#tm_line_color").val('#03f');
+                $("#tm_line_color").val('#fff');
             }
             if (mapData.properties) {
                 var props = mapData.properties;

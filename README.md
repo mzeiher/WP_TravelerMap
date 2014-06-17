@@ -1,4 +1,4 @@
-WP_TravelerMap
+wp-travelermap
 ==============
 
 Wordpress Traveler Map

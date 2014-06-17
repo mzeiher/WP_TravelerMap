@@ -59,7 +59,7 @@ if(isset($_GET['map_id'])) {
 		<label for="tm_map_name">Name</label>
 		<input type="text" id="tm_map_name" /><br />
                 <label for="tm_line_color">Line Color</label>
-		<input type="text" id="tm_line_color" value="#03f" />
+		<input type="color" id="tm_line_color" value="#03f" />
 		<div class="tm_layer">
 			<div class="tm_maplayer">
 				<div class="tm_toolbar">
