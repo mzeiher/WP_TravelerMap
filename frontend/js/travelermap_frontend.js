@@ -156,7 +156,7 @@
                 var isInFuture = false;
                 var switchToFutureLine = false;
                 var isInSection = false;
-                var currentLine = L.polyline([], {color:lineColor});
+                var currentLine = L.geodesicPolyline([], {color:lineColor});
                 if(mapOptions.connectMaps && lastMapPoint) {
                     currentLine.addLatLng([lastMapPoint.lat, lastMapPoint.lng]);
                 }
@@ -175,7 +175,7 @@
                                 currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
                             }
                             group.addLayer(currentLine);
-                            currentLine = L.polyline([], {color:lineColor});
+                            currentLine = L.geodesicPolyline([], {color:lineColor});
                             if(nextPoint !== null) {
                                 currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
                             }
@@ -188,7 +188,7 @@
                             currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
                         }
                         group.addLayer(currentLine);
-                        currentLine = L.polyline([], {color:'black', weight: 5});
+                        currentLine = L.geodesicPolyline([], {color:'black', weight: 5});
                         if(nextPoint !== null) {
                             currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
                         }
@@ -200,7 +200,7 @@
                         currentLine['tm_data'] = feature;
                         group.addLayer(currentLine);
                         feature['_lf_object'] = currentLine;
-                        currentLine = L.polyline([],{color:lineColor});
+                        currentLine = L.geodesicPolyline([],{color:lineColor});
                         currentLine.addLatLng([lastPoint.lat, lastPoint.lng]); //add as starting point
                         isInSection = false;
                     }
@@ -246,7 +246,7 @@
                         var popupElement = feature.title;
                         if(feature.type === 'media') {
                             var pop = $('<div><a class="tm_popup fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a><div>'+feature.title+'</divp></div>');
-                            pop.find('a').slimbox();
+                            pop.find('a').colorbox();
                             popupElement = pop[0];
                         }
                         var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(popupElement);
@@ -264,7 +264,7 @@
                 var wrapper = $('<li class="tm_marker_info_entry" style="display:none;"></li>');
                 if(feature.thumbnail) {
                     var img = $('<div class="tm_marker_info_image"><a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a></div>');
-                    img.find('a').slimbox();
+                    img.find('a').colorbox();
                     wrapper.append(img);
                 }
                 var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a><span>'+ (feature.date ? new Date(feature.date).toLocaleDateString() : '') +'</span></h2><p>'+feature.description+'</p></div>');
