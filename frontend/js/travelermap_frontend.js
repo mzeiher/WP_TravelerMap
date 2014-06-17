@@ -183,25 +183,27 @@
                         lastPoint = feature;
                         lastMapPoint = feature;
                     } else if(feature.type === 'startsection') {
-                        var nextPoint = findNextWaypointMarker(data,i);
-                        if(nextPoint !== null) {
-                            currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
-                        }
+                        //var nextPoint = findNextWaypointMarker(data,i);
+                        //if(nextPoint !== null) {
+                        //    currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
+                        //}
+                        currentLine.addLatLng([feature.lat, feature.lng]);
                         group.addLayer(currentLine);
                         currentLine = L.geodesicPolyline([], {color:lineColor, weight: 5, opacity:1});
-                        if(nextPoint !== null) {
-                            currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
-                        }
+                        //if(nextPoint !== null) {
+                        //    currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
+                        //}
+                        currentLine.addLatLng([feature.lat, feature.lng]);
                         isInSection = true;
                     } else if(feature.type === 'endsection') {
                         //var nextPoint = findNextWaypointMarker(data,i);
-                        currentLine.addLatLng([lastPoint.lat, lastPoint.lng]);
+                        currentLine.addLatLng([feature.lat, feature.lng]);
                         currentLine.bindPopup(feature.title);
                         currentLine['tm_data'] = feature;
                         group.addLayer(currentLine);
                         feature['_lf_object'] = currentLine;
                         currentLine = L.geodesicPolyline([],{color:lineColor});
-                        currentLine.addLatLng([lastPoint.lat, lastPoint.lng]); //add as starting point
+                        currentLine.addLatLng([feature.lat, feature.lng]); //add as starting point
                         isInSection = false;
                     }
                     

@@ -88,7 +88,7 @@
             } else {
                 $('#tm_lat').val(0);
             }
-            if (data.type == 'waypoint' || data.type == 'marker' || data.type == 'media' || data.type == 'post') {
+            if (data.type == 'waypoint' || data.type == 'marker' || data.type == 'media' || data.type == 'post' || data.type == 'startsection' || data.type == 'endsection') {
                 marker.setLatLng({
                     lat: parseFloat($('#tm_lat').val()),
                     lng: parseFloat($('#tm_lng').val())
@@ -148,7 +148,9 @@
                 $('#tm_saveChanges').prop('disabled', false);
             } else if (data.type === 'startsection') {
                 $('#tm_type').prop('disabled', false);
-
+                $('#tm_lng').prop('disabled', false);
+                $('#tm_lat').prop('disabled', false);
+                
                 $('#tm_saveChanges').prop('disabled', false);
             } else if (data.type === 'endsection') {
                 $('#tm_type').prop('disabled', false);
@@ -157,7 +159,8 @@
                 $('#tm_fullsize').prop('disabled', false);
                 $('#tm_description').prop('disabled', false);
                 $('#tm_link').prop('disabled', false);
-
+                $('#tm_lng').prop('disabled', false);
+                $('#tm_lat').prop('disabled', false);
                 $('#tm_linkToMedia').prop('disabled', false);
                 $('#tm_linkToPost').prop('disabled', false);
                 $('#tm_saveChanges').prop('disabled', false);
@@ -204,6 +207,10 @@
                 "lng": $('#tm_lng').val() != '' ? parseFloat($('#tm_lng').val()) : 0.0,
                 "arrival": $('#tm_arrival').val() != '' ? Date.parse($('#tm_arrival').val()) : null,
                 "departure": $('#tm_departure').val() != '' ? Date.parse($('#tm_departure').val()) : null
+            }
+            if(data.type === 'startsection' || data.type === 'endsection' || data.type === 'waypoint') {
+                data.excludeFromPath = false;
+                $('#tm_excludefrompath').prop('checked', data.excludeFromPath);
             }
             $(currentSelection).data('point', data);
             $(currentSelection).find('.tm_title').html(data.title);
