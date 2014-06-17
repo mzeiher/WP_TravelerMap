@@ -165,20 +165,17 @@
                     var feature = data[i];
                     if((feature.type === 'waypoint' || feature.type === 'marker'|| feature.type === 'media' || feature.type === 'post') && !feature.excludeFromPath) {
                         currentLine.addLatLng([feature.lat, feature.lng]);
-                        if(feature.arrival && feature.arrival >= new Date().getTime()) {
-                            isInFuture = true;
+                        var nextPoint = findNextWaypointMarker(data,i+1);
+                        if(nextPoint) {
+                            if(nextPoint.arrival && nextPoint.arrival >= new Date().getTime()) {
+                                isInFuture = true;
+                            }
                         }
                         if(isInFuture && !isInSection && !switchToFutureLine) {
                             switchToFutureLine = true;
-                            var nextPoint = findNextWaypointMarker(data,i);
-                            if(nextPoint !== null) {
-                                currentLine.addLatLng([nextPoint.lat, nextPoint.lng]);    
-                            }
                             group.addLayer(currentLine);
                             currentLine = L.geodesicPolyline([], {color:lineColor});
-                            if(nextPoint !== null) {
-                                currentLine.addLatLng([nextPoint.lat, nextPoint.lng]); //add as starting point
-                            }
+                            currentLine.addLatLng([feature.lat, feature.lng]); //add as starting point
                         }
                         lastPoint = feature;
                         lastMapPoint = feature;
@@ -210,6 +207,12 @@
                         currentLine = L.geodesicPolyline([],{color:lineColor});
                         currentLine.addLatLng([feature.lat, feature.lng]); //add as starting point
                         isInSection = false;
+                        var nextPoint = findNextWaypointMarker(data,i+1);
+                        if(nextPoint) {
+                            if(nextPoint.arrival && nextPoint.arrival >= new Date().getTime()) {
+                                isInFuture = true;
+                            }
+                        }
                     }
                     
                     if(isInFuture) {
@@ -222,7 +225,7 @@
             
             function findNextWaypointMarker(data, start) {
                 for(var i = start; i < data.length; i++) {
-                    if((data[i].type === "waypoint" || data[i].type === "startsection" || data[i].type === "endsection" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].type.excludeFromPath) {
+                    if((data[i].type === "waypoint" || data[i].type === "startsection" || data[i].type === "endsection" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].excludeFromPath) {
                         return data[i];
                     }
                 }
