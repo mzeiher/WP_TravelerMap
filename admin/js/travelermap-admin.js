@@ -434,6 +434,7 @@
                         inSection = false;
                     }
                 }
+                if(inSection) return false; //no closing section
             }
             return true;
         }
