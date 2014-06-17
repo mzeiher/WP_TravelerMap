@@ -419,9 +419,31 @@
             });
         }
 
+        function tm_validate(map) {
+            if(map.data && map.data.length > 0) {
+                var inSection = false;
+                for(var i = 0; i < map.data.length; i++) {
+                    var feature = map.data[i];
+                    if(feature.type === 'endsection' && !inSection) {
+                        return false;
+                    } else if(feature.type === 'startsection' && inSection) {
+                        return false;
+                    } else if(feature.type === 'startsection') {
+                        inSection = true;
+                    } else if(feature.type === 'endsection') {
+                        inSection = false;
+                    }
+                }
+            }
+            return true;
+        }
+        
         function tm_saveMap() {
             var map = tm_generateMap();
-
+            if(!tm_validate(map)) {
+                alert("Errors in Map, please check the marker order and sections");
+                return;
+            }
             var data = {
                 "action": "travelermap_ajax_updatemap",
                 "map": JSON.stringify(map),
@@ -432,14 +454,18 @@
 
             // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
             $.post(ajaxurl, data, function(response) {
-                alert('Got this from the server: ' + response);
+                if(response.success) {
+                    alert('Map updated');
+                } else {
+                    alert("Error while updating map");
+                }
             });
         }
 
         function tm_previewMap() {
             var mapData = tm_generateMap();
             var dialog = $('<div><div>');
-            var mapWrapper = $('<div style="height:400px;"></div>');
+            var mapWrapper = $('<div style=""></div>');
             dialog.append(mapWrapper);
             dialog.dialog({close: function(evt) {
 

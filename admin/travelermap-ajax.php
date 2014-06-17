@@ -37,7 +37,7 @@ function travelermap_ajax_updatemap() {
             $_POST['name'], $_POST['map'], $_POST['id']
         )
     );
-    echo "0";
+    wp_send_json_success();
     die();
 }
 
