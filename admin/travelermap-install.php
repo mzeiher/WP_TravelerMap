@@ -23,7 +23,7 @@
  */
 
 function travelermap_create_settings() {
-	add_option( "tm_version", "1.0.0" );
+	add_option( "travelermap_version", "0.9.0" );
 }
 
 function travelermap_create_tables() {

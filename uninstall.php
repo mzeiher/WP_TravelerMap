@@ -33,6 +33,7 @@ function travelermap_uninstall() {
     );
     
     delete_option( "travelermap_db_version", "0.9.0" );
+    delete_option( "travelermap_version", "0.9.0" );
 }
 
 travelermap_uninstall();
