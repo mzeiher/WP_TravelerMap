@@ -47,11 +47,11 @@
             $('#tm_pointlist').sortable();
             $('#tm_layerlist').sortable();
             $('#tm_overlaylist').sortable();
-            $('#tm_arrival').datepicker({dateFormat:'yy-mm-dd'});
-            $('#tm_departure').datepicker({dateFormat:'yy-mm-dd'});
-            $('#tm_date').datepicker({dateFormat:'yy-mm-dd'});
+            $('#tm_arrival').datepicker({dateFormat: 'yy-mm-dd'});
+            $('#tm_departure').datepicker({dateFormat: 'yy-mm-dd'});
+            $('#tm_date').datepicker({dateFormat: 'yy-mm-dd'});
             //$("#tm_line_color").spectrum({change: function(color) {$("#tm_line_color").val(color.toHexString());}});
-            
+
             //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
                 _tm_enableControls({type: $('#tm_type').val()});
@@ -70,9 +70,9 @@
             $('#tm_icon').val(data.icon);
             $('#tm_icon_color').val(data.iconColor);
             $('#tm_thumbnail').val(data.thumbnail);
-            if(data.date) {
+            if (data.date) {
                 var date = new Date(data.date);
-                $('#tm_date').val(date.toISOString().substr(0,10));
+                $('#tm_date').val(date.toISOString().substr(0, 10));
             } else {
                 $('#tm_date').val('');
             }
@@ -81,16 +81,16 @@
             $('#tm_fullsize').val(data.fullsize);
             $('#tm_description').val(data.description);
             $('#tm_link').val(data.link);
-            $('#tm_excludefrompath').prop('checked',data.excludeFromPath);
-            if(data.arrival) {
+            $('#tm_excludefrompath').prop('checked', data.excludeFromPath);
+            if (data.arrival) {
                 var date = new Date(data.arrival);
-                $('#tm_arrival').val(date.toISOString().substr(0,10));
+                $('#tm_arrival').val(date.toISOString().substr(0, 10));
             } else {
                 $('#tm_arrival').val('');
             }
-            if(data.departure) {
+            if (data.departure) {
                 var date = new Date(data.departure);
-                $('#tm_departure').val(date.toISOString().substr(0,10));
+                $('#tm_departure').val(date.toISOString().substr(0, 10));
             } else {
                 $('#tm_departure').val('');
             }
@@ -134,6 +134,7 @@
             $('#tm_link_to_media').prop('disabled', true);
             $('#tm_link_to_post').prop('disabled', true);
             $('#tm_save_changes').prop('disabled', true);
+            $('#tm_place_at_address').prop('disabled', true);
 
             if (data.type === 'marker' || data.type === 'post' || data.type === 'media') {
                 $('#tm_type').prop('disabled', false);
@@ -153,6 +154,7 @@
 
                 $('#tm_link_to_media').prop('disabled', false);
                 $('#tm_link_to_post').prop('disabled', false);
+                $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'waypoint') {
                 $('#tm_type').prop('disabled', false);
@@ -162,12 +164,14 @@
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
 
+                $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'startsection') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
-                
+
+                $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'endsection') {
                 $('#tm_type').prop('disabled', false);
@@ -180,6 +184,7 @@
                 $('#tm_lat').prop('disabled', false);
                 $('#tm_link_to_media').prop('disabled', false);
                 $('#tm_link_to_post').prop('disabled', false);
+                $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             }
         }
@@ -205,7 +210,7 @@
                 "arrival": $('#tm_arrival').val() !== '' ? Date.parse($('#tm_arrival').val()) : null,
                 "departure": $('#tm_departure').val() !== '' ? Date.parse($('#tm_departure').val()) : null
             };
-            if(data.type === 'startsection' || data.type === 'endsection' || data.type === 'waypoint') {
+            if (data.type === 'startsection' || data.type === 'endsection' || data.type === 'waypoint') {
                 data.excludeFromPath = false;
                 $('#tm_excludefrompath').prop('checked', data.excludeFromPath);
             }
@@ -231,7 +236,7 @@
                 data = {
                     "type": "marker",
                     "title": "",
-                    "date" : null,
+                    "date": null,
                     "thumbnail": "",
                     "fullsize": "",
                     "description": "",
@@ -351,8 +356,8 @@
                 $('#tm_mediaid').val(attachment.id);
                 $('#tm_postid').val(-1);
                 var date = Date.parse(attachment.date);
-                if(!isNaN(date)) {
-                    $('#tm_date').val(new Date(date).toISOString().substr(0,10));
+                if (!isNaN(date)) {
+                    $('#tm_date').val(new Date(date).toISOString().substr(0, 10));
                 }
                 $('#tm_fullsize').val(attachment.sizes.full.url);
                 $('#tm_description').val(attachment.description);
@@ -391,13 +396,13 @@
                                         alert("Error while linking to post");
                                         return;
                                     }
-                                    if($('#tm_type').val() !== 'endsection') {
+                                    if ($('#tm_type').val() !== 'endsection') {
                                         $('#tm_type').val('post');
                                     }
                                     $('#tm_title').val(response.title);
                                     var date = Date.parse(response.date);
-                                    if(!isNaN(date)) {
-                                        $('#tm_date').val(new Date(date).toISOString().substr(0,10));
+                                    if (!isNaN(date)) {
+                                        $('#tm_date').val(new Date(date).toISOString().substr(0, 10));
                                     }
                                     $('#tm_thumbnail').val(response.thumbnail);
                                     $('#tm_mediaid').val(response.mediaId);
@@ -419,29 +424,85 @@
             });
         }
 
+        function _tm_placeMarkerAtAddress() {
+            var dialog = $('<div></div>');
+            dialog.append($('<label>Search</label>'));
+            dialog.append($('<input type="text"></input>'));
+            dialog.dialog({buttons: [
+                    {text: "Search", click: function() {
+                            $.getJSON('http://nominatim.openstreetmap.org/search?format=json&q='+dialog.find('input').val().toString().replace(/ /g,"+"), function(response) {
+                                if(!response) { alert("Error while retrieving results"); return; };
+                                if(response.length == 0) {
+                                    alert("No results found");
+                                    return;
+                                }
+                                var selectionDialog = $('<div></div>');
+                                var list = $('<ul class="tm_list"></ul>');
+                                for(var i = 0; i < response.length; i++) {
+                                    var li = $('<li class="tm_list_entry">'+response[i].display_name+'</li>');
+                                    li.data("info", response[i]);
+                                    li.on('click', function(evt) {
+                                        selectionDialog.dialog('destroy');
+                                        dialog.dialog('destroy');
+                                        $('#tm_lat').val($(this).data('info').lat);
+                                        $('#tm_lng').val($(this).data('info').lon);
+                                        _marker.setLatLng({
+                                            lat: parseFloat($('#tm_lat').val()),
+                                            lng: parseFloat($('#tm_lng').val())
+                                        });
+                                        _map.setView([parseFloat($('#tm_lat').val()), parseFloat($('#tm_lng').val())]);
+                                    });
+                                    list.append(li);
+                                }
+                                selectionDialog.append(list);
+                                selectionDialog.dialog({ minWidth: 400, maxHeight:400, buttons: [
+                                        {
+                                            text: "Cancel",
+                                            click: function() {
+                                               $(this).dialog("destroy"); 
+                                            }
+                                        }
+                                ]});
+                                selectionDialog.on('close', function() {
+                                    selectionDialog.dialog('destroy');
+                                });
+                            }).fail(function() {
+                                alert("Error while retrieving results");
+                            });
+                        }},
+                    {text: "Cancel", click: function() {
+                            $(this).dialog("destroy");
+                        }}
+                ]});
+            dialog.on('close', function() {
+                dialog.dialog('destroy');
+            });
+        }
+
         function _tm_validate(map) {
-            if(map.data && map.data.length > 0) {
+            if (map.data && map.data.length > 0) {
                 var inSection = false;
-                for(var i = 0; i < map.data.length; i++) {
+                for (var i = 0; i < map.data.length; i++) {
                     var feature = map.data[i];
-                    if(feature.type === 'endsection' && !inSection) {
+                    if (feature.type === 'endsection' && !inSection) {
                         return false;
-                    } else if(feature.type === 'startsection' && inSection) {
+                    } else if (feature.type === 'startsection' && inSection) {
                         return false;
-                    } else if(feature.type === 'startsection') {
+                    } else if (feature.type === 'startsection') {
                         inSection = true;
-                    } else if(feature.type === 'endsection') {
+                    } else if (feature.type === 'endsection') {
                         inSection = false;
                     }
                 }
-                if(inSection) return false; //no closing section
+                if (inSection)
+                    return false; //no closing section
             }
             return true;
         }
-        
+
         function _tm_saveMap() {
             var map = _tm_generateMap();
-            if(!_tm_validate(map)) {
+            if (!_tm_validate(map)) {
                 alert("Errors in Map, please check the marker order and sections");
                 return;
             }
@@ -455,7 +516,7 @@
 
             // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
             $.post(ajaxurl, data, function(response) {
-                if(response.success) {
+                if (response.success) {
                     alert('Map updated');
                 } else {
                     alert("Error while updating map");
@@ -548,6 +609,9 @@
         });
         $('#tm_link_to_media').on('click', function() {
             _tm_linkToMedia();
+        });
+        $('#tm_place_at_address').on('click', function() {
+            _tm_placeMarkerAtAddress();
         });
 
         $('#tm_type').on('change', function() {

@@ -61,7 +61,7 @@ if(isset($_GET['map_id'])) {
 		<label for="tm_map_name">Name</label>
 		<input type="text" id="tm_map_name" /><br />
                 <label for="tm_line_color">Line Color</label>
-		<input type="color" id="tm_line_color" value="#03f" />
+		<input type="color" id="tm_line_color" value="#0033ff" />
 		<div class="tm_layer">
 			<div class="tm_maplayer">
 				<div class="tm_toolbar">
@@ -201,7 +201,7 @@ if(isset($_GET['map_id'])) {
 			<input type="text" id="tm_arrival" disabled="true"  /><br />
 			<label for="tm_departure">Departure</label>
 			<input type="text" id="tm_departure" disabled="true"  /><br />
-			<button id="tm_link_to_media" disabled="true" >Link To Media</button><button id="tm_link_to_post" disabled="true" >Link To Post</button><button id="tm_link_to_address" disabled="true" >Link To Address</button><button id="tm_save_changes" disabled="true" >Save Changes</button>
+			<button id="tm_link_to_media" disabled="true" >Link To Media</button><button id="tm_link_to_post" disabled="true" >Link To Post</button><button id="tm_place_at_address" disabled="true" >Place At Address</button><button id="tm_save_changes" disabled="true" >Save Changes</button>
 		</div>
 		<div class="tm_preview_map" style="height: 300px;" id="tm_map" data-mapid="0"></div>
 	</div>

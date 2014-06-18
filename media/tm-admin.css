@@ -142,3 +142,19 @@ ul#tm_pointlist > li.post > i:before {
     margin: 0;
     padding: 0.3em;
 }
+
+
+.tm_list {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+.tm_list_entry:hover {
+    background-color: #ccc;
+    cursor: pointer;
+}
+.tm_list_entry {
+    margin: 0 !important;
+    padding: 5px !important;
+    list-style: none !important;
+}
