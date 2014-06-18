@@ -52,7 +52,6 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 == Changelog ==
 
 = 1.1.0 =
-* added settings page to define common settings
 * added ability to place marker in admin menu to a specific address (no marker dragging anymore)
 * fixed some bugs
 
