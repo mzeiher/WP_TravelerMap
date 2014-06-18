@@ -56,7 +56,7 @@ function travelermap_init() {
 function travelermap_create_admin_menu() {
     add_menu_page( 'Travelermap', 'Travelermap', 'manage_options', 'travelermap_managemaps', 'travelermap_managemaps' , 'dashicons-location-alt');
     add_submenu_page('travelermap_managemaps', "Manage Maps", 'Manage Maps', 'manage_options', 'travelermap_managemaps', 'travelermap_managemaps' );
-    add_submenu_page('travelermap_managemaps', "Settings", 'Settings', 'manage_options', 'travelermap_editsettings', 'travelermap_editsettings' );
+    //add_submenu_page('travelermap_managemaps', "Settings", 'Settings', 'manage_options', 'travelermap_editsettings', 'travelermap_editsettings' );
     add_submenu_page( null, "Edit Map", "Edit Map", 'manage_options', 'travelermap_editmap', 'travelermap_editmap');
 }
  

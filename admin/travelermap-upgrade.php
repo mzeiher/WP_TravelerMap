@@ -36,7 +36,6 @@ function travelermap_upgrade_1_0_0_to_1_1_0() {
 	
 	if (!$settings) {
 		$settings = array(
-			'dateFormat'       => 'dd.MM.yyyy'
 		);
 		update_option('travelermap_settings', $settings);
 	}
