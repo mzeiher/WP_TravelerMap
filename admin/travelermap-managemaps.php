@@ -24,15 +24,15 @@
 ?>
 <?php
 
-function travelermap_editmaps() {
+function travelermap_managemaps() {
 
     global $wpdb;
 
     $map_table = $wpdb->prefix . "travelermap_maps";
     $results = $wpdb->get_results("SELECT * FROM $map_table");
 
-    if (isset($_POST['travelermap_editmaps'])) {
-        check_admin_referer( 'travelermap_editmaps' );
+    if (isset($_POST['travelermap_managemaps'])) {
+        check_admin_referer( 'travelermap_managemaps' );
         if (isset($_POST['action']) && $_POST['action'] == "travelermap_add_new_map") {
             $wpdb->query(
                     $wpdb->prepare(
@@ -44,7 +44,7 @@ function travelermap_editmaps() {
                         ", 'New Map', '{ "name":"New Map", "data":[]}'
                     )
             );
-            wp_redirect(admin_url('admin.php?page=travelermap_editmaps'));
+            wp_redirect(admin_url('admin.php?page=travelermap_managemaps'));
             exit();
         } elseif (isset($_POST['action']) && strpos($_POST['action'],"travelermap_delete_map_") == 0) {
             $mapId = intval(substr($_POST['action'], strlen("travelermap_delete_map_")));
@@ -56,15 +56,15 @@ function travelermap_editmaps() {
                         ", $mapId
                     )
             );
-            wp_redirect(admin_url('admin.php?page=travelermap_editmaps'));
+            wp_redirect(admin_url('admin.php?page=travelermap_managemaps'));
             exit();
         }
     }
     ?>
     <h2>Manage Maps</h2>
-    <form method="POST" action="admin.php?page=travelermap_editmaps" accept-charset="utf-8">
-        <?php wp_nonce_field('travelermap_editmaps') ?>
-        <input type="hidden" name="travelermap_editmaps" value="1" />
+    <form method="POST" action="admin.php?page=travelermap_managemaps" accept-charset="utf-8">
+        <?php wp_nonce_field('travelermap_managemaps') ?>
+        <input type="hidden" name="travelermap_managemaps" value="1" />
         <div class="tablenav top">
             <div class="alignleft actions">
                 <button id="travelermap_add_map" type="submit" name="action" class="button-secondary action"  value="travelermap_add_new_map">Add New Map</button>

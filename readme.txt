@@ -4,7 +4,7 @@ Donate link: http://bitschubser.org
 Tags: travel, map, waypoints
 Requires at least: 3.9.0
 Tested up to: 3.9.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -24,7 +24,7 @@ through markers.
 example:
 [tm_map id="1"]
 [tm_map id="1,2" connectmaps="false"]
-[tm_map id="1,6,3 spinner="false" connectmaps="true"]
+[tm_map id="1,6,3" spinner="false" connectmaps="true"]
 
 The Plugin is build with the help of leaflet.js and some 3rd party libraries. The
 licenses of the libraries are in the appendix "3rd Party Licenses" within this readme.
@@ -50,6 +50,11 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 3. Map Display
 
 == Changelog ==
+
+= 1.1.0 =
+* added settings page to define common settings
+* added ability to place marker in admin menu to a specific address (no marker dragging anymore)
+* fixed some bugs
 
 = 1.0.0 =
 * Initial Release of the BETA
@@ -95,3 +100,8 @@ Spectrum Colorpicker v1.3.4
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
+
+jquert-dateFormat 1.0.0
+(c)2014 phstc
+https://github.com/phstc/jquery-dateFormat
+License: MIT & GPL

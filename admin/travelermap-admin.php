@@ -31,6 +31,7 @@ function travelermap_enqueue_admin_scripts() {
     wp_enqueue_script('jquery');
     wp_enqueue_script('jquery-ui-01.10.4', TM_URL . "js/jquery-ui-1.10.4.min.js" , array('jquery'), '1.10.4', false);
     wp_enqueue_script('jquery-colorbox', TM_URL . "js/jquery.colorbox-min.js" , array('jquery'), '1.5.9', false);
+    wp_enqueue_script('jquery-dateFormat', TM_URL . "js/jquery-dateFormat.min.js" , array('jquery'), '1.0.0', false);
     wp_enqueue_script('spectrum', TM_URL . "js/spectrum.js" , array('jquery'), '1.3.4', false);
     wp_enqueue_script('json2');
     wp_enqueue_script('travelermap-admin', TM_URL . "admin/js/travelermap-admin.js" , array(), '1.0.0', false);
@@ -45,13 +46,16 @@ function travelermap_enqueue_admin_scripts() {
 
 function travelermap_init() {
    ob_start();
+   require_once (dirname (__FILE__) . '/travelermap-upgrade.php');
    require_once (dirname (__FILE__) . '/travelermap-ajax.php');
-   require_once (dirname (__FILE__) . '/travelermap-editmaps.php');
+   require_once (dirname (__FILE__) . '/travelermap-editsettings.php');
+   require_once (dirname (__FILE__) . '/travelermap-managemaps.php');
    require_once (dirname (__FILE__) . '/travelermap-editmap.php');
 }
 
 function travelermap_create_admin_menu() {
-    add_menu_page( 'Travelermap', 'Travelermap', 'manage_options', 'travelermap_editmaps', 'travelermap_editmaps' );
+    add_menu_page( 'Settings', 'Travelermap', 'manage_options', 'travelermap_editsettings', 'travelermap_editsettings' );
+    add_submenu_page('travelermap_editsettings', "Manage Maps", 'Manage Maps', 'manage_options', 'travelermap_managemaps', 'travelermap_managemaps' );
     add_submenu_page( null, "Edit Map", "Edit Map", 'manage_options', 'travelermap_editmap', 'travelermap_editmap');
 }
  

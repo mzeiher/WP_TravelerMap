@@ -296,7 +296,7 @@
 
         function _tm_generateMap() {
             var obj = {};
-            obj['version'] = "1.0.0";
+            obj['version'] = "1.1.0";
             obj['mapid'] = $('#tm_map').data('mapid');
             obj['name'] = $('#tm_map_name').val();
             obj['id'] = $('#tm_map_id').val();

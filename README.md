@@ -43,3 +43,8 @@ Spectrum Colorpicker v1.3.4
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
+
+jquert-dateFormat 1.0.0
+(c)2014 phstc
+https://github.com/phstc/jquery-dateFormat
+License: MIT & GPL

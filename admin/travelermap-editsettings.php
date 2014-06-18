@@ -22,38 +22,8 @@
  *  THE SOFTWARE.
  */
 
-function travelermap_create_settings() {
-	add_option( "travelermap_version", "1.0.0" );
-
-	$settings = get_option('traverlermap_settings');
+function travelermap_editsettings() {
 	
-	if (!$settings) {
-		$settings = array(
-			'dateFormat'       => 'dd.MM.yyyy'
-		);
-		update_option('travelermap_settings', $settings);
-	}
 }
-
-function travelermap_create_tables() {
-	global $wpdb;
-
-	$map_table = $wpdb->prefix . "travelermap_maps";
-
-	$map_sql = "CREATE TABLE $map_table (
-		id INT NOT NULL AUTO_INCREMENT,
-		name VARCHAR(255) NOT NULL,
-		map TEXT  NOT NULL,
-		PRIMARY KEY  (id)
-	);";
-
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	dbDelta( $map_sql );
-
-	add_option( "travelermap_db_version", "1.0.0" );
-}
-
-travelermap_create_settings();
-travelermap_create_tables();
 
 ?>

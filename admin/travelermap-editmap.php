@@ -51,6 +51,7 @@ if(isset($_GET['map_id'])) {
 <?php
 }   
 ?>
+<a href="admin.php?page=travelermap_managemaps">Back to maps</a>
 <div class="tm_mapoptions">
                 <input id="travelermap_ajax_getpostnames" type="hidden" value="<?php echo wp_create_nonce('travelermap_ajax_getpostnames') ?>"/>
                 <input id="travelermap_ajax_updatemap" type="hidden" value="<?php echo wp_create_nonce('travelermap_ajax_updatemap') ?>"/>
