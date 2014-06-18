@@ -3,6 +3,8 @@ wp-travelermap
 
 Wordpress Traveler Map
 
+see readme.txt
+
 
 PLUGIN LICENSES
 ===============

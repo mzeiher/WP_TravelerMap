@@ -471,7 +471,7 @@
             dialog.dialog({close: function(evt) {
 
                 }, minWidth: 650});
-            var map = window.tm_loadFrontendMap(mapData, mapWrapper);
+            var map = window.tm_loadFrontendMap(mapData, mapWrapper, {dateFormat: $('#tm_date_format').val()});
             dialog.on('close', function() {
                 map.destroy();
                 dialog.dialog('destroy');

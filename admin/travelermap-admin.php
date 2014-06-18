@@ -34,8 +34,8 @@ function travelermap_enqueue_admin_scripts() {
     wp_enqueue_script('jquery-dateFormat', TM_URL . "js/jquery-dateFormat.min.js" , array('jquery'), '1.0.0', false);
     wp_enqueue_script('spectrum', TM_URL . "js/spectrum.js" , array('jquery'), '1.3.4', false);
     wp_enqueue_script('json2');
-    wp_enqueue_script('travelermap-admin', TM_URL . "admin/js/travelermap-admin.js" , array(), '1.0.0', false);
-    wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap-frontend.js" , array(), '1.0.0', false);
+    wp_enqueue_script('travelermap-admin', TM_URL . "admin/js/travelermap-admin.js" , array(), '1.1.0', false);
+    wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap-frontend.js" , array(), '1.1.0', false);
     wp_enqueue_style('tm-admin', TM_URL . "media/tm-admin.css" );
     wp_enqueue_style('tm-frontend', TM_URL . "media/tm-frontend.css" );
     wp_enqueue_style('font-awesome', TM_URL . "media/font-awesome.min.css" );
@@ -54,8 +54,9 @@ function travelermap_init() {
 }
 
 function travelermap_create_admin_menu() {
-    add_menu_page( 'Settings', 'Travelermap', 'manage_options', 'travelermap_editsettings', 'travelermap_editsettings' );
-    add_submenu_page('travelermap_editsettings', "Manage Maps", 'Manage Maps', 'manage_options', 'travelermap_managemaps', 'travelermap_managemaps' );
+    add_menu_page( 'Travelermap', 'Travelermap', 'manage_options', 'travelermap_managemaps', 'travelermap_managemaps' , 'dashicons-location-alt');
+    add_submenu_page('travelermap_managemaps', "Manage Maps", 'Manage Maps', 'manage_options', 'travelermap_managemaps', 'travelermap_managemaps' );
+    add_submenu_page('travelermap_managemaps', "Settings", 'Settings', 'manage_options', 'travelermap_editsettings', 'travelermap_editsettings' );
     add_submenu_page( null, "Edit Map", "Edit Map", 'manage_options', 'travelermap_editmap', 'travelermap_editmap');
 }
  

@@ -91,7 +91,6 @@
                 }
                 
                 var firstMap = null;
-                var firstMarker = null;
                 for(var i = 0; i < data.length; i++) {
 
                     var routeLayer = _createRouteLayer(data[i].data, data[i].lineColor);
@@ -102,7 +101,7 @@
                         data[i]['name'] = "Map";
                     }
                     if(!firstMap) {
-                        firstMap = date[i].name;
+                        firstMap = data[i].name;
                     }
                     overlayMaps[data[i].name] = mapLayer;
                 }
@@ -297,13 +296,13 @@
                 }
                 var dateInfo = '<span>';
                 if(feature.date) {
-                    dateInfo += 'Date: ' + $.format.date(feature.date) + ' ';
+                    dateInfo += 'Date: ' + $.format.date(feature.date, _mapOptions.dateFormat) + ' ';
                 }
                 if(feature.arrival) {
-                    dateInfo += 'Arrival: ' + $.format.date(feature.arrival) + ' ';
+                    dateInfo += 'Arrival: ' + $.format.date(feature.arrival, _mapOptions.dateFormat) + ' ';
                 }
                 if(feature.depature) {
-                    dateInfo += 'Departure: ' + $.format.date(feature.departure) + ' ';
+                    dateInfo += 'Departure: ' + $.format.date(feature.departure, _mapOptions.dateFormat) + ' ';
                 }
                 dateInfo += '</span>';
                 var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a>'+dateInfo+'</h2><p>'+feature.description+'</p></div>');

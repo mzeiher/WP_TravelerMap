@@ -61,6 +61,8 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 
 == Upgrade Notice ==
 
+To upgrade, remove old wp-travelermap folder under wp-content/plugins and replace it with the new version
+
 First Version
 
 == 3rd Party Licenses ==

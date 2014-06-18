@@ -57,6 +57,7 @@ if(isset($_GET['map_id'])) {
                 <input id="travelermap_ajax_updatemap" type="hidden" value="<?php echo wp_create_nonce('travelermap_ajax_updatemap') ?>"/>
                 <input id="travelermap_ajax_getpostinfos" type="hidden" value="<?php echo wp_create_nonce('travelermap_ajax_getpostinfos') ?>"/>
                 <input id="tm_map_id" type="hidden" value="<?php echo $map->id ?>" />
+                <input id="tm_date_format" type="hidden" value="<?php echo get_option('date_format') ?>" />
 		<label for="tm_map_name">Name</label>
 		<input type="text" id="tm_map_name" /><br />
                 <label for="tm_line_color">Line Color</label>
@@ -200,7 +201,7 @@ if(isset($_GET['map_id'])) {
 			<input type="text" id="tm_arrival" disabled="true"  /><br />
 			<label for="tm_departure">Departure</label>
 			<input type="text" id="tm_departure" disabled="true"  /><br />
-			<button id="tm_link_to_media" disabled="true" >Link To Media</button><button id="tm_link_to_post" disabled="true" >Link To Post</button><button id="tm_save_changes" disabled="true" >Save Changes</button>
+			<button id="tm_link_to_media" disabled="true" >Link To Media</button><button id="tm_link_to_post" disabled="true" >Link To Post</button><button id="tm_link_to_address" disabled="true" >Link To Address</button><button id="tm_save_changes" disabled="true" >Save Changes</button>
 		</div>
 		<div class="tm_preview_map" style="height: 300px;" id="tm_map" data-mapid="0"></div>
 	</div>
