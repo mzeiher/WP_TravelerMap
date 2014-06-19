@@ -214,6 +214,12 @@
                         });
                         currentLine.addLatLng([feature.lat, feature.lng]);
                         isInSection = true;
+                        var nextPoint = _findNextWaypointMarker(data,i+1);
+                        if(nextPoint) {
+                            if(nextPoint.arrival && nextPoint.arrival >= new Date().getTime()) {
+                                isInFuture = true;
+                            }
+                        }
                     } else if(feature.type === 'endsection') {
                         //var nextPoint = findNextWaypointMarker(data,i);
                         currentLine.addLatLng([feature.lat, feature.lng]);
@@ -258,9 +264,15 @@
                 for(var i = 0; i < data.length; i++) {
                     var feature = data[i];
                     if(feature.type === 'waypoint') {
-                        continue;
+                        if(feature.title) {
+                            var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor}).bindPopup(feature.title);
+                            markerLayer.addLayer(wp);
+                        }
                     } else if(feature.type === 'startsection' || feature.type === 'endsection') {
-                        var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor}).bindPopup(feature.title);
+                        var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
+                        if(feature.title) {
+                            wp.bindPopup(feature.title)
+                        }
                         markerLayer.addLayer(wp);
                     } else if(feature.type === 'marker' || feature.type === 'media' || feature.type === 'post') {
                         var iconName = feature.icon;

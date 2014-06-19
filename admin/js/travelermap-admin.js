@@ -168,9 +168,12 @@
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'startsection') {
                 $('#tm_type').prop('disabled', false);
+                $('#tm_title').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
-
+                $('#tm_arrival').prop('disabled', false);
+                $('#tm_departure').prop('disabled', false);
+                
                 $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'endsection') {
@@ -182,6 +185,9 @@
                 $('#tm_link').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
                 $('#tm_lat').prop('disabled', false);
+                $('#tm_arrival').prop('disabled', false);
+                $('#tm_departure').prop('disabled', false);
+                
                 $('#tm_link_to_media').prop('disabled', false);
                 $('#tm_link_to_post').prop('disabled', false);
                 $('#tm_place_at_address').prop('disabled', false);
