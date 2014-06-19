@@ -74,7 +74,12 @@ function travelermap_ajax_getpostinfos() {
     $permalink = get_permalink( $result->ID);
     $thumbnail = wp_get_attachment_image_src( $thumbnailId );
     $fullsize = wp_get_attachment_image_src( $thumbnailId, 'full');
-    $description = travelermap_create_excerpt($result->post_content);
+    $description = "";
+    if(!empty($result->post_excerpt)) {
+        $description = $result->post_excerpt;
+    } else {
+        $description = travelermap_create_excerpt($result->post_content);
+    }
     $title = $result->post_title;
     $date = $result->post_date;
     
