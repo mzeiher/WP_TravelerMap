@@ -116,13 +116,13 @@
                     _createInfoPanel();
                     window.setTimeout(function() {
                         _showMap(firstMap);
-                    }, 1000);
+                    }, 500);
                 } else {
                     if(data[0] && data[0].data && data[0].data[0]) {
                         if(data[0].data[0]._lf_object) {
                             window.setTimeout(function() {
                                 data[0].data[0]._lf_object.openPopup();
-                            }, 1000);
+                            }, 500);
                         }
                     }
                 }
@@ -531,13 +531,5 @@
             _createMap(data,element);
         }
         window.tm_loadFrontendMap = tm_loadMap;
-
-        $('#tm_load').on('click', function() {
-           window.tm_loadFrontendMap($('#tm_mapdata').val());
-        });
-        
-        $('#tm_loadTestData').on('click', function() {
-           $('#tm_mapdata').val('{"version":"1.0.0","mapid":0,"properties":{"layer":[],"overlays":[]},"data":[{"type":"marker","title":"Start","thumbnail":"","description":"","link":"","excludeFromPath":false,"lat":-8.754794702435605,"lng":-59.4140625,"arrival":null,"departure":null},{"type":"waypoint","title":"point","thumbnail":"","description":"","link":"","excludeFromPath":false,"lat":-5.7908968128719565,"lng":-27.773437499999996,"arrival":null,"departure":null},{"type":"waypoint","title":"point","thumbnail":"","description":"","link":"","excludeFromPath":false,"lat":-12.039320557540572,"lng":3.8671874999999996,"arrival":null,"departure":null},{"type":"waypoint","title":"point","thumbnail":"","description":"","link":"","excludeFromPath":false,"lat":-7.18810087117902,"lng":22.148437499999996,"arrival":null,"departure":null},{"type":"waypoint","title":"point","thumbnail":"","description":"","link":"","excludeFromPath":false,"lat":12.211180191503997,"lng":23.5546875,"arrival":null,"departure":null},{"type":"waypoint","title":"point","thumbnail":"","description":"","link":"","excludeFromPath":false,"lat":16.46769474828897,"lng":-14.414062499999998,"arrival":null,"departure":null},{"type":"marker","title":"End","thumbnail":"","description":"","link":"","excludeFromPath":false,"lat":12.554563528593656,"lng":-48.515625,"arrival":null,"departure":null}]}');
-        });
     });
 })(jQuery);
