@@ -308,13 +308,13 @@
                 }
                 var dateInfo = '<span>';
                 if(feature.date) {
-                    dateInfo += 'Date: ' + $.format.date(feature.date, _mapOptions.dateFormat) + ' ';
+                    dateInfo += 'Date: ' + $.format.date(feature.date, _mapOptions.dateFormat) + ' | ';
                 }
                 if(feature.arrival) {
-                    dateInfo += 'Arrival: ' + $.format.date(feature.arrival, _mapOptions.dateFormat) + ' ';
+                    dateInfo += 'Arrival: ' + $.format.date(feature.arrival, _mapOptions.dateFormat) + ' | ';
                 }
                 if(feature.depature) {
-                    dateInfo += 'Departure: ' + $.format.date(feature.departure, _mapOptions.dateFormat) + ' ';
+                    dateInfo += 'Departure: ' + $.format.date(feature.departure, _mapOptions.dateFormat) + ' | ';
                 }
                 dateInfo += '</span>';
                 var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a>'+dateInfo+'</h2><p>'+feature.description+'</p></div>');
