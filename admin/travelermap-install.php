@@ -23,13 +23,12 @@
  */
 
 function travelermap_create_settings() {
-	add_option( "travelermap_version", "1.0.0" );
+	add_option( "travelermap_version", TM_VERSION );
 
 	$settings = get_option('traverlermap_settings');
 	
 	if (!$settings) {
 		$settings = array(
-			'dateFormat'       => 'dd.MM.yyyy'
 		);
 		update_option('travelermap_settings', $settings);
 	}
@@ -50,7 +49,7 @@ function travelermap_create_tables() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $map_sql );
 
-	add_option( "travelermap_db_version", "1.0.0" );
+	add_option( "travelermap_db_version", TM_VERSION );
 }
 
 travelermap_create_settings();

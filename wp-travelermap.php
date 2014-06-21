@@ -39,23 +39,23 @@ if ( ! defined( 'TM_URL' ) )
 if ( !defined( 'TM_BASENAME' ) )
 	define( 'TM_BASENAME', plugin_basename( __FILE__ ) );
 	
-require 'includes/travelermap-leaflet.php';
+require_once('includes/travelermap-leaflet.php');
 
-function tm_activate() {
-	require 'admin/travelermap-install.php';
+function travelermap_activate() {
+	require_once('admin/travelermap-install.php');
 }
 
-function tm_deactivate() {
+function travelermap_deactivate() {
 	
 }
 
 if ( is_admin() ) {
-    register_activation_hook( __FILE__, 'tm_activate' );
-    register_deactivation_hook( __FILE__, 'tm_deactivate' );
-        
-    require 'admin/travelermap-admin.php';
+    require_once('admin/travelermap-admin.php');
+
+    register_activation_hook( __FILE__, 'travelermap_activate' );
+    register_deactivation_hook( __FILE__, 'travelermap_deactivate' );
 } else {
-    require 'frontend/travelermap-frontend.php';
+    require_once('frontend/travelermap-frontend.php');
 }
 
 ?>
