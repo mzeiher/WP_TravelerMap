@@ -246,6 +246,15 @@
                 return group;
             }
             
+            function _findStartSection(data, start) {
+                for(var i = start; i >= 0; i--) {
+                    if(data[i].type === 'startsection') {
+                        return data[i];
+                    }
+                }
+                return null;
+            }
+
             function _findNextWaypointMarker(data, start) {
                 for(var i = start; i < data.length; i++) {
                     if((data[i].type === "waypoint" || data[i].type === "startsection" || data[i].type === "endsection" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].excludeFromPath) {
@@ -299,7 +308,7 @@
                 return markerLayer;
             }
             
-            function _createMarkerInfo(feature) {
+            function _createMarkerInfo(feature, data, position) {
                 var wrapper = $('<li class="tm_marker_info_entry" style="display:none;"></li>');
                 if(feature.thumbnail) {
                     var img = $('<div class="tm_marker_info_image"><a class="fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a></div>');
@@ -307,14 +316,25 @@
                     wrapper.append(img);
                 }
                 var dateInfo = '<span>';
-                if(feature.date) {
-                    dateInfo += 'Date: ' + $.format.date(feature.date, _mapOptions.dateFormat) + ' | ';
-                }
-                if(feature.arrival) {
-                    dateInfo += 'Arrival: ' + $.format.date(feature.arrival, _mapOptions.dateFormat) + ' | ';
-                }
-                if(feature.depature) {
-                    dateInfo += 'Departure: ' + $.format.date(feature.departure, _mapOptions.dateFormat) + ' | ';
+                if(feature.type === 'endsection') {
+                    var start = _findStartSection(data, position);
+                    if(start && start.arrival) {
+                        dateInfo += "Start: " + $.format.date(start.arrival, _mapOptions.dateFormat) + ' | ';
+                    }
+                    if(feature.departure) {
+                        dateInfo += "End: " + $.format.date(feature.departure, _mapOptions.dateFormat) + ' | ';
+                    }
+
+                } else {
+                    if(feature.date) {
+                        dateInfo += 'Date: ' + $.format.date(feature.date, _mapOptions.dateFormat) + ' | ';
+                    }
+                    if(feature.arrival) {
+                        dateInfo += 'Arrival: ' + $.format.date(feature.arrival, _mapOptions.dateFormat) + ' | ';
+                    }
+                    if(feature.departure) {
+                        dateInfo += 'Departure: ' + $.format.date(feature.departure, _mapOptions.dateFormat) + ' | ';
+                    }
                 }
                 dateInfo += '</span>';
                 var info = $('<div class="tm_marker_info"><h2><a href="'+feature.link+'">'+ feature.title+'</a>'+dateInfo+'</h2><p>'+feature.description+'</p></div>');
@@ -332,7 +352,7 @@
                     for(var j = 0; j < data[i].data.length; j++) {
                         var feature = data[i].data[j];
                         if(feature.type === 'startsection' || feature.type === 'waypoint') continue;
-                        var markerInfo = _createMarkerInfo(feature);
+                        var markerInfo = _createMarkerInfo(feature, data[i].data, j);
                         _markerInfoMapping[data[i].name].push({marker: feature._lf_object, info: markerInfo});
                         if(feature._lf_object) {
                             feature._lf_object.on('click', function(evt) {
