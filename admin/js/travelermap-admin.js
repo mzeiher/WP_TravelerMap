@@ -23,6 +23,8 @@
 (function($) {
     $(document).ready(function() {
 
+        $('body').addClass("wp_travelermap");
+        
         var _currentSelection = null;
         var _marker = null;
         var _map = null;
