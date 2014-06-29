@@ -1,10 +1,10 @@
 === wp-travelermap ===
-Contributors: Mathis Zeiher
+Contributors: der_maddis
 Donate link: http://bitschubser.org
 Tags: travel, map, waypoints
 Requires at least: 3.9.0
 Tested up to: 3.9.1
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 

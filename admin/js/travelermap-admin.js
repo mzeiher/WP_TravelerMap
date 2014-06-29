@@ -168,7 +168,7 @@
 
                 $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
-            } else if (data.type === 'startsection') {
+            } else if (data.type === 'endsection') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
@@ -178,7 +178,7 @@
                 
                 $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
-            } else if (data.type === 'endsection' || data.type === 'startendsection') {
+            } else if (data.type === 'startsection' || data.type === 'startendsection') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
@@ -310,7 +310,7 @@
 
         function _tm_generateMap() {
             var obj = {};
-            obj['version'] = "1.1.0";
+            obj['version'] = "1.3.0";
             obj['mapid'] = $('#tm_map').data('mapid');
             obj['name'] = $('#tm_map_name').val();
             obj['id'] = $('#tm_map_id').val();
@@ -405,7 +405,7 @@
                                         alert("Error while linking to post");
                                         return;
                                     }
-                                    if ($('#tm_type').val() !== 'endsection') {
+                                    if ($('#tm_type').val() !== 'startsection' && $('#tm_type').val() !== 'startendsection') {
                                         $('#tm_type').val('post');
                                     }
                                     $('#tm_title').val(response.title);
