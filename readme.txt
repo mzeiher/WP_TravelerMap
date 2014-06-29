@@ -3,8 +3,8 @@ Contributors: Mathis Zeiher
 Donate link: http://bitschubser.org
 Tags: travel, map, waypoints
 Requires at least: 3.9.0
-Tested up to: 3.9.0
-Stable tag: 1.1.0
+Tested up to: 3.9.1
+Stable tag: 1.2.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -12,14 +12,14 @@ A simple Plugin to create travel routes and manage maps
 
 == Description ==
 
-This Pluigin allow the creation of travel maps with routes and point of interests.
+This plugin allows the creation of travel maps with routes and point of interests.
 The points or route section can be linked with posts or media attachments.
 
 To place the maps within posts use the shortcode [tm_map id=""] where id is either the map id or
 a comma separated list of map ids to display.
 Additional parameters for the shortcode are: connectmaps="true|false" to connect the maps in the order
 specified in the comma separated id list and spinner="true|false" to disable the spinner to navigate
-through markers.
+through markers, zoomlevel="0-16" to set the initial zoom level (0 min, 16 max level)
 
 example:
 [tm_map id="1"]
@@ -50,6 +50,11 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 3. Map Display
 
 == Changelog ==
+
+= 1.2.0 =
+* added zoomlevel to shortcode to set initial zoom level
+* added startendsection marker type to create consecutive sections
+* fixed some bugs
 
 = 1.1.0 =
 * added ability to place marker in admin menu to a specific address (no marker dragging anymore)

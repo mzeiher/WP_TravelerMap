@@ -144,6 +144,7 @@ if(isset($_GET['map_id'])) {
 				<option value="media">Media</option>
 				<option value="waypoint">Waypoint</option>
 				<option value="startsection">Start Section</option>
+				<option value="startendsection">Start-End Section</option>
 				<option value="endsection">End Section</option>
 			</select><br />
                         <label for="tm_icon">Marker Symbol</label>

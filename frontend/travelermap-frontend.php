@@ -38,7 +38,8 @@ function travelermap_show_map($atts, $content = null) {
         "height"  => '400',
         "id"      => '',
         "connectmaps" => 'false',
-        'spinner' => 'true'
+        'spinner' => 'true',
+        'zoomlevel' => '3'
     ), $atts ) );
     
     $dateFormat = get_option('date_format');
@@ -71,7 +72,7 @@ function travelermap_show_map($atts, $content = null) {
     $output .= ",";
     $output .= "$('#tm_map_$map_id')";
     $output .= ",";
-    $output .= "{connectMaps:$connectmaps, height:$height, spinner:$spinner, dateFormat:'$dateFormat'}";
+    $output .= "{connectMaps:$connectmaps, height:$height, spinner:$spinner, dateFormat:'$dateFormat', zoomLevel:$zoomlevel}";
     $output .= ');';
     $output .= '});';
     $output .= '})(jQuery);';

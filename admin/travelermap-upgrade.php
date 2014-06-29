@@ -29,6 +29,9 @@ function travelermap_upgrade() {
 	if( version_compare($currentVersion, '1.1.0', '<')) {
 		travelermap_upgrade_1_0_0_to_1_1_0();
 	}
+	if( version_compare($currentVersion, '1.2.0', '<')) {
+		travelermap_upgrade_1_1_0_to_1_2_0();
+	}
 }
 
 function travelermap_upgrade_1_0_0_to_1_1_0() {
@@ -40,8 +43,22 @@ function travelermap_upgrade_1_0_0_to_1_1_0() {
 		update_option('travelermap_settings', $settings);
 	}
 
-	update_option("travelermap_version", TM_VERSION);
-	update_option("travelermap_db_version", TM_VERSION);
+	update_option("travelermap_version", '1.1.0');
+	update_option("travelermap_db_version", '1.1.0');
+
+}
+
+function travelermap_upgrade_1_1_0_to_1_2_0() {
+	$settings = get_option('traverlermap_settings');
+	
+	if (!$settings) {
+		$settings = array(
+		);
+		update_option('travelermap_settings', $settings);
+	}
+
+	update_option("travelermap_version", '1.2.0');
+	update_option("travelermap_db_version", '1.2.0');
 
 }
 

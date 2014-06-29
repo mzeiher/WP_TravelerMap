@@ -37,7 +37,8 @@
                 connectMaps : false,
                 height: 400,
                 spinner: true,
-                dateFormat: "dd.MM.yyyy"
+                dateFormat: "dd.MM.yyyy",
+                zoomLevel: 3
             };
             
             var _currentMap = null;
@@ -71,7 +72,7 @@
                     _mapWrapper.css('height', _mapOptions.height + "px");
                 }
                 
-                _map = L.map(_mapWrapper[0]).setView([0,0], 3);;
+                _map = L.map(_mapWrapper[0]).setView([0,0], _mapOptions.zoomLevel);;
                 _map.on('popupopen', function(e) {
                     var px = _map.project(e.popup._latlng);
                     px.y -= e.popup._container.clientHeight/2;
@@ -225,11 +226,37 @@
                         currentLine.addLatLng([feature.lat, feature.lng]);
                         currentLine.bindPopup(feature.title);
                         currentLine['tm_data'] = feature;
-                        group.addLayer(currentLine);
                         feature['_lf_object'] = currentLine;
+                        group.addLayer(currentLine);
                         currentLine = L.geodesicPolyline([],{color:lineColor});
                         currentLine.addLatLng([feature.lat, feature.lng]); //add as starting point
                         isInSection = false;
+                        var nextPoint = _findNextWaypointMarker(data,i+1);
+                        if(nextPoint) {
+                            if(nextPoint.arrival && nextPoint.arrival >= new Date().getTime()) {
+                                isInFuture = true;
+                            }
+                        }
+                    } else if(feature.type === 'startendsection') {
+                        currentLine.addLatLng([feature.lat, feature.lng]);
+                        currentLine.bindPopup(feature.title);
+                        currentLine['tm_data'] = feature;
+                        group.addLayer(currentLine);
+                        feature['_lf_object'] = currentLine;
+                        currentLine = L.geodesicPolyline([],{color:lineColor});
+                        currentLine.on('mouseover', function(evt) {
+                            evt.target.setStyle({opacity: 1});
+                        });
+                        currentLine.on('mouseout', function(evt) {
+                            evt.target.setStyle({opacity: 0.5});
+                        });
+                        currentLine.on('popupopen', function(evt) {
+                            evt.target.setStyle({opacity: 1});
+                        });
+                        currentLine.on('popupclose', function(evt) {
+                            evt.target.setStyle({opacity: 0.5});
+                        });
+                        currentLine.addLatLng([feature.lat, feature.lng]); //add as starting point
                         var nextPoint = _findNextWaypointMarker(data,i+1);
                         if(nextPoint) {
                             if(nextPoint.arrival && nextPoint.arrival >= new Date().getTime()) {
@@ -248,7 +275,16 @@
             
             function _findStartSection(data, start) {
                 for(var i = start; i >= 0; i--) {
-                    if(data[i].type === 'startsection') {
+                    if(data[i].type === 'startsection' || data[i].type === 'startendsection') {
+                        return data[i];
+                    }
+                }
+                return null;
+            }
+
+            function _findEndSection(data, start) {
+                for(var i = start; i < data.length; i++) {
+                    if(data[i].type === 'startendsection' || data[i].type === 'endsection') {
                         return data[i];
                     }
                 }
@@ -257,7 +293,7 @@
 
             function _findNextWaypointMarker(data, start) {
                 for(var i = start; i < data.length; i++) {
-                    if((data[i].type === "waypoint" || data[i].type === "startsection" || data[i].type === "endsection" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].excludeFromPath) {
+                    if((data[i].type === "waypoint" || data[i].type === "startsection" || data[i].type === "startendsection" || data[i].type === "endsection" || data[i].type==='marker' || data[i].type === 'media' || data[i].type === 'post') && !data[i].excludeFromPath) {
                         return data[i];
                     }
                 }
@@ -277,7 +313,7 @@
                             var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor}).bindPopup(feature.title);
                             markerLayer.addLayer(wp);
                         }
-                    } else if(feature.type === 'startsection' || feature.type === 'endsection') {
+                    } else if(feature.type === 'startsection' || feature.type === 'endsection' || feature.type === 'startendsection') {
                         var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
                         if(feature.title) {
                             wp.bindPopup(feature.title)
@@ -316,15 +352,18 @@
                     wrapper.append(img);
                 }
                 var dateInfo = '<span>';
-                if(feature.type === 'endsection') {
-                    var start = _findStartSection(data, position);
-                    if(start && start.arrival) {
+                if(feature.type === 'endsection' || feature.type === 'startendsection') {
+                    var start = _findStartSection(data, position-1);
+                    if(start && start.departure) {
+                        dateInfo += "Start: " + $.format.date(start.departure, _mapOptions.dateFormat) + ' | ';
+                    } else if(start && start.arrival) {
                         dateInfo += "Start: " + $.format.date(start.arrival, _mapOptions.dateFormat) + ' | ';
                     }
-                    if(feature.departure) {
+                    if(feature.arrival) {
+                        dateInfo += "End: " + $.format.date(feature.arrival, _mapOptions.dateFormat) + ' | ';
+                    } else if(feature.departure) {
                         dateInfo += "End: " + $.format.date(feature.departure, _mapOptions.dateFormat) + ' | ';
                     }
-
                 } else {
                     if(feature.date) {
                         dateInfo += 'Date: ' + $.format.date(feature.date, _mapOptions.dateFormat) + ' | ';

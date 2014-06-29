@@ -178,7 +178,7 @@
                 
                 $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
-            } else if (data.type === 'endsection') {
+            } else if (data.type === 'endsection' || data.type === 'startendsection') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
@@ -218,7 +218,7 @@
                 "arrival": $('#tm_arrival').val() !== '' ? Date.parse($('#tm_arrival').val()) : null,
                 "departure": $('#tm_departure').val() !== '' ? Date.parse($('#tm_departure').val()) : null
             };
-            if (data.type === 'startsection' || data.type === 'endsection' || data.type === 'waypoint') {
+            if (data.type === 'startsection' || data.type === 'endsection' || data.type === 'startendsection' || data.type === 'waypoint') {
                 data.excludeFromPath = false;
                 $('#tm_excludefrompath').prop('checked', data.excludeFromPath);
             }
@@ -231,6 +231,7 @@
             $(_currentSelection).removeClass('media');
             $(_currentSelection).removeClass('post');
             $(_currentSelection).removeClass('startsection');
+            $(_currentSelection).removeClass('startendsection');
             $(_currentSelection).removeClass('endsection');
 
             $(_currentSelection).addClass(data.type);

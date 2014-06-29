@@ -103,12 +103,20 @@ ul#tm_pointlist > li.endsection {
     border-left: 1px solid #000;
 }
 
+ul#tm_pointlist > li.startendsection {
+    border: 1px solid #000;
+}
+
 ul#tm_pointlist > li.startsection > i:before {
     content: "\f105";
 }
 
 ul#tm_pointlist > li.endsection > i:before {
     content: "\f104";
+}
+
+ul#tm_pointlist > li.startendsection > i:before {
+    content: "\f101";
 }
 
 ul#tm_pointlist > li.media > i:before {

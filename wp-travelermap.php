@@ -3,7 +3,7 @@
 Plugin Name: wp-travelermap
 Plugin URI: http://bitschubser.org/projects/wp-travelermap
 Description: A simple Plugin to create travel routes and manage maps
-Version: 1.1.0
+Version: 1.2.0
 Author: Mathis Zeiher
 Author URI: http://bitschubser.org/
 
@@ -31,7 +31,7 @@ THE SOFTWARE.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 if ( ! defined( 'TM_VERSION' ) )	
-	define( 'TM_VERSION', '1.1.0' );
+	define( 'TM_VERSION', '1.2.0' );
 	
 if ( ! defined( 'TM_URL' ) )
 	define( 'TM_URL', plugin_dir_url( __FILE__ ) );
