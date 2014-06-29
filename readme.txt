@@ -51,6 +51,9 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 
 == Changelog ==
 
+= 1.3.0 =
+* Moved Post linking from endsection to startsection
+
 = 1.2.0 =
 * added zoomlevel to shortcode to set initial zoom level
 * added startendsection marker type to create consecutive sections
