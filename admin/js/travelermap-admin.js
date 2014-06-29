@@ -424,7 +424,7 @@
                         {text: "Cancel", click: function() {
                                 $(this).dialog("destroy");
                             }}
-                    ]});
+                    ], minHeight:400});
                 dialog.on('close', function() {
                     dialog.dialog('destroy');
                 });
