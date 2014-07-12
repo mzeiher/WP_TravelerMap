@@ -112,3 +112,28 @@
 #colorbox {
     z-index: 100001 !important;
 }
+
+.tm_map .leaflet-popup-content-wrapper {
+    border-radius: 0px;
+    padding: 10px;
+}
+
+.tm_map .leaflet-popup-content {
+    margin: 0;
+}
+
+.tm_map a.leaflet-popup-close-button {
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 9px;
+    color: #c3c3c3;
+    font: bold 16px/14px Tahoma,Verdana,sans-serif;
+    height: 18px;
+    padding: 0;
+    position: absolute;
+    right: -9px;
+    text-align: center;
+    text-decoration: none;
+    top: -9px;
+    width: 18px;
+}

@@ -23,6 +23,23 @@
 (function($) {
     $(document).ready(function() {
         
+        var tm_thumbnailIcon = L.Icon.extend({
+            options: {
+                iconSize:     [50, 50],
+                iconAnchor:   [25, 25],
+                popupAnchor:  [0, -25]
+            }
+        });
+
+        var tm_mapSymbols = L.Icon.extend({
+            options: {
+                iconSize:     [50, 50],
+                iconAnchor:   [25, 25],
+                popupAnchor:  [0, -25]
+            }
+        });
+
+
         function tm_loadMap(data ,element, options) {
             return new tm_map(data, element, options);
         }
@@ -308,34 +325,73 @@
                 }
                 for(var i = 0; i < data.length; i++) {
                     var feature = data[i];
-                    if(feature.type === 'waypoint') {
-                        if(feature.title) {
-                            var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor}).bindPopup(feature.title);
-                            markerLayer.addLayer(wp);
+                    if(feature.type === 'waypoint' || feature.type === 'startsection' || feature.type === 'endsection' || feature.type === 'startendsection') {
+                        var wp = null;
+                        if(feature.icon === '_none') continue;
+                        if(feature.icon === '_thumbnail' && feature.thumbnail) {
+                            var icon = new tm_thumbnailIcon({
+                                iconUrl: feature.thumbnail
+                            });
+                            wp = L.marker([feature.lat, feature.lng], {icon:icon});                            
+                        } else {
+                            feature.icon === '_default';
                         }
-                    } else if(feature.type === 'startsection' || feature.type === 'endsection' || feature.type === 'startendsection') {
-                        var wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
+                        if(feature.icon === '_default' || feature.icon === '_dot') {
+                            wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
+                        }
+                        if(feature.icon.charAt(0) !== "_") {
+                            iconName = feature.icon;
+                            if(!iconName) {
+                                iconName="circle";
+                            }
+
+                            var icon = L.AwesomeMarkers.icon({
+                                icon: iconName,
+                                markerColor: feature.iconColor,
+                                prefix: 'fa'
+                            });
+                            wp = L.marker([feature.lat, feature.lng], {icon:icon});
+                        }
                         if(feature.title) {
                             wp.bindPopup(feature.title)
                         }
                         markerLayer.addLayer(wp);
                     } else if(feature.type === 'marker' || feature.type === 'media' || feature.type === 'post') {
-                        var iconName = feature.icon;
-                        if(!iconName) {
-                            iconName="circle";
-                        } 
-                        var icon = L.AwesomeMarkers.icon({
-                            icon: iconName,
-                            markerColor: feature.iconColor,
-                            prefix: 'fa'
-                        });
+                        var iconName = 'circle';
+                        if(iconName === '_none') feature.icon = '_default';
+                        if(feature.icon === '_thumbnail' && !feature.thumbnail) {
+                            feature.icon === '_default';
+                        }
+                        if(feature.icon === '_default') {
+                            if(!iconName) {
+                                iconName="circle";
+                            }
+                        } else {
+                            iconName = feature.icon;
+                        }
                         var popupElement = feature.title;
                         if(feature.type === 'media') {
-                            var pop = $('<div><a class="tm_popup fancybox" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a><div>'+feature.title+'</divp></div>');
+                            var pop = $('<div><a class="tm_popup" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a><div>'+feature.title+'</div></div>');
                             pop.find('a').colorbox({maxWidth:'95%', maxHeight:'95%'});
                             popupElement = pop[0];
                         }
-                        var marker = L.marker([feature.lat, feature.lng], {icon:icon}).bindPopup(popupElement);
+                        var marker = null;
+                        if(feature.icon === '_dot') {
+                            marker = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
+                        } else if(feature.icon === '_thumbnail') {
+                            var icon = new tm_thumbnailIcon({
+                                iconUrl: feature.thumbnail
+                            });
+                            marker = L.marker([feature.lat, feature.lng], {icon:icon});
+                        }else {
+                            var icon = L.AwesomeMarkers.icon({
+                                icon: iconName,
+                                markerColor: feature.iconColor,
+                                prefix: 'fa'
+                            });
+                            marker = L.marker([feature.lat, feature.lng], {icon:icon})
+                        }
+                        marker.bindPopup(popupElement);
                         marker['tm_data'] = feature;
                         feature['_lf_object'] = marker;
                         markerLayer.addLayer(marker);

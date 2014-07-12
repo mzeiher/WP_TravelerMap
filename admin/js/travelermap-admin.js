@@ -56,7 +56,10 @@
 
             //$('#tm_icon').combobox();
             $('#tm_type').on('change', function() {
-                _tm_enableControls({type: $('#tm_type').val()});
+                _tm_enableControls($.extend(_currentSelection.data('point'),{type: $('#tm_type').val()}));
+            });
+            $('#tm_icon').on('change', function() {
+                _tm_enableControls($.extend(_currentSelection.data('point'),{icon: $('#tm_icon').val()}));
             });
         }
 
@@ -69,6 +72,9 @@
             var data = _currentSelection.data('point');
             $('#tm_type').val(data.type);
             $('#tm_title').val(data.title);
+            if(data.icon === undefined || data.icon === "" || data.icon === null) {
+                data.icon = "_default";
+            }
             $('#tm_icon').val(data.icon);
             $('#tm_icon_color').val(data.iconColor);
             $('#tm_thumbnail').val(data.thumbnail);
@@ -122,6 +128,7 @@
             $('#tm_title').prop('disabled', true);
             $('#tm_date').prop('disabled', true);
             $('#tm_icon').prop('disabled', true);
+            $('#tm_mapsymbols').css('display', 'none');
             $('#tm_icon_color').prop('disabled', true);
             $('#tm_thumbnail').prop('disabled', true);
             $('#tm_fullsize').prop('disabled', true);
@@ -138,10 +145,16 @@
             $('#tm_save_changes').prop('disabled', true);
             $('#tm_place_at_address').prop('disabled', true);
 
+            if(data.icon !== null && data.icon !== undefined && data.icon.charAt(0) !== "_") {
+                $('#tm_icon_color').prop('disabled', false);
+            }
+            if(data.icon === "_mapsymbols") {
+                $('#tm_mapsymbols').css('display', '');
+            }
+
             if (data.type === 'marker' || data.type === 'post' || data.type === 'media') {
                 $('#tm_type').prop('disabled', false);
                 $('#tm_icon').prop('disabled', false);
-                $('#tm_icon_color').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_date').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);
@@ -159,6 +172,7 @@
                 $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'waypoint') {
+                $('#tm_icon').prop('disabled', false);
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_arrival').prop('disabled', false);
@@ -169,6 +183,7 @@
                 $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'endsection') {
+                $('#tm_icon').prop('disabled', false);
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_lng').prop('disabled', false);
@@ -179,6 +194,7 @@
                 $('#tm_place_at_address').prop('disabled', false);
                 $('#tm_save_changes').prop('disabled', false);
             } else if (data.type === 'startsection' || data.type === 'startendsection') {
+                $('#tm_icon').prop('disabled', false);
                 $('#tm_type').prop('disabled', false);
                 $('#tm_title').prop('disabled', false);
                 $('#tm_thumbnail').prop('disabled', false);

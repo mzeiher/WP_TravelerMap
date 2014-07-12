@@ -127,7 +127,7 @@ ul#tm_pointlist > li.post > i:before {
     content: "\f040";
 }
 
-.tm_form > label {
+.tm_form label {
     width: 130px;
     display: inline-block;
 }
@@ -151,6 +151,11 @@ ul#tm_pointlist > li.post > i:before {
     padding: 0.3em;
 }
 
+.wp_travelermap ul.ui-autocomplete {
+    z-index: 100000;
+    max-height: 400px;
+    overflow-y: auto;
+}
 
 .tm_list {
     margin: 0 !important;
