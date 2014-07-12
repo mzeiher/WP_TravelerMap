@@ -86,7 +86,7 @@ function travelermap_enqueue_frontend_scripts() {
     wp_enqueue_script('jquery-colorbox', TM_URL . "js/jquery.colorbox-min.js" , array('jquery'), '1.5.9', false);
     wp_enqueue_script('jquery-dateFormat', TM_URL . "js/jquery-dateFormat.min.js" , array('jquery'), '1.0.0', false);
     wp_enqueue_script('json2');
-    wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap-frontend.js" , array('jquery'), '1.3.0', false);
+    wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap-frontend.js" , array('jquery'), '1.4.0', false);
 }
 
 function travelermap_enqueue_frontend_styles() {

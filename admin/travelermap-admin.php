@@ -44,8 +44,8 @@ function travelermap_enqueue_admin_scripts() {
     wp_enqueue_script('jquery-dateFormat', TM_URL . "js/jquery-dateFormat.min.js" , array('jquery'), '1.0.0', false);
     wp_enqueue_script('spectrum', TM_URL . "js/spectrum.js" , array('jquery'), '1.3.4', false);
     wp_enqueue_script('json2');
-    wp_enqueue_script('travelermap-admin', TM_URL . "admin/js/travelermap-admin.js" , array('jquery', 'jquery-ui-core', 'jquery-ui-widget'), '1.3.0', false);
-    wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap-frontend.js" , array('jquery'), '1.3.0', false);
+    wp_enqueue_script('travelermap-admin', TM_URL . "admin/js/travelermap-admin.js" , array('jquery', 'jquery-ui-core', 'jquery-ui-widget'), '1.4.0', false);
+    wp_enqueue_script('travelermap-frontend', TM_URL . "frontend/js/travelermap-frontend.js" , array('jquery'), '1.4.0', false);
     wp_enqueue_style('tm-admin', TM_URL . "media/tm-admin.css" );
     wp_enqueue_style('tm-frontend', TM_URL . "media/tm-frontend.css" );
     wp_enqueue_style('font-awesome', TM_URL . "media/font-awesome.min.css" );
