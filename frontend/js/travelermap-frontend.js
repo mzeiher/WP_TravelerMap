@@ -33,9 +33,9 @@
 
         var tm_mapSymbols = L.Icon.extend({
             options: {
-                iconSize:     [50, 50],
-                iconAnchor:   [25, 25],
-                popupAnchor:  [0, -25]
+                iconSize:     [32, 37],
+                iconAnchor:   [16, 35],
+                popupAnchor:  [0, -35]
             }
         });
 
@@ -332,9 +332,14 @@
                             var icon = new tm_thumbnailIcon({
                                 iconUrl: feature.thumbnail
                             });
-                            wp = L.marker([feature.lat, feature.lng], {icon:icon});                            
+                            wp = L.marker([feature.lat, feature.lng], {icon:icon});
+                        } else if(feature.icon === '_mapsymbols' && feature.mapsymbols) {
+                            var icon = new tm_mapSymbols({
+                                iconUrl: feature.mapsymbols
+                            });
+                            wp = L.marker([feature.lat, feature.lng], {icon:icon});
                         } else {
-                            feature.icon === '_default';
+                            feature.icon = "_default";
                         }
                         if(feature.icon === '_default' || feature.icon === '_dot') {
                             wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
@@ -362,6 +367,9 @@
                         if(feature.icon === '_thumbnail' && !feature.thumbnail) {
                             feature.icon === '_default';
                         }
+                        if(feature.icon === '_mapsymbols' && !feature.mapsymbols) {
+                            feature.icon === '_default';
+                        }
                         if(feature.icon === '_default') {
                             if(!iconName) {
                                 iconName="circle";
@@ -383,7 +391,12 @@
                                 iconUrl: feature.thumbnail
                             });
                             marker = L.marker([feature.lat, feature.lng], {icon:icon});
-                        }else {
+                        } else if(feature.icon === '_mapsymbols') {
+                            var icon = new tm_mapSymbols({
+                                iconUrl: feature.mapsymbols
+                            });
+                            marker = L.marker([feature.lat, feature.lng], {icon:icon});
+                        } else {
                             var icon = L.AwesomeMarkers.icon({
                                 icon: iconName,
                                 markerColor: feature.iconColor,

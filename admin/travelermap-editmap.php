@@ -43,7 +43,7 @@ if(isset($_GET['map_id'])) {
 <script type="text/javascript">
     (function($) {
     $(document).ready(function() {
-    window.tm_init();
+    window.tm_init({"pluginurl" : "<?php echo TM_URL ?>"});
     window.tm_loadAdminMap('<?php echo $map->map ?>');    
     });
 })(jQuery);
