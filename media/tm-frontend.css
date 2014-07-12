@@ -137,3 +137,7 @@
     top: -9px;
     width: 18px;
 }
+
+.tm_map .leaflet-popup-tip-container {
+    margin: -1px auto;
+}
