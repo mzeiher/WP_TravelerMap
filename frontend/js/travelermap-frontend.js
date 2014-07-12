@@ -338,13 +338,7 @@
                                 iconUrl: feature.mapsymbols
                             });
                             wp = L.marker([feature.lat, feature.lng], {icon:icon});
-                        } else {
-                            feature.icon = "_default";
-                        }
-                        if(feature.icon === '_default' || feature.icon === '_dot') {
-                            wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
-                        }
-                        if(feature.icon.charAt(0) !== "_") {
+                        } else if(feature.icon.charAt(0) !== "_") {
                             iconName = feature.icon;
                             if(!iconName) {
                                 iconName="circle";
@@ -356,9 +350,18 @@
                                 prefix: 'fa'
                             });
                             wp = L.marker([feature.lat, feature.lng], {icon:icon});
+                        } else {
+                            feature.icon = "_default";
+                        }
+                        if(feature.icon === '_default' || feature.icon === '_dot') {
+                            wp = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
                         }
                         if(feature.title) {
                             wp.bindPopup(feature.title)
+                        }
+                        if(feature.title && feature.type === 'waypoint') {
+                            wp['tm_data'] = feature;
+                            feature['_lf_object'] = wp;
                         }
                         markerLayer.addLayer(wp);
                     } else if(feature.type === 'marker' || feature.type === 'media' || feature.type === 'post') {
@@ -459,7 +462,7 @@
                     _markerInfoMapping[data[i].name] = [];
                     for(var j = 0; j < data[i].data.length; j++) {
                         var feature = data[i].data[j];
-                        if(feature.type === 'endsection' || feature.type === 'waypoint') continue;
+                        if(feature.type === 'endsection' || (feature.type === 'waypoint' && !feature._lf_object) ) continue;
                         var markerInfo = _createMarkerInfo(feature, data[i].data, j);
                         _markerInfoMapping[data[i].name].push({marker: feature._lf_object, info: markerInfo});
                         if(feature._lf_object) {

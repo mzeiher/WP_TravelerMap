@@ -50,3 +50,8 @@ jquert-dateFormat 1.0.0
 (c)2014 phstc
 https://github.com/phstc/jquery-dateFormat
 License: MIT & GPL
+
+Map Icons Collection
+Creative Commons 3.0 BY-SA
+Author : Nicolas Mollet
+http://mapicons.nicolasmollet.com/

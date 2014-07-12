@@ -51,6 +51,9 @@ Go to http://blog.bitschubser.org and ask in the wp-travelermap section or here
 
 == Changelog ==
 
+= 1.4.0 =
+* Added more marker possibities
+
 = 1.3.0 =
 * Moved Post linking from endsection to startsection
 
@@ -114,3 +117,8 @@ jquert-dateFormat 1.0.0
 (c)2014 phstc
 https://github.com/phstc/jquery-dateFormat
 License: MIT & GPL
+
+Map Icons Collection
+Creative Commons 3.0 BY-SA
+Author : Nicolas Mollet
+http://mapicons.nicolasmollet.com/
