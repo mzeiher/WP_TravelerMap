@@ -385,7 +385,10 @@
                             var pop = $('<div><a class="tm_popup" href="'+feature.fullsize+'" title="'+feature.title+'"><img src="'+feature.thumbnail+'" /></a><div>'+feature.title+'</div></div>');
                             pop.find('a').colorbox({maxWidth:'95%', maxHeight:'95%'});
                             popupElement = pop[0];
-                        }
+                        } else if (feature.link){						//edit: add link to title
+							var tlink = $('<a href="'+feature.link+'">'+ feature.title+'</a>');
+							popupElement = tlink[0];
+						}	
                         var marker = null;
                         if(feature.icon === '_dot') {
                             marker = L.circleMarker([feature.lat, feature.lng], {radius: 5, fillOpacity:1, color:lineColor});
